@@ -1,0 +1,6 @@
+# Cloudflare Pages redirects — this repo's root is served as-is (pravilnici/,
+# standardi/, the numbered training chapters, and cortex-app/ all live here),
+# but the actual app lives in cortex-app/. Redirect (not rewrite) the bare
+# root to it, so the browser's address bar ends up at /cortex-app/ and every
+# relative fetch/img path inside the app resolves correctly.
+/    /cortex-app/    302
