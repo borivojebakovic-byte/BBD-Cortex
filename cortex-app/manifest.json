@@ -1,0 +1,1203 @@
+{
+  "tree": [
+    {
+      "type": "folder",
+      "slug": "pravilnici",
+      "label": "Pravilnici",
+      "children": [
+        {
+          "type": "doc",
+          "path": "pravilnici/00-lista-i-status-provere.md",
+          "title": "Status provere — lista koju je Borivoje dostavio 22.09.2026.",
+          "category": "Pravilnici",
+          "sizeBytes": 10001,
+          "isReadme": false
+        },
+        {
+          "type": "doc",
+          "path": "pravilnici/TEMPLATE.md",
+          "title": "<Naziv pravilnika>",
+          "category": "Pravilnici",
+          "sizeBytes": 785,
+          "isReadme": false
+        },
+        {
+          "type": "folder",
+          "slug": "pravilnici/bezbednost-i-zdravlje-na-radu",
+          "label": "Bezbednost i zdravlje na radu",
+          "children": [
+            {
+              "type": "doc",
+              "path": "pravilnici/bezbednost-i-zdravlje-na-radu/0022-zakon-bezbednost-zdravlje-na-radu.md",
+              "title": "Zakon o bezbednosti i zdravlju na radu",
+              "category": "Pravilnici / Bezbednost i zdravlje na radu",
+              "sizeBytes": 138049,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "pravilnici/buka",
+          "label": "Buka",
+          "children": [
+            {
+              "type": "doc",
+              "path": "pravilnici/buka/0012-zakon-zastita-od-buke.md",
+              "title": "Zakon o zaštiti od buke u životnoj sredini",
+              "category": "Pravilnici / Buka",
+              "sizeBytes": 40600,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "pravilnici/buka/0013-uredba-indikatori-buke.md",
+              "title": "Uredba o indikatorima buke, graničnim vrednostima, metodama za ocenjivanje indikatora buke, uznemiravanja i štetnih efekata buke u životnoj sredini",
+              "category": "Pravilnici / Buka",
+              "sizeBytes": 14464,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "pravilnici/buka/0014-pravilnik-akusticke-zone.md",
+              "title": "Pravilnik o metodologiji za određivanje akustičkih zona",
+              "category": "Pravilnici / Buka",
+              "sizeBytes": 8119,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "pravilnici/buka/0015-pravilnik-metode-merenja-buke.md",
+              "title": "Pravilnik o metodama merenja buke, sadržini i obimu izveštaja o merenju buke u životnoj sredini",
+              "category": "Pravilnici / Buka",
+              "sizeBytes": 5903,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "pravilnici/garaze",
+          "label": "Garaže",
+          "children": [
+            {
+              "type": "doc",
+              "path": "pravilnici/garaze/0005-pravilnik-bezbednost-garaza.md",
+              "title": "Pravilnik o tehničkim normativima bezbednosti garaža od požara",
+              "category": "Pravilnici / Garaže",
+              "sizeBytes": 46536,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "pravilnici/gasne-instalacije",
+          "label": "Gasne instalacije",
+          "children": [
+            {
+              "type": "doc",
+              "path": "pravilnici/gasne-instalacije/0010-pravilnik-unutrasnje-gasne-instalacije.md",
+              "title": "Pravilnik o tehničkim normativima za unutrašnje gasne instalacije",
+              "category": "Pravilnici / Gasne instalacije",
+              "sizeBytes": 84164,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "pravilnici/gasne-instalacije/0011-pravilnik-gasne-kotlarnice.md",
+              "title": "Pravilnik o tehničkim normativima za projektovanje, građenje, pogon i održavanje gasnih kotlarnica",
+              "category": "Pravilnici / Gasne instalacije",
+              "sizeBytes": 51940,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "pravilnici/grad-beograd",
+          "label": "Grad Beograd",
+          "children": [
+            {
+              "type": "doc",
+              "path": "pravilnici/grad-beograd/0021-odluka-snabdevanje-toplotnom-energijom-beograd.md",
+              "title": "Odluka o snabdevanju toplotnom energijom u gradu Beogradu",
+              "category": "Pravilnici / Grad Beograd",
+              "sizeBytes": 70096,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "pravilnici/hvac",
+          "label": "HVAC",
+          "children": [
+            {
+              "type": "doc",
+              "path": "pravilnici/hvac/0016-pravilnik-ventilacija-klimatizacija.md",
+              "title": "Pravilnik o tehnickim normativima za sisteme za ventilaciju ili klimatizaciju",
+              "category": "Pravilnici / HVAC",
+              "sizeBytes": 33521,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "pravilnici/hvac/0017-pravilnik-kontrola-klimatizacije-zgrada.md",
+              "title": "Pravilnik o kontroli sistema za klimatizaciju zgrada",
+              "category": "Pravilnici / HVAC",
+              "sizeBytes": 22436,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "pravilnici/hvac/0018-pravilnik-energetska-efikasnost-zgrada.md",
+              "title": "Pravilnik o energetskoj efikasnosti zgrada",
+              "category": "Pravilnici / HVAC",
+              "sizeBytes": 107959,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "pravilnici/hvac/0019-pravilnik-sertifikati-energetskih-svojstava.md",
+              "title": "Pravilnik o uslovima, sadrzini i nacinu izdavanja sertifikata o energetskim svojstvima zgrada",
+              "category": "Pravilnici / HVAC",
+              "sizeBytes": 19509,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "pravilnici/hvac/0020-zakon-energetska-efikasnost-racionalna-upotreba-energije.md",
+              "title": "Zakon o energetskoj efikasnosti i racionalnoj upotrebi energije",
+              "category": "Pravilnici / HVAC",
+              "sizeBytes": 182193,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "pravilnici/planiranje-i-izgradnja",
+          "label": "Planiranje i izgradnja",
+          "children": [
+            {
+              "type": "doc",
+              "path": "pravilnici/planiranje-i-izgradnja/0024-zakon-planiranje-izgradnja.md",
+              "title": "Zakon o planiranju i izgradnji",
+              "category": "Pravilnici / Planiranje i izgradnja",
+              "sizeBytes": 509592,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "pravilnici/planiranje-i-izgradnja/0025-pravilnik-tehnicka-dokumentacija.md",
+              "title": "Pravilnik o sadrzini, nacinu i postupku izrade i nacinu vrsenja kontrole tehnicke dokumentacije prema klasi i nameni objekata",
+              "category": "Pravilnici / Planiranje i izgradnja",
+              "sizeBytes": 90873,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "pravilnici/planiranje-i-izgradnja/0026-pravilnik-projektovanje-stambenih-zgrada.md",
+              "title": "Pravilnik o uslovima i normativima za projektovanje stambenih zgrada i stanova",
+              "category": "Pravilnici / Planiranje i izgradnja",
+              "sizeBytes": 30836,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "pravilnici/protivpozarna-zastita",
+          "label": "Protivpožarna zaštita",
+          "children": [
+            {
+              "type": "doc",
+              "path": "pravilnici/protivpozarna-zastita/0001-zakon-o-zastiti-od-pozara.md",
+              "title": "Zakon o zaštiti od požara",
+              "category": "Pravilnici / Protivpožarna zaštita",
+              "sizeBytes": 75099,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "pravilnici/protivpozarna-zastita/0002-pravilnik-zastita-stambenih-poslovnih-javnih-objekata.md",
+              "title": "Pravilnik o tehničkim normativima za zaštitu od požara stambenih i poslovnih objekata i objekata javne namene",
+              "category": "Pravilnici / Protivpožarna zaštita",
+              "sizeBytes": 57019,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "pravilnici/protivpozarna-zastita/0003-pravilnik-zastita-industrijskih-objekata.md",
+              "title": "Pravilnik o tehničkim normativima za zaštitu industrijskih objekata od požara",
+              "category": "Pravilnici / Protivpožarna zaštita",
+              "sizeBytes": 54461,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "pravilnici/protivpozarna-zastita/0004-pravilnik-zastita-visokih-objekata.md",
+              "title": "Pravilnik o tehničkim normativima za zaštitu visokih objekata od požara",
+              "category": "Pravilnici / Protivpožarna zaštita",
+              "sizeBytes": 62551,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "pravilnici/protivpozarna-zastita/0006-pravilnik-zastita-skladista.md",
+              "title": "Pravilnik o tehničkim normativima za zaštitu skladišta od požara i eksplozija",
+              "category": "Pravilnici / Protivpožarna zaštita",
+              "sizeBytes": 13777,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "pravilnici/protivpozarna-zastita/0007-pravilnik-automatsko-zatvaranje-vrata-klapni.md",
+              "title": "Pravilnik o tehničkim normativima za uređaje za automatsko zatvaranje vrata ili klapni otpornih prema požaru",
+              "category": "Pravilnici / Protivpožarna zaštita",
+              "sizeBytes": 9561,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "pravilnici/protivpozarna-zastita/0008-pravilnik-performanse-gradjevinskih-proizvoda.md",
+              "title": "Pravilnik o načinu iskazivanja performansi građevinskih proizvoda i elemenata zgrade u vezi sa bitnim karakteristikama – reakcija na požar, otpornost na požar i ponašanje pri spoljašnjem požaru",
+              "category": "Pravilnici / Protivpožarna zaštita",
+              "sizeBytes": 17466,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "pravilnici/protivpozarna-zastita/0009-pravilnik-strucni-ispit-licence-ppz.md",
+              "title": "Pravilnik o polaganju stručnog ispita i uslovima za dobijanje licence i ovlašćenja za izradu Glavnog projekta zaštite od požara i posebnih sistema i mera zaštite od požara",
+              "category": "Pravilnici / Protivpožarna zaštita",
+              "sizeBytes": 63259,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "pravilnici/protivpozarna-zastita/0027-zakon-zapaljive-gorive-tecnosti-gasovi.md",
+              "title": "Zakon o zapaljivim i gorivim tecnostima i zapaljivim gasovima",
+              "category": "Pravilnici / Protivpožarna zaštita",
+              "sizeBytes": 51709,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "pravilnici/sigurnosni-sistemi",
+          "label": "Sigurnosni sistemi",
+          "children": []
+        },
+        {
+          "type": "folder",
+          "slug": "pravilnici/zastita-zivotne-sredine",
+          "label": "Zaštita životne sredine",
+          "children": [
+            {
+              "type": "doc",
+              "path": "pravilnici/zastita-zivotne-sredine/0023-zakon-zastita-zivotne-sredine.md",
+              "title": "Zakon o zastiti zivotne sredine",
+              "category": "Pravilnici / Zaštita životne sredine",
+              "sizeBytes": 151649,
+              "isReadme": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "standardi",
+      "label": "Standardi",
+      "children": []
+    },
+    {
+      "type": "folder",
+      "slug": "01-document-management",
+      "label": "1. Document Management",
+      "children": [
+        {
+          "type": "doc",
+          "path": "01-document-management/01-document-management.md",
+          "title": "DOCUMENT MANAGEMENT",
+          "category": "1. Document Management",
+          "sizeBytes": 9568,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "02-cad-standard",
+      "label": "2. CAD Standard",
+      "children": [
+        {
+          "type": "doc",
+          "path": "02-cad-standard/02-cad-standard.md",
+          "title": "CAD STANDARD",
+          "category": "2. CAD Standard",
+          "sizeBytes": 7998,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "03-revit-standard",
+      "label": "3. Revit Standard",
+      "children": [
+        {
+          "type": "doc",
+          "path": "03-revit-standard/03-revit-standard.md",
+          "title": "REVIT STANDARD",
+          "category": "3. Revit Standard",
+          "sizeBytes": 1447,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "04-proracun-gubitaka-toplote",
+      "label": "4. Proracun Gubitaka Toplote",
+      "children": [
+        {
+          "type": "doc",
+          "path": "04-proracun-gubitaka-toplote/04-proracun-gubitaka-toplote.md",
+          "title": "PRORAČUN GUBITAKA TOPLOTE",
+          "category": "4. Proracun Gubitaka Toplote",
+          "sizeBytes": 2775,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "05-proracun-dobitaka-toplote",
+      "label": "5. Proracun Dobitaka Toplote",
+      "children": [
+        {
+          "type": "doc",
+          "path": "05-proracun-dobitaka-toplote/05-proracun-dobitaka-toplote.md",
+          "title": "PRORAČUN DOBITAKA TOPLOTE",
+          "category": "5. Proracun Dobitaka Toplote",
+          "sizeBytes": 2648,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "06-proracun-kolicina-vazduha",
+      "label": "6. Proracun Kolicina Vazduha",
+      "children": [
+        {
+          "type": "doc",
+          "path": "06-proracun-kolicina-vazduha/06-proracun-kolicina-vazduha.md",
+          "title": "PRORAČUN KOLIČINA VAZDUHA",
+          "category": "6. Proracun Kolicina Vazduha",
+          "sizeBytes": 1066,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "07-ventilacija-kuhinja",
+      "label": "7. Ventilacija Kuhinja",
+      "children": [
+        {
+          "type": "doc",
+          "path": "07-ventilacija-kuhinja/07-ventilacija-kuhinja.md",
+          "title": "VENTILACIJA KUHINJA",
+          "category": "7. Ventilacija Kuhinja",
+          "sizeBytes": 837,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "08-proracun-buke",
+      "label": "8. Proracun Buke",
+      "children": [
+        {
+          "type": "doc",
+          "path": "08-proracun-buke/08-proracun-buke.md",
+          "title": "PRORAČUN BUKE",
+          "category": "8. Proracun Buke",
+          "sizeBytes": 825,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "09-proracun-cevne-mreze",
+      "label": "9. Proracun Cevne Mreze",
+      "children": [
+        {
+          "type": "doc",
+          "path": "09-proracun-cevne-mreze/09-proracun-cevne-mreze.md",
+          "title": "PRORAČUN CEVNE MREŽE",
+          "category": "9. Proracun Cevne Mreze",
+          "sizeBytes": 673,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "10-proracun-kanala-za-vazduh",
+      "label": "10. Proracun Kanala Za Vazduh",
+      "children": [
+        {
+          "type": "doc",
+          "path": "10-proracun-kanala-za-vazduh/10-proracun-kanala-za-vazduh.md",
+          "title": "PRORAČUN KANALA ZA VAZDUH",
+          "category": "10. Proracun Kanala Za Vazduh",
+          "sizeBytes": 683,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "11-proracun-kompenzacije-cevovoda",
+      "label": "11. Proracun Kompenzacije Cevovoda",
+      "children": [
+        {
+          "type": "doc",
+          "path": "11-proracun-kompenzacije-cevovoda/11-proracun-kompenzacije-cevovoda.md",
+          "title": "PRORAČUN KOMPENZACIJE CEVOVODA",
+          "category": "11. Proracun Kompenzacije Cevovoda",
+          "sizeBytes": 693,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "12-proracun-cevnog-registra",
+      "label": "12. Proracun Cevnog Registra",
+      "children": [
+        {
+          "type": "doc",
+          "path": "12-proracun-cevnog-registra/12-proracun-cevnog-registra.md",
+          "title": "PRORAČUN CEVNOG REGISTRA",
+          "category": "12. Proracun Cevnog Registra",
+          "sizeBytes": 856,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "13-proracun-odvlazivanja",
+      "label": "13. Proracun Odvlazivanja",
+      "children": [
+        {
+          "type": "doc",
+          "path": "13-proracun-odvlazivanja/13-proracun-odvlazivanja.md",
+          "title": "PRORAČUN ODVLAŽIVANJA",
+          "category": "13. Proracun Odvlazivanja",
+          "sizeBytes": 908,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "14-proracun-leda",
+      "label": "14. Proracun Leda",
+      "children": [
+        {
+          "type": "doc",
+          "path": "14-proracun-leda/14-proracun-leda.md",
+          "title": "PRORAČUN LEDA",
+          "category": "14. Proracun Leda",
+          "sizeBytes": 960,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "15-proracun-koeficijenta-prolaza-toplote",
+      "label": "15. Proracun Koeficijenta Prolaza Toplote",
+      "children": [
+        {
+          "type": "doc",
+          "path": "15-proracun-koeficijenta-prolaza-toplote/15-proracun-koeficijenta-prolaza-toplote.md",
+          "title": "PRORAČUN KOEFICIJENTA PROLAZA TOPLOTE",
+          "category": "15. Proracun Koeficijenta Prolaza Toplote",
+          "sizeBytes": 1099,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "16-elaborat-energetske-efikasnosti",
+      "label": "16. Elaborat Energetske Efikasnosti",
+      "children": [
+        {
+          "type": "doc",
+          "path": "16-elaborat-energetske-efikasnosti/16-elaborat-energetske-efikasnosti.md",
+          "title": "ELABORAT ENERGETSKE EFIKASNOSTI",
+          "category": "16. Elaborat Energetske Efikasnosti",
+          "sizeBytes": 953,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "17-ventilacija-bazena",
+      "label": "17. Ventilacija Bazena",
+      "children": [
+        {
+          "type": "doc",
+          "path": "17-ventilacija-bazena/17-ventilacija-bazena.md",
+          "title": "VENTILACIJA BAZENA",
+          "category": "17. Ventilacija Bazena",
+          "sizeBytes": 787,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "18-proracun-natpritisne-ventilacije",
+      "label": "18. Proracun Natpritisne Ventilacije",
+      "children": [
+        {
+          "type": "doc",
+          "path": "18-proracun-natpritisne-ventilacije/18-proracun-natpritisne-ventilacije.md",
+          "title": "PRORAČUN NATPRITISNE VENTILACIJE",
+          "category": "18. Proracun Natpritisne Ventilacije",
+          "sizeBytes": 698,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "19-proracun-odimljavanja",
+      "label": "19. Proracun Odimljavanja",
+      "children": [
+        {
+          "type": "doc",
+          "path": "19-proracun-odimljavanja/19-proracun-odimljavanja.md",
+          "title": "PRORAČUN ODIMLJAVANJA",
+          "category": "19. Proracun Odimljavanja",
+          "sizeBytes": 676,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "20-izbor-radijatora",
+      "label": "20. Izbor Radijatora",
+      "children": [
+        {
+          "type": "doc",
+          "path": "20-izbor-radijatora/20-izbor-radijatora.md",
+          "title": "IZBOR RADIJATORA",
+          "category": "20. Izbor Radijatora",
+          "sizeBytes": 664,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "21-izbor-fen-kojla",
+      "label": "21. Izbor Fen Kojla",
+      "children": [
+        {
+          "type": "doc",
+          "path": "21-izbor-fen-kojla/21-izbor-fen-kojla.md",
+          "title": "IZBOR FEN KOJLA",
+          "category": "21. Izbor Fen Kojla",
+          "sizeBytes": 662,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "22-izbor-vrf-sistema",
+      "label": "22. Izbor VRF Sistema",
+      "children": [
+        {
+          "type": "doc",
+          "path": "22-izbor-vrf-sistema/22-izbor-vrf-sistema.md",
+          "title": "IZBOR VRF SISTEMA",
+          "category": "22. Izbor VRF Sistema",
+          "sizeBytes": 666,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "23-proracun-podnog-grejanja",
+      "label": "23. Proracun Podnog Grejanja",
+      "children": [
+        {
+          "type": "doc",
+          "path": "23-proracun-podnog-grejanja/23-proracun-podnog-grejanja.md",
+          "title": "PRORAČUN PODNOG GREJANJA",
+          "category": "23. Proracun Podnog Grejanja",
+          "sizeBytes": 682,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "24-izbor-distributivnih-elemenata",
+      "label": "24. Izbor Distributivnih Elemenata",
+      "children": [
+        {
+          "type": "doc",
+          "path": "24-izbor-distributivnih-elemenata/24-izbor-distributivnih-elemenata.md",
+          "title": "IZBOR DISTRIBUTIVNIH ELEMENATA",
+          "category": "24. Izbor Distributivnih Elemenata",
+          "sizeBytes": 692,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "25-izbor-pp-klapni",
+      "label": "25. Izbor PP Klapni",
+      "children": [
+        {
+          "type": "doc",
+          "path": "25-izbor-pp-klapni/25-izbor-pp-klapni.md",
+          "title": "IZBOR PP KLAPNI",
+          "category": "25. Izbor PP Klapni",
+          "sizeBytes": 660,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "26-izbor-vav-cav",
+      "label": "26. Izbor VAV CAV",
+      "children": [
+        {
+          "type": "doc",
+          "path": "26-izbor-vav-cav/26-izbor-vav-cav.md",
+          "title": "IZBOR VAV/CAV",
+          "category": "26. Izbor VAV CAV",
+          "sizeBytes": 656,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "27-izbor-klima-komora",
+      "label": "27. Izbor Klima Komora",
+      "children": [
+        {
+          "type": "doc",
+          "path": "27-izbor-klima-komora/27-izbor-klima-komora.md",
+          "title": "IZBOR KLIMA KOMORA",
+          "category": "27. Izbor Klima Komora",
+          "sizeBytes": 667,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "28-izbor-ventilatora",
+      "label": "28. Izbor Ventilatora",
+      "children": [
+        {
+          "type": "doc",
+          "path": "28-izbor-ventilatora/28-izbor-ventilatora.md",
+          "title": "IZBOR VENTILATORA",
+          "category": "28. Izbor Ventilatora",
+          "sizeBytes": 664,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "29-izbor-prigusivaca-buke",
+      "label": "29. Izbor Prigusivaca Buke",
+      "children": [
+        {
+          "type": "doc",
+          "path": "29-izbor-prigusivaca-buke/29-izbor-prigusivaca-buke.md",
+          "title": "IZBOR PRIGUŠIVAČA BUKE",
+          "category": "29. Izbor Prigusivaca Buke",
+          "sizeBytes": 678,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "30-izbor-cirkulacionih-pumpi",
+      "label": "30. Izbor Cirkulacionih Pumpi",
+      "children": [
+        {
+          "type": "doc",
+          "path": "30-izbor-cirkulacionih-pumpi/30-izbor-cirkulacionih-pumpi.md",
+          "title": "IZBOR CIRKULACIONIH PUMPI",
+          "category": "30. Izbor Cirkulacionih Pumpi",
+          "sizeBytes": 680,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "31-izbor-regulacionih-ventila",
+      "label": "31. Izbor Regulacionih Ventila",
+      "children": [
+        {
+          "type": "doc",
+          "path": "31-izbor-regulacionih-ventila/31-izbor-regulacionih-ventila.md",
+          "title": "IZBOR REGULACIONIH VENTILA",
+          "category": "31. Izbor Regulacionih Ventila",
+          "sizeBytes": 684,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "32-izbor-sistema-za-odrzavanje-pritiska",
+      "label": "32. Izbor Sistema Za Odrzavanje Pritiska",
+      "children": [
+        {
+          "type": "doc",
+          "path": "32-izbor-sistema-za-odrzavanje-pritiska/32-izbor-sistema-za-odrzavanje-pritiska.md",
+          "title": "IZBOR SISTEMA ZA ODRŽAVANJE PRITISKA",
+          "category": "32. Izbor Sistema Za Odrzavanje Pritiska",
+          "sizeBytes": 809,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "33-izbor-ventila-sigurnosti",
+      "label": "33. Izbor Ventila Sigurnosti",
+      "children": [
+        {
+          "type": "doc",
+          "path": "33-izbor-ventila-sigurnosti/33-izbor-ventila-sigurnosti.md",
+          "title": "IZBOR VENTILA SIGURNOSTI",
+          "category": "33. Izbor Ventila Sigurnosti",
+          "sizeBytes": 678,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "34-izbor-izmenjivaca-toplote",
+      "label": "34. Izbor Izmenjivaca Toplote",
+      "children": [
+        {
+          "type": "doc",
+          "path": "34-izbor-izmenjivaca-toplote/34-izbor-izmenjivaca-toplote.md",
+          "title": "IZBOR IZMENJIVAČA TOPLOTE",
+          "category": "34. Izbor Izmenjivaca Toplote",
+          "sizeBytes": 682,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "35-izbor-sabirnika-i-razdelnika",
+      "label": "35. Izbor Sabirnika I Razdelnika",
+      "children": [
+        {
+          "type": "doc",
+          "path": "35-izbor-sabirnika-i-razdelnika/35-izbor-sabirnika-i-razdelnika.md",
+          "title": "IZBOR SABIRNIKA I RAZDELNIKA",
+          "category": "35. Izbor Sabirnika I Razdelnika",
+          "sizeBytes": 686,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "36-odzracivanje",
+      "label": "36. Odzracivanje",
+      "children": [
+        {
+          "type": "doc",
+          "path": "36-odzracivanje/36-odzracivanje.md",
+          "title": "ODZRAČIVANJE",
+          "category": "36. Odzracivanje",
+          "sizeBytes": 656,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "37-izbor-bafer-tankova",
+      "label": "37. Izbor Bafer Tankova",
+      "children": [
+        {
+          "type": "doc",
+          "path": "37-izbor-bafer-tankova/37-izbor-bafer-tankova.md",
+          "title": "IZBOR BAFER TANKOVA",
+          "category": "37. Izbor Bafer Tankova",
+          "sizeBytes": 668,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "38-izbor-kotlova",
+      "label": "38. Izbor Kotlova",
+      "children": [
+        {
+          "type": "doc",
+          "path": "38-izbor-kotlova/38-izbor-kotlova.md",
+          "title": "IZBOR KOTLOVA",
+          "category": "38. Izbor Kotlova",
+          "sizeBytes": 656,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "39-izbor-toplotnih-pumpi",
+      "label": "39. Izbor Toplotnih Pumpi",
+      "children": [
+        {
+          "type": "doc",
+          "path": "39-izbor-toplotnih-pumpi/39-izbor-toplotnih-pumpi.md",
+          "title": "IZBOR TOPLOTNIH PUMPI",
+          "category": "39. Izbor Toplotnih Pumpi",
+          "sizeBytes": 673,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "40-solarni-kolektori",
+      "label": "40. Solarni Kolektori",
+      "children": [
+        {
+          "type": "doc",
+          "path": "40-solarni-kolektori/40-solarni-kolektori.md",
+          "title": "SOLARNI KOLEKTORI",
+          "category": "40. Solarni Kolektori",
+          "sizeBytes": 3058,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "41-hemijska-priprema-vode",
+      "label": "41. Hemijska Priprema Vode",
+      "children": [
+        {
+          "type": "doc",
+          "path": "41-hemijska-priprema-vode/41-hemijska-priprema-vode.md",
+          "title": "HEMIJSKA PRIPREMA VODE",
+          "category": "41. Hemijska Priprema Vode",
+          "sizeBytes": 674,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "42-sanitarna-topla-voda",
+      "label": "42. Sanitarna Topla Voda",
+      "children": [
+        {
+          "type": "doc",
+          "path": "42-sanitarna-topla-voda/42-sanitarna-topla-voda.md",
+          "title": "SANITARNA TOPLA VODA",
+          "category": "42. Sanitarna Topla Voda",
+          "sizeBytes": 670,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "43-ventilacija-prostorija-dizel-agregata",
+      "label": "43. Ventilacija Prostorija Dizel Agregata",
+      "children": [
+        {
+          "type": "doc",
+          "path": "43-ventilacija-prostorija-dizel-agregata/43-ventilacija-prostorija-dizel-agregata.md",
+          "title": "VENTILACIJA PROSTORIJA DIZEL AGREGATA",
+          "category": "43. Ventilacija Prostorija Dizel Agregata",
+          "sizeBytes": 704,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "44-hladjenje-trafo-stanice",
+      "label": "44. Hladjenje Trafo Stanice",
+      "children": [
+        {
+          "type": "doc",
+          "path": "44-hladjenje-trafo-stanice/44-hladjenje-trafo-stanice.md",
+          "title": "HLADJENJE TRAFO STANICE",
+          "category": "44. Hladjenje Trafo Stanice",
+          "sizeBytes": 676,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "45-rezervoari-za-gorivo",
+      "label": "45. Rezervoari Za Gorivo",
+      "children": [
+        {
+          "type": "doc",
+          "path": "45-rezervoari-za-gorivo/45-rezervoari-za-gorivo.md",
+          "title": "REZERVOARI ZA GORIVO",
+          "category": "45. Rezervoari Za Gorivo",
+          "sizeBytes": 670,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "46-hidraulicke-seme",
+      "label": "46. Hidraulicke Seme",
+      "children": [
+        {
+          "type": "doc",
+          "path": "46-hidraulicke-seme/46-hidraulicke-seme.md",
+          "title": "HIDRAULIČKE ŠEME",
+          "category": "46. Hidraulicke Seme",
+          "sizeBytes": 666,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "47-proracun-dimnjaka",
+      "label": "47. Proracun Dimnjaka",
+      "children": [
+        {
+          "type": "doc",
+          "path": "47-proracun-dimnjaka/47-proracun-dimnjaka.md",
+          "title": "PRORAČUN DIMNJAKA",
+          "category": "47. Proracun Dimnjaka",
+          "sizeBytes": 666,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "48-gasne-kotlarnice",
+      "label": "48. Gasne Kotlarnice",
+      "children": [
+        {
+          "type": "doc",
+          "path": "48-gasne-kotlarnice/48-gasne-kotlarnice.md",
+          "title": "GASNE KOTLARNICE",
+          "category": "48. Gasne Kotlarnice",
+          "sizeBytes": 662,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "49-proracun-gasovoda",
+      "label": "49. Proracun Gasovoda",
+      "children": [
+        {
+          "type": "doc",
+          "path": "49-proracun-gasovoda/49-proracun-gasovoda.md",
+          "title": "PRORAČUN GASOVODA",
+          "category": "49. Proracun Gasovoda",
+          "sizeBytes": 666,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "50-izbor-kalorimetara",
+      "label": "50. Izbor Kalorimetara",
+      "children": [
+        {
+          "type": "doc",
+          "path": "50-izbor-kalorimetara/50-izbor-kalorimetara.md",
+          "title": "IZBOR KALORIMETARA",
+          "category": "50. Izbor Kalorimetara",
+          "sizeBytes": 666,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "51-kompimovani-vazduh",
+      "label": "51. Kompimovani Vazduh",
+      "children": [
+        {
+          "type": "doc",
+          "path": "51-kompimovani-vazduh/51-kompimovani-vazduh.md",
+          "title": "KOMPIMOVANI VAZDUH",
+          "category": "51. Kompimovani Vazduh",
+          "sizeBytes": 666,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "52-izolacija",
+      "label": "52. Izolacija",
+      "children": [
+        {
+          "type": "doc",
+          "path": "52-izolacija/52-izolacija.md",
+          "title": "IZOLACIJA",
+          "category": "52. Izolacija",
+          "sizeBytes": 648,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "53-masinske-sale",
+      "label": "53. Masinske Sale",
+      "children": [
+        {
+          "type": "doc",
+          "path": "53-masinske-sale/53-masinske-sale.md",
+          "title": "MAŠINSKE SALE",
+          "category": "53. Masinske Sale",
+          "sizeBytes": 903,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "54-leed",
+      "label": "54. LEED",
+      "children": [
+        {
+          "type": "doc",
+          "path": "54-leed/54-leed.md",
+          "title": "LEED",
+          "category": "54. LEED",
+          "sizeBytes": 638,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "55-ibc",
+      "label": "55. IBC",
+      "children": [
+        {
+          "type": "doc",
+          "path": "55-ibc/55-ibc.md",
+          "title": "IBC",
+          "category": "55. IBC",
+          "sizeBytes": 636,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "56-proracun-energije",
+      "label": "56. Proracun Energije",
+      "children": [
+        {
+          "type": "doc",
+          "path": "56-proracun-energije/56-proracun-energije.md",
+          "title": "PRORAČUN ENERGIJE",
+          "category": "56. Proracun Energije",
+          "sizeBytes": 666,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "57-izbor-grejnih-kablova",
+      "label": "57. Izbor Grejnih Kablova",
+      "children": [
+        {
+          "type": "doc",
+          "path": "57-izbor-grejnih-kablova/57-izbor-grejnih-kablova.md",
+          "title": "IZBOR GREJNIH KABLOVA",
+          "category": "57. Izbor Grejnih Kablova",
+          "sizeBytes": 672,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "58-tekstualna-dokumentacija",
+      "label": "58. Tekstualna Dokumentacija",
+      "children": [
+        {
+          "type": "doc",
+          "path": "58-tekstualna-dokumentacija/58-tekstualna-dokumentacija.md",
+          "title": "TEKSTUALNA DOKUMENTACIJA",
+          "category": "58. Tekstualna Dokumentacija",
+          "sizeBytes": 22183,
+          "isReadme": false
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "59-projekt-menadzment",
+      "label": "59. Projekt Menadzment",
+      "children": [
+        {
+          "type": "doc",
+          "path": "59-projekt-menadzment/59-projekt-menadzment.md",
+          "title": "PROJEKT MENADŽMENT",
+          "category": "59. Projekt Menadzment",
+          "sizeBytes": 1038,
+          "isReadme": false
+        }
+      ]
+    }
+  ]
+}
