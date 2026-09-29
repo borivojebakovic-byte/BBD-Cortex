@@ -29,3 +29,4 @@ Ovde idu MD kartice domaćih i međunarodnih standarda iz oblasti HVAC, protivpo
 | Standard | Naziv | Folder |
 |---|---|---|
 | SRPS EN 12101-13:2022 | Sistemi za kontrolu dima i toplote — Deo 13: Sistemi sa natpritiskom (PDS) | `EN/` |
+| SRPS CEN/TR 12101-5:2009 | Sistemi za kontrolu dima i toplote — Deo 5: Smernice za rad i proračun SHEVS (tehnički izveštaj) | `EN/` |
