@@ -69,8 +69,10 @@ The top bar has a tools menu built from the `MENU` registry at the top of `asset
 Each tool opens in the content area at `#tool/<id>` (e.g. `#tool/flow-calc`).
 
 - **Hydronic Tools → Flow Calc** — flow from heat load and ΔT, or heat load from flow
-  (Q = ṁ·cp·ΔT); water properties at mean temperature, glycol presets, manual ρ/cp, and
-  velocity check in EN 10255 steel pipes.
+  (Q = ṁ·cp·ΔT); water properties (ρ, cp, μ) at mean temperature, glycol presets, manual
+  ρ/cp/μ. For the selected pipe range (steel EN 10255 / EN 10220, Viega Prestabo, Viega
+  Sanpress, copper EN 1057, PE-X, multilayer) it lists velocity and unit pressure drop R (Pa/m,
+  Darcy–Weisbach + Colebrook-White) per size. Pipe ranges live in `PIPE_SETS` in `tools.js`.
 
 To add a tool: add an entry to `MENU` (new menu = new object, new tool = new item in `tools`)
 and write its `render(el, menu)` function. No build step needed.
