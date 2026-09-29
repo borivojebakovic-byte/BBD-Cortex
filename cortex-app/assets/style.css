@@ -322,7 +322,9 @@ html, body {
 .tl-tbl { overflow-x: auto; }
 .prose .tl-tbl table { margin: 0; font: 13.5px var(--num); font-variant-numeric: tabular-nums; }
 .prose .tl-tbl th, .prose .tl-tbl td { border: 0; border-bottom: 1px solid var(--border); padding: 5px 8px; text-align: right; }
-.prose .tl-tbl th { font: 600 11px var(--font); text-transform: uppercase; letter-spacing: .05em; color: var(--text-muted); }
+/* bez uppercase: zaglavlja sadrže oznake i jedinice (d, w, R, mm, m/s, Pa/m) koje moraju zadržati mala/velika slova */
+.prose .tl-tbl th { font: 600 12.5px var(--font); color: var(--text-muted); }
+.prose .tl-tbl th .sym { font-style: italic; color: var(--text); }
 .prose .tl-tbl th:first-child, .prose .tl-tbl td:first-child { text-align: left; }
 .prose .tl-tbl tr.best td { background: var(--ok-bg); }
 .tl-pill { display: inline-block; font: 600 11px var(--font); padding: 2px 8px; border-radius: 99px; }

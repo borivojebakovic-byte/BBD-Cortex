@@ -189,7 +189,7 @@
           '<div class="tl-field"><label for="tl-set">Asortiman cevi</label><div class="tl-inp"><select id="tl-set">' + setOpts + '</select></div></div>' +
           field('k', 'Hrapavost k', '', 'mm') +
         '</div>' +
-        '<div class="tl-tbl"><table><thead><tr><th>Dimenzija</th><th>d<sub>u</sub> mm</th><th>w m/s</th><th>R Pa/m</th><th></th></tr></thead><tbody id="tl-pipes"></tbody></table></div>' +
+        '<div class="tl-tbl"><table><thead><tr><th>Dimenzija</th><th><span class="sym">d</span><sub>u</sub> [mm]</th><th><span class="sym">w</span> [m/s]</th><th><span class="sym">R</span> [Pa/m]</th><th></th></tr></thead><tbody id="tl-pipes"></tbody></table></div>' +
         '<p class="tl-note">R po Darcy–Weisbach-u, faktor trenja po Colebrook-White-u (laminarno 64/Re). Orijentacioni opseg brzina 0,5–1,5 m/s; zeleno je najmanja dimenzija u opsegu. Dimenzije su tipične kataloške vrednosti; za izvođački projekat proverite katalog proizvođača.</p>' +
       '</section>' +
       '</div></div>';
