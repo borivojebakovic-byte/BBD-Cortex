@@ -9,7 +9,10 @@ search, read-only, no chat/Q&A yet (that's Phase 2).
 
 - **No build step, no dependencies to install.** The app is plain HTML/CSS/JS. Markdown is
   rendered in the browser using a vendored copy of [marked](https://marked.js.org)
-  (`assets/marked.umd.js`) — nothing is fetched from the internet at runtime.
+  (`assets/marked.umd.js`). The only external request is the **Plus Jakarta Sans** font from
+  Google Fonts (same typeface as bbdcons.com); if it can't load, the page falls back to Segoe UI /
+  system sans-serif. To self-host it later, put the woff2 files in `assets/fonts/`, add
+  `@font-face` rules to `style.css`, and remove the Google Fonts `<link>` from `index.html`.
 - **The repo root stays the single source of truth.** This app reads documents directly from
   the repo root (one level up) — it never copies or duplicates that content. Edit a document
   anywhere in the repo, refresh the browser, see the change.
