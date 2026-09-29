@@ -197,8 +197,9 @@
           '<div class="tl-field"><label for="tl-set">Asortiman cevi</label><div class="tl-inp"><select id="tl-set">' + setOpts + '</select></div></div>' +
           field('k', 'Hrapavost k', '', 'mm') +
         '</div>' +
+        '<div class="tl-row3">' + field('wmin', 'w min', 0.5, 'm/s') + field('wmax', 'w max', 1.5, 'm/s') + field('rmax', 'R max', 200, 'Pa/m') + '</div>' +
         '<div class="tl-tbl"><table><thead><tr><th>Dimenzija</th><th><span class="sym">d</span><sub>u</sub> [mm]</th><th><span class="sym">w</span> [m/s]</th><th><span class="sym">R</span> [Pa/m]</th><th></th></tr></thead><tbody id="tl-pipes"></tbody></table></div>' +
-        '<p class="tl-note">R po Darcy–Weisbach-u, faktor trenja po Colebrook-White-u (laminarno 64/Re). Orijentacioni opseg brzina 0,5–1,5 m/s; zeleno je najmanja dimenzija u opsegu. Dimenzije su tipične kataloške vrednosti; za izvođački projekat proverite katalog proizvođača.</p>' +
+        '<p class="tl-note">R po Darcy–Weisbach-u, faktor trenja po Colebrook-White-u (laminarno 64/Re). Dimenzija zadovoljava ako je brzina u zadatom opsegu i R ≤ R max; zeleno je najmanja dimenzija koja zadovoljava oba uslova. Dimenzije su tipične kataloške vrednosti; za izvođački projekat proverite katalog proizvođača.</p>' +
       '</section>' +
       '</div></div>';
 
@@ -242,6 +243,8 @@
       syncSet();
       var ts = +$('ts').value, tr = +$('tr').value, rho = +$('rho').value, cp = +$('cp').value;
       var mu = +$('mu').value / 1000, kRough = +$('k').value / 1000;
+      var wMin = +$('wmin').value, wMax = +$('wmax').value, rMax = +$('rmax').value;
+      if (!(wMin >= 0 && wMax > wMin && rMax > 0)) return bad('Proverite kriterijume: brzina min < max i R max > 0.');
       var dT = Math.abs(ts - tr), tm = (ts + tr) / 2;
       $('dt').textContent = fmt(dT, 1); $('tm').textContent = fmt(tm, 1);
       $('mode').textContent = ts >= tr ? 'grejanje' : 'hlađenje';
@@ -277,15 +280,15 @@
         var d = p[1] / 1000, A = Math.PI * d * d / 4, w = V / A;
         var Re = rho * w * d / mu;
         var R = frictionFactor(Re, kRough / d) / d * rho * w * w / 2;
-        var cls = w < 0.5 ? 'lo' : w > 1.5 ? 'hi' : 'ok';
+        var cls = w > wMax ? 'hi' : R > rMax ? 'rhi' : w < wMin ? 'lo' : 'ok';
         if (cls === 'ok' && best === null) best = i;
-        var tag = cls === 'ok' ? '<span class="tl-pill ok">u opsegu</span>' : cls === 'hi' ? '<span class="tl-pill hi">visoka</span>' : '<span class="tl-pill lo">niska</span>';
-        return '<tr data-i="' + i + '"><td>' + p[0] + '</td><td>' + fmt(p[1], 1) + '</td><td>' + fmt(w, 2) + '</td><td>' + fmt(R, R < 10 ? 1 : 0) + '</td><td>' + tag + '</td></tr>';
+        var tag = cls === 'ok' ? '<span class="tl-pill ok">zadovoljava</span>' : cls === 'hi' ? '<span class="tl-pill hi">w visoka</span>' : cls === 'rhi' ? '<span class="tl-pill hi">R > ' + fmt(rMax, 0) + '</span>' : '<span class="tl-pill lo">w niska</span>';
+        return '<tr data-i="' + i + '"><td>' + p[0] + '</td><td>' + fmt(p[1], 1) + '</td><td' + (w > wMax ? ' class="tl-bad"' : '') + '>' + fmt(w, 2) + '</td><td' + (R > rMax ? ' class="tl-bad"' : '') + '>' + fmt(R, R < 10 ? 1 : 0) + '</td><td>' + tag + '</td></tr>';
       }).join('');
       if (best !== null) pipes.querySelector('[data-i="' + best + '"]').classList.add('best');
     }
 
-    ['q', 'v', 'ts', 'tr', 'rho', 'cp', 'mu', 'fluid', 'set', 'k'].forEach(function (id) { $(id).addEventListener('input', calc); });
+    ['q', 'v', 'ts', 'tr', 'rho', 'cp', 'mu', 'fluid', 'set', 'k', 'wmin', 'wmax', 'rmax'].forEach(function (id) { $(id).addEventListener('input', calc); });
     setMode('flow');
   }
   // ---- Duct Calc -----------------------------------------------------------

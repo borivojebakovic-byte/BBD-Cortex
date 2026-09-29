@@ -431,3 +431,6 @@ html, body {
 .prose .tl-tbl td.hx-pname { text-align: left; white-space: nowrap; }
 .prose #tl-steptbl th:nth-child(2) { text-align: left; }
 .prose #tl-steptbl { font-size: 13px; } .prose #tl-steptbl th, .prose #tl-steptbl td { padding: 5px 6px; }
+.prose .tl-tbl td.tl-bad { color: var(--warn); font-weight: 700; }
+.tl-row3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; }
+@media (max-width: 480px) { .tl-row3 { grid-template-columns: repeat(2, minmax(0,1fr)); } }
