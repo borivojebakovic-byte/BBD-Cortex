@@ -76,6 +76,13 @@ Each tool opens in the content area at `#tool/<id>` (e.g. `#tool/flow-calc`).
   ρ/cp/μ. For the selected pipe range (steel EN 10255 / EN 10220, Viega Prestabo, Viega
   Sanpress, copper EN 1057, PE-X, multilayer) it lists velocity and unit pressure drop R (Pa/m,
   Darcy–Weisbach + Colebrook-White) per size. Pipe ranges live in `PIPE_SETS` in `tools.js`.
+- **Air Tools → Duct Calc** — air flow from heating or sensible cooling load and the
+  temperatures before/after the coil (or a known flow), air properties at the leaving-coil
+  temperature and given pressure. For a rectangular (a×b) or round (D) duct and the selected
+  material (roughness k) it gives velocity, dynamic pressure, Dh, De (Huebscher), Re, λ and unit
+  pressure drop R (Pa/m), plus a table of alternative sizes (widths at the same height, or EN 1506
+  round sizes) against the recommended velocity for the chosen duct section. Materials, velocity
+  ranges and size series live in `DUCT_MATERIALS`, `DUCT_USE`, `ROUND_D`, `RECT_A` in `tools.js`.
 
 To add a tool: add an entry to `MENU` (new menu = new object, new tool = new item in `tools`)
 and write its `render(el, menu)` function. No build step needed.

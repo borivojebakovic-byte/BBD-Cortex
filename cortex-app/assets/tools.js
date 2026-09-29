@@ -16,6 +16,13 @@
       tools: [
         { id: 'flow-calc', label: 'Flow Calc', desc: 'Protok iz snage i ΔT, ili snaga iz protoka', render: renderFlowCalc }
       ]
+    },
+    {
+      id: 'air',
+      label: 'Air Tools',
+      tools: [
+        { id: 'duct-calc', label: 'Duct Calc', desc: 'Protok vazduha iz snage, brzina i pad pritiska u kanalu', render: renderDuctCalc }
+      ]
     }
   ];
 
@@ -278,6 +285,193 @@
     }
 
     ['q', 'v', 'ts', 'tr', 'rho', 'cp', 'mu', 'fluid', 'set', 'k'].forEach(function (id) { $(id).addEventListener('input', calc); });
+    setMode('flow');
+  }
+  // ---- Duct Calc -----------------------------------------------------------
+
+  // Materijali kanala: apsolutna hrapavost k u mm (orijentacione vrednosti, ASHRAE / CIBSE)
+  var DUCT_MATERIALS = {
+    galv:   { label: 'Pocinkovani lim', k: 0.15 },
+    spiro:  { label: 'Spiro kanali, pocinkovani', k: 0.09 },
+    alu:    { label: 'Aluminijumski lim', k: 0.05 },
+    inox:   { label: 'Nerđajući čelik', k: 0.05 },
+    pvc:    { label: 'PVC / PP (plastični kanali)', k: 0.01 },
+    panel:  { label: 'Preizolovani paneli (PIR/fenolni, Al folija)', k: 0.07 },
+    fiber:  { label: 'Kanali od staklene vune (duct board)', k: 0.9 },
+    flex:   { label: 'Fleksibilno crevo, potpuno razvučeno', k: 1.5 },
+    conc:   { label: 'Zidani / betonski kanal', k: 1.3 }
+  };
+  // Orijentacione preporučene brzine (komfor), m/s
+  var DUCT_USE = {
+    main:   { label: 'Glavni razvod', lo: 4.0, hi: 6.0 },
+    branch: { label: 'Ogranci', lo: 3.0, hi: 4.5 },
+    term:   { label: 'Priključci na distributivne elemente', lo: 2.0, hi: 3.0 },
+    shaft:  { label: 'Vertikale / šahtovi, tehničke prostorije', lo: 6.0, hi: 8.0 }
+  };
+  // Standardni kružni kanali EN 1506 (nazivni prečnik, mm)
+  var ROUND_D = [80, 100, 125, 160, 200, 250, 315, 355, 400, 450, 500, 560, 630, 710, 800, 900, 1000, 1120, 1250];
+  // Uobičajene širine pravougaonih kanala (mm)
+  var RECT_A = [100, 150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 2000];
+
+  // Vazduh: gustina iz jednačine stanja (p u hPa), viskoznost po Sutherland-u (Pa·s)
+  function airRho(t, pHpa) { return pHpa * 100 / (287.05 * (t + 273.15)); }
+  function airMu(t) { var T = t + 273.15; return 1.458e-6 * Math.pow(T, 1.5) / (T + 110.4); }
+
+  // Jedinični pad pritiska za kanal preseka A i hidrauličkog prečnika Dh
+  function ductR(V, A, Dh, rho, mu, k) {
+    var w = V / A, Re = rho * w * Dh / mu;
+    var lam = frictionFactor(Re, k / Dh);
+    return { w: w, Re: Re, lam: lam, R: lam / Dh * rho * w * w / 2, pd: rho * w * w / 2 };
+  }
+
+  function renderDuctCalc(el, menu) {
+    var matOpts = Object.keys(DUCT_MATERIALS).map(function (k) { return '<option value="' + k + '">' + DUCT_MATERIALS[k].label + '</option>'; }).join('');
+    var useOpts = Object.keys(DUCT_USE).map(function (k) { var u = DUCT_USE[k]; return '<option value="' + k + '">' + u.label + ' (' + fmt(u.lo, 1) + '–' + fmt(u.hi, 1) + ' m/s)</option>'; }).join('');
+    el.innerHTML =
+      '<div class="tool">' +
+      '<div class="doc-meta">Alati · ' + menu.label + '</div>' +
+      '<h1>Duct Calc</h1>' +
+      '<p class="tl-lede">Protok vazduha iz toplotne ili senzibilne rashladne snage, pa brzina i jedinični pad pritiska za kružni ili pravougaoni kanal. Svojstva vazduha se računaju na temperaturi posle izmenjivača (dovodni vazduh).</p>' +
+      '<div class="tl-grid">' +
+      '<section class="tl-panel" aria-label="Ulazni podaci">' +
+        '<h2>Protok vazduha</h2>' +
+        '<div class="tl-seg" role="group" aria-label="Režim proračuna">' +
+          '<button type="button" id="tl-m-flow" aria-pressed="true">Protok iz snage</button>' +
+          '<button type="button" id="tl-m-direct" aria-pressed="false">Poznat protok</button>' +
+        '</div>' +
+        field('q', 'Toplotna / senzibilna rashladna snaga Q', 12, 'kW') +
+        field('v', 'Zapreminski protok V̇', 3600, 'm³/h') +
+        '<div class="tl-row">' + field('t1', 'Ispred izmenjivača t<sub>1</sub>', 26, '°C') + field('t2', 'Iza izmenjivača t<sub>2</sub>', 16, '°C') + '</div>' +
+        '<div class="tl-dt"><span>ΔT = <b id="tl-dt">—</b> K</span><span>ρ(t<sub>2</sub>) = <b id="tl-rhot">—</b> kg/m³</span><span id="tl-mode">hlađenje</span></div>' +
+        '<div class="tl-row">' + field('p', 'Atmosferski pritisak', 1013, 'hPa') + field('cp', 'Spec. toplota cp', 1.006, 'kJ/kgK') + '</div>' +
+        '<h2>Kanal</h2>' +
+        '<div class="tl-seg" role="group" aria-label="Oblik kanala">' +
+          '<button type="button" id="tl-s-rect" aria-pressed="true">Pravougaoni</button>' +
+          '<button type="button" id="tl-s-round" aria-pressed="false">Kružni</button>' +
+        '</div>' +
+        '<div class="tl-row" id="tl-rect-dims">' + field('a', 'Širina a', 600, 'mm') + field('b', 'Visina b', 300, 'mm') + '</div>' +
+        '<div class="tl-row" id="tl-round-dims" hidden>' + field('d', 'Prečnik D', 400, 'mm') + '</div>' +
+        '<div class="tl-pipe-sel">' +
+          '<div class="tl-field"><label for="tl-mat">Materijal kanala</label><div class="tl-inp"><select id="tl-mat">' + matOpts + '</select></div></div>' +
+          field('k', 'Hrapavost k', '', 'mm') +
+        '</div>' +
+        '<div class="tl-field"><label for="tl-use">Namena deonice (preporučena brzina)</label><div class="tl-inp"><select id="tl-use">' + useOpts + '</select></div></div>' +
+        '<p class="tl-note">Preporučene brzine su orijentacione vrednosti za komforne sisteme; za prostore sa strožim zahtevima za buku birajte niže brzine.</p>' +
+      '</section>' +
+      '<section class="tl-panel" aria-label="Rezultati" aria-live="polite">' +
+        '<h2>Rezultat</h2>' +
+        '<div class="tl-big"><span class="lbl" id="tl-big-lbl">Zapreminski protok</span><span class="val" id="tl-big-val">—</span></div>' +
+        '<dl class="tl-kv" id="tl-kv"></dl>' +
+        '<div class="tl-formula" id="tl-formula"></div>' +
+        '<h2 id="tl-duct-title">Izabrani kanal</h2>' +
+        '<div class="tl-big"><span class="lbl">Brzina / jedinični pad pritiska</span><span class="val" id="tl-duct-val">—</span></div>' +
+        '<dl class="tl-kv" id="tl-kv2"></dl>' +
+        '<h2 id="tl-tbl-title">Alternativne dimenzije</h2>' +
+        '<div class="tl-tbl"><table><thead><tr><th>Dimenzija</th><th><span class="sym">D</span><sub>h</sub> [mm]</th><th><span class="sym">w</span> [m/s]</th><th><span class="sym">R</span> [Pa/m]</th><th></th></tr></thead><tbody id="tl-ducts"></tbody></table></div>' +
+        '<p class="tl-note">R po Darcy–Weisbach-u sa hidrauličkim prečnikom D<sub>h</sub> = 2ab/(a+b), faktor trenja po Colebrook-White-u. D<sub>e</sub> je ekvivalentni prečnik (Huebscher) za izbor kružnog kanala istog pada pritiska pri istom protoku.</p>' +
+      '</section>' +
+      '</div></div>';
+
+    function $(id) { return el.querySelector('#tl-' + id); }
+    var mode = 'flow', shape = 'rect', lastMat = null;
+    function press(a, b, on) { $(a).setAttribute('aria-pressed', String(on)); $(b).setAttribute('aria-pressed', String(!on)); }
+    function setMode(m) { mode = m; press('m-flow', 'm-direct', m === 'flow'); el.querySelector('#f-q').hidden = m !== 'flow'; el.querySelector('#f-v').hidden = m !== 'direct'; calc(); }
+    function setShape(s) { shape = s; press('s-rect', 's-round', s === 'rect'); $('rect-dims').hidden = s !== 'rect'; $('round-dims').hidden = s !== 'round'; calc(); }
+    $('m-flow').onclick = function () { setMode('flow'); };
+    $('m-direct').onclick = function () { setMode('direct'); };
+    $('s-rect').onclick = function () { setShape('rect'); };
+    $('s-round').onclick = function () { setShape('round'); };
+
+    function pill(w, use) {
+      if (w < use.lo) return '<span class="tl-pill lo">niska</span>';
+      if (w > use.hi) return '<span class="tl-pill hi">visoka</span>';
+      return '<span class="tl-pill ok">u opsegu</span>';
+    }
+
+    function calc() {
+      var mk = $('mat').value;
+      if (mk !== lastMat) { $('k').value = DUCT_MATERIALS[mk].k; lastMat = mk; }
+      var t1 = +$('t1').value, t2 = +$('t2').value, p = +$('p').value, cp = +$('cp').value, k = +$('k').value / 1000;
+      var use = DUCT_USE[$('use').value];
+      var dT = Math.abs(t1 - t2);
+      var kv = $('kv'), kv2 = $('kv2'), big = $('big-val'), fx = $('formula'), dv = $('duct-val'), tb = $('ducts');
+      function bad(msg) { big.textContent = '—'; dv.textContent = '—'; kv.innerHTML = '<p class="tl-err">' + msg + '</p>'; kv2.innerHTML = ''; fx.textContent = ''; tb.innerHTML = ''; }
+      if (!(p > 0 && cp > 0)) return bad('Unesite pozitivne vrednosti za pritisak i cp.');
+      if (!(k >= 0)) return bad('Hrapavost k ne može biti negativna.');
+      var rho = airRho(t2, p), mu = airMu(t2);
+      $('dt').textContent = fmt(dT, 1); $('rhot').textContent = fmt(rho, 3);
+      // toplija strana crveno, hladnija plavo
+      el.querySelector('#f-t1').classList.toggle('tsup', t1 > t2); el.querySelector('#f-t1').classList.toggle('tret', t1 < t2);
+      el.querySelector('#f-t2').classList.toggle('tsup', t2 > t1); el.querySelector('#f-t2').classList.toggle('tret', t2 < t1);
+      $('mode').textContent = t2 > t1 ? 'grejanje' : t2 < t1 ? 'hlađenje (senzibilno)' : '—';
+      var V, Q;
+      if (mode === 'flow') {
+        Q = +$('q').value;
+        if (!(Q > 0)) return bad('Unesite snagu veću od nule.');
+        if (!(dT > 0)) return bad('Temperature ispred i iza izmenjivača moraju se razlikovati (ΔT > 0).');
+        V = Q / (rho * cp * dT);
+      } else {
+        var vIn = +$('v').value;
+        if (!(vIn > 0)) return bad('Unesite protok veći od nule.');
+        V = vIn / 3600; Q = V * rho * cp * dT;
+      }
+      var Vh = V * 3600, m = V * rho;
+      if (mode === 'flow') { $('big-lbl').textContent = 'Zapreminski protok'; big.innerHTML = fmt(Vh, 0) + '<small>m³/h</small>'; }
+      else { $('big-lbl').textContent = 'Toplotna snaga pri zadatom ΔT'; big.innerHTML = fmt(Q, 2) + '<small>kW</small>'; }
+      var rows = [
+        ['V̇', fmt(V, 3) + ' m³/s'], ['V̇', fmt(V * 1000, 0) + ' l/s'],
+        ['ṁ', fmt(m * 3600, 0) + ' kg/h'], mode === 'flow' ? ['Q', fmt(Q, 2) + ' kW'] : ['V̇', fmt(Vh, 0) + ' m³/h'],
+        ['ΔT', fmt(dT, 1) + ' K'], ['ρ', fmt(rho, 3) + ' kg/m³']
+      ];
+      kv.innerHTML = rows.map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + r[1] + '</dd></div>'; }).join('');
+      fx.textContent = mode === 'flow'
+        ? 'V̇ = Q / (ρ·cp·ΔT) = ' + fmt(Q, 2) + ' / (' + fmt(rho, 3) + ' · ' + fmt(cp, 3) + ' · ' + fmt(dT, 1) + ') = ' + fmt(V, 4) + ' m³/s = ' + fmt(Vh, 0) + ' m³/h'
+        : 'Q = V̇·ρ·cp·ΔT = ' + fmt(V, 4) + ' · ' + fmt(rho, 3) + ' · ' + fmt(cp, 3) + ' · ' + fmt(dT, 1) + ' = ' + fmt(Q, 2) + ' kW';
+
+      // izabrani kanal
+      var A, Dh, De, label;
+      if (shape === 'rect') {
+        var a = +$('a').value / 1000, b = +$('b').value / 1000;
+        if (!(a > 0 && b > 0)) { dv.textContent = '—'; kv2.innerHTML = '<p class="tl-err">Unesite dimenzije kanala.</p>'; tb.innerHTML = ''; return; }
+        A = a * b; Dh = 2 * a * b / (a + b); De = 1.30 * Math.pow(a * b, 0.625) / Math.pow(a + b, 0.25);
+        label = fmt(a * 1000, 0) + '×' + fmt(b * 1000, 0) + ' mm';
+      } else {
+        var d = +$('d').value / 1000;
+        if (!(d > 0)) { dv.textContent = '—'; kv2.innerHTML = '<p class="tl-err">Unesite prečnik kanala.</p>'; tb.innerHTML = ''; return; }
+        A = Math.PI * d * d / 4; Dh = d; De = d; label = 'Ø' + fmt(d * 1000, 0) + ' mm';
+      }
+      var r = ductR(V, A, Dh, rho, mu, k);
+      $('duct-title').innerHTML = 'Izabrani kanal <span class="nc">' + label + '</span>';
+      dv.innerHTML = fmt(r.w, 2) + '<small>m/s</small> ' + fmt(r.R, 2) + '<small>Pa/m</small>';
+      var ratio = shape === 'rect' ? Math.max(a, b) / Math.min(a, b) : 1;
+      var rows2 = [
+        ['A', fmt(A, 4) + ' m²'], ['D<sub>h</sub>', fmt(Dh * 1000, 0) + ' mm'],
+        ['D<sub>e</sub>', fmt(De * 1000, 0) + ' mm'], ['p<sub>d</sub>', fmt(r.pd, 1) + ' Pa'],
+        ['Re', fmt(r.Re, 0)], ['λ', fmt(r.lam, 4)],
+        ['Brzina', pill(r.w, use)], ['a : b', shape === 'rect' ? fmt(ratio, 1) + ' : 1' + (ratio > 4 ? ' ⚠' : '') : '—']
+      ];
+      kv2.innerHTML = rows2.map(function (x) { return '<div><dt>' + x[0] + '</dt><dd>' + x[1] + '</dd></div>'; }).join('');
+
+      // tabela alternativa
+      var list;
+      if (shape === 'rect') {
+        $('tbl-title').innerHTML = 'Alternativne širine pri visini <span class="nc">b = ' + fmt(b * 1000, 0) + ' mm</span>';
+        list = RECT_A.map(function (aa) { var A2 = aa / 1000 * b; return { name: aa + '×' + fmt(b * 1000, 0), A: A2, Dh: 2 * (aa / 1000) * b / (aa / 1000 + b) }; });
+      } else {
+        $('tbl-title').textContent = 'Standardni kružni kanali EN 1506';
+        list = ROUND_D.map(function (dd) { return { name: 'Ø' + dd, A: Math.PI * Math.pow(dd / 1000, 2) / 4, Dh: dd / 1000 }; });
+      }
+      var best = null;
+      tb.innerHTML = list.map(function (x, i) {
+        var rr = ductR(V, x.A, x.Dh, rho, mu, k);
+        var inRange = rr.w >= use.lo && rr.w <= use.hi;
+        if (inRange && best === null) best = i;
+        return '<tr data-i="' + i + '"><td>' + x.name + '</td><td>' + fmt(x.Dh * 1000, 0) + '</td><td>' + fmt(rr.w, 2) + '</td><td>' + fmt(rr.R, 2) + '</td><td>' + pill(rr.w, use) + '</td></tr>';
+      }).join('');
+      if (best !== null) tb.querySelector('[data-i="' + best + '"]').classList.add('best');
+    }
+
+    ['q', 'v', 't1', 't2', 'p', 'cp', 'a', 'b', 'd', 'k', 'mat', 'use'].forEach(function (id) { $(id).addEventListener('input', calc); });
     setMode('flow');
   }
 })();

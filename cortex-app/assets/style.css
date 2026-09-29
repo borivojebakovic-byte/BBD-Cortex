@@ -374,3 +374,4 @@ html, body {
 .prose .tl-tbl td:first-child { white-space: nowrap; }
 .prose .tl-tbl th, .tl-pill { white-space: nowrap; }
 .tl-dt { font-variant-numeric: tabular-nums; }
+.tool h2 .nc { text-transform: none; letter-spacing: 0; }
