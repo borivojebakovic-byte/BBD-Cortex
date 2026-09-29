@@ -83,6 +83,12 @@ Each tool opens in the content area at `#tool/<id>` (e.g. `#tool/flow-calc`).
   pressure drop R (Pa/m), plus a table of alternative sizes (widths at the same height, or EN 1506
   round sizes) against the recommended velocity for the chosen duct section. Materials, velocity
   ranges and size series live in `DUCT_MATERIALS`, `DUCT_USE`, `ROUND_D`, `RECT_A` in `tools.js`.
+- **Air Tools → h-x dijagram** — moist-air state from any two of t, φ, x, h, t_dew, t_wb at a
+  given pressure (Magnus saturation pressure, ASHRAE wet-bulb equation); process 1 → 2 as two
+  entered states, heating, cooling with ADP (dry or dehumidifying, with bypass factor), steam
+  humidification to a target φ, adiabatic humidification with efficiency η, or mixing of two
+  streams. For the entered air flow it gives sensible, latent and total heat, SHR and condensate
+  or added water (kg/h), and draws everything on a Mollier h-x chart (SVG).
 
 To add a tool: add an entry to `MENU` (new menu = new object, new tool = new item in `tools`)
 and write its `render(el, menu)` function. No build step needed.

@@ -21,7 +21,8 @@
       id: 'air',
       label: 'Air Tools',
       tools: [
-        { id: 'duct-calc', label: 'Duct Calc', desc: 'Protok vazduha iz snage, brzina i pad pritiska u kanalu', render: renderDuctCalc }
+        { id: 'duct-calc', label: 'Duct Calc', desc: 'Protok vazduha iz snage, brzina i pad pritiska u kanalu', render: renderDuctCalc },
+        { id: 'hx', label: 'h-x dijagram', desc: 'Stanja vlažnog vazduha, procesi, senzibilna/latentna toplota', render: renderHxCalc }
       ]
     }
   ];
@@ -479,5 +480,409 @@
 
     ['q', 'v', 't1', 't2', 'p', 'cp', 'a', 'b', 'd', 'k', 'mat', 'use'].forEach(function (id) { $(id).addEventListener('input', calc); });
     setMode('flow');
+  }
+  // ---- h-x dijagram: psihrometrija vlažnog vazduha -------------------------
+  // Jedinice interno: t [°C], x [kg/kg suvog vazduha], phi [0–1], h [kJ/kg s.v.], p [Pa]
+
+  function pws(t) { // pritisak zasićenja (Magnus, iznad vode / leda), Pa
+    return t >= 0 ? 611.2 * Math.exp(17.62 * t / (243.12 + t)) : 611.2 * Math.exp(22.46 * t / (272.62 + t));
+  }
+  function xFromPw(pw, p) { return 0.622 * pw / (p - pw); }
+  function pwFromX(x, p) { return p * x / (0.622 + x); }
+  function xSat(t, p) { return xFromPw(pws(t), p); }
+  function hOf(t, x) { return 1.006 * t + x * (2501 + 1.86 * t); }
+  function tFromHX(h, x) { return (h - 2501 * x) / (1.006 + 1.86 * x); }
+  function dewPoint(x, p) {
+    var pw = pwFromX(x, p); if (!(pw > 0)) return NaN;
+    var L = Math.log(pw / 611.2);
+    var t = 243.12 * L / (17.62 - L);
+    return t >= 0 ? t : 272.62 * L / (22.46 - L);
+  }
+  function xWetBulb(t, tw, p) { // psihrometrijska jednačina (ASHRAE)
+    var xs = xSat(tw, p);
+    return tw >= 0
+      ? ((2501 - 2.326 * tw) * xs - 1.006 * (t - tw)) / (2501 + 1.86 * t - 4.186 * tw)
+      : ((2830 - 0.24 * tw) * xs - 1.006 * (t - tw)) / (2830 + 1.86 * t - 2.1 * tw);
+  }
+  function bisect(f, a, b, n) {
+    var fa = f(a);
+    for (var i = 0; i < (n || 80); i++) {
+      var m = (a + b) / 2, fm = f(m);
+      if ((fm < 0) === (fa < 0)) { a = m; fa = fm; } else { b = m; }
+    }
+    return (a + b) / 2;
+  }
+  function wetBulb(t, x, p) {
+    if (xWetBulb(t, t, p) <= x) return t; // zasićeno (ili magla)
+    return bisect(function (tw) { return xWetBulb(t, tw, p) - x; }, -60, t);
+  }
+  // Kompletno stanje iz (t, x)
+  function stateTX(t, x, p) {
+    var pw = pwFromX(x, p), T = t + 273.15;
+    var v = 287.05 * T * (1 + 1.6078 * x) / p; // m³/kg suvog vazduha
+    return { t: t, x: x, phi: pw / pws(t), h: hOf(t, x), td: dewPoint(x, p), twb: wetBulb(t, x, p), v: v, rho: (1 + x) / v, p: p };
+  }
+
+  var PSY_PROPS = {
+    t:   { label: 'Temperatura t', unit: '°C', toSI: function (v) { return v; }, fromSI: function (v) { return v; }, dec: 1 },
+    phi: { label: 'Relativna vlažnost φ', unit: '%', toSI: function (v) { return v / 100; }, fromSI: function (v) { return v * 100; }, dec: 0 },
+    x:   { label: 'Sadržaj vlage x', unit: 'g/kg', toSI: function (v) { return v / 1000; }, fromSI: function (v) { return v * 1000; }, dec: 2 },
+    h:   { label: 'Entalpija h', unit: 'kJ/kg', toSI: function (v) { return v; }, fromSI: function (v) { return v; }, dec: 1 },
+    td:  { label: 'Temperatura rose t_r', unit: '°C', toSI: function (v) { return v; }, fromSI: function (v) { return v; }, dec: 1 },
+    twb: { label: 'Temp. vlažnog termometra t_v', unit: '°C', toSI: function (v) { return v; }, fromSI: function (v) { return v; }, dec: 1 }
+  };
+
+  // Stanje iz bilo koje dve nezavisne veličine. Vraća {state} ili {err}.
+  function stateFrom(k1, v1, k2, v2, p) {
+    if (k1 === k2) return { err: 'Izaberite dve različite veličine.' };
+    var X = {
+      phi: function (t, v) { return xFromPw(v * pws(t), p); },
+      x:   function (t, v) { return v; },
+      h:   function (t, v) { return (v - 1.006 * t) / (2501 + 1.86 * t); },
+      td:  function (t, v) { return xFromPw(pws(v), p); },
+      twb: function (t, v) { return xWetBulb(t, v, p); }
+    };
+    var pair = [k1, k2].sort().join('+');
+    if (pair === 'td+x') return { err: 'x i t_r nisu nezavisne veličine (obe određuju sadržaj vlage). Izaberite drugu kombinaciju.' };
+    if (pair === 'h+twb') return { err: 'h i t_v su praktično zavisne (adijabatska linija ≈ izentalpa). Izaberite drugu kombinaciju.' };
+    if (k1 === 'phi' && !(v1 > 0 && v1 <= 1)) return { err: 'Relativna vlažnost mora biti između 0 i 100 %.' };
+    if (k2 === 'phi' && !(v2 > 0 && v2 <= 1)) return { err: 'Relativna vlažnost mora biti između 0 i 100 %.' };
+    var t, x;
+    if (k1 === 't' || k2 === 't') {
+      t = k1 === 't' ? v1 : v2;
+      var ko = k1 === 't' ? k2 : k1, vo = k1 === 't' ? v2 : v1;
+      if ((ko === 'td' || ko === 'twb') && vo > t + 1e-9) return { err: (ko === 'td' ? 'Temperatura rose' : 'Temperatura vlažnog termometra') + ' ne može biti viša od temperature vazduha.' };
+      x = X[ko](t, vo);
+    } else {
+      var g = function (tt) { return X[k1](tt, v1) - X[k2](tt, v2); };
+      var lo = -50, prev = g(lo), found = null;
+      for (var tt = lo + 0.25; tt <= 120; tt += 0.25) {
+        var cur = g(tt);
+        if (isFinite(cur) && isFinite(prev) && (cur < 0) !== (prev < 0)) {
+          var r = bisect(g, tt - 0.25, tt);
+          var xr = X[k1](r, v1);
+          if (xr >= 0 && pwFromX(xr, p) / pws(r) <= 1.005) { found = r; break; }
+        }
+        prev = cur;
+      }
+      if (found === null) return { err: 'Za unete vrednosti ne postoji fizički moguće stanje vlažnog vazduha.' };
+      t = found; x = X[k1](t, v1);
+    }
+    if (!(x >= 0)) return { err: 'Za unete vrednosti sadržaj vlage ispada negativan.' };
+    var s = stateTX(t, x, p);
+    if (s.phi > 1.005) return { err: 'Stanje je u oblasti magle (φ > 100 %).' };
+    return { state: s };
+  }
+
+  // Procesi: iz stanja 1 i parametara daju stanje 2 (+ pomoćne tačke za dijagram)
+  var HX_PROCESSES = {
+    points: { label: 'Dve tačke (unos stanja 2)' },
+    heat:   { label: 'Grejanje (x = const)' },
+    cool:   { label: 'Hlađenje (suvo ili sa odvlaživanjem)' },
+    steam:  { label: 'Parno ovlaživanje' },
+    adiab:  { label: 'Adijabatsko ovlaživanje (h ≈ const)' },
+    mix:    { label: 'Mešanje dve struje' }
+  };
+
+  function hSat(t, p) { return hOf(t, xSat(t, p)); }
+
+  function runProcess(kind, s1, P, p) {
+    var s2, extra = {};
+    if (kind === 'heat') {
+      if (!(P.t2 > s1.t)) return { err: 'Kod grejanja temperatura posle grejača mora biti viša od t₁.' };
+      s2 = stateTX(P.t2, s1.x, p);
+    } else if (kind === 'cool') {
+      if (!(P.t2 < s1.t)) return { err: 'Kod hlađenja temperatura posle hladnjaka mora biti niža od t₁.' };
+      if (!(P.tadp < P.t2)) return { err: 'Temperatura površine hladnjaka (ADP) mora biti niža od temperature posle hladnjaka.' };
+      var xs = xSat(P.tadp, p);
+      if (xs >= s1.x) {
+        s2 = stateTX(P.t2, s1.x, p); extra.note = 'ADP je iznad tačke rose stanja 1 — suvo hlađenje, bez kondenzacije.';
+        if (s2.phi > 1.005) return { err: 'Temperatura posle hladnjaka je ispod tačke rose — izaberite ADP ispod t_r.' };
+      } else {
+        var f = (s1.t - P.t2) / (s1.t - P.tadp);
+        s2 = stateTX(P.t2, s1.x + f * (xs - s1.x), p);
+        extra.adp = stateTX(P.tadp, xs, p); extra.bf = 1 - f;
+      }
+    } else if (kind === 'steam') {
+      if (!(P.phi2 > s1.phi && P.phi2 <= 1)) return { err: 'Ciljna relativna vlažnost mora biti veća od φ₁ i najviše 100 %.' };
+      var hs = 2676; // entalpija pare ~100 °C, kJ/kg
+      var st = function (x2) { return stateTX(tFromHX(s1.h + (x2 - s1.x) * hs, x2), x2, p); };
+      var x2 = bisect(function (x) { return st(x).phi - P.phi2; }, s1.x, s1.x + 0.06);
+      s2 = st(x2);
+    } else if (kind === 'adiab') {
+      if (!(P.eta > 0 && P.eta <= 1)) return { err: 'Efikasnost ovlaživača mora biti između 0 i 100 %.' };
+      var ts = bisect(function (t) { return hSat(t, p) - s1.h; }, -40, s1.t);
+      var xsat = xSat(ts, p);
+      var xa = s1.x + P.eta * (xsat - s1.x);
+      s2 = stateTX(tFromHX(s1.h, xa), xa, p);
+      extra.sat = stateTX(ts, xsat, p);
+    } else if (kind === 'mix') {
+      var mA = P.VA / s1.v, mB = P.VB / P.sB.v; // kg s.v./h
+      var xm = (mA * s1.x + mB * P.sB.x) / (mA + mB), hm = (mA * s1.h + mB * P.sB.h) / (mA + mB);
+      s2 = stateTX(tFromHX(hm, xm), xm, p);
+      extra.B = P.sB; extra.share = mB / (mA + mB);
+      if (s2.phi > 1.005) extra.note = 'Mešavina pada u oblast magle (φ > 100 %) — deo vlage se izdvaja kao magla.';
+    }
+    return { s2: s2, extra: extra };
+  }
+
+  // ---- crtanje h-x (Mollier) dijagrama ----------------------------------------
+  // Kosi koordinatni sistem: horizontalno x [g/kg], vertikalno Y = h − 2501·x = t·(1,006 + 1,86·x),
+  // pa su izoterme skoro horizontalne, a izentalpe kose prave — kao na klasičnom Mollier dijagramu.
+  function drawHx(host, pts, segs, p) {
+    var NS = 'http://www.w3.org/2000/svg';
+    var W = 920, H = 580, ml = 44, mr = 56, mt = 18, mb = 42;
+    var maxT = 40, minT = -10, maxX = 20;
+    pts.forEach(function (q) { maxT = Math.max(maxT, q.s.t); minT = Math.min(minT, q.s.t); maxX = Math.max(maxX, q.s.x * 1000); });
+    var tmin = Math.floor((minT - 3) / 5) * 5, tmax = Math.ceil((maxT + 3) / 5) * 5, xmax = Math.ceil((maxX + 2) / 5) * 5;
+    var Yof = function (t, xg) { return t * (1.006 + 1.86 * xg / 1000); };
+    var Ymax = Yof(tmax, xmax), Ymin = tmin < 0 ? Yof(tmin, xmax) : tmin * 1.006;
+    var sx = function (xg) { return ml + xg / xmax * (W - ml - mr); };
+    var sy = function (Y) { return mt + (Ymax - Y) / (Ymax - Ymin) * (H - mt - mb); };
+    var P = function (t, xg) { return sx(xg).toFixed(1) + ',' + sy(Yof(t, xg)).toFixed(1); };
+    var out = [];
+    function line(pts2, cls, extra) { out.push('<polyline class="' + cls + '" points="' + pts2.join(' ') + '"' + (extra || '') + '/>'); }
+    function text(x, y, s, cls, anchor) { out.push('<text class="' + (cls || 'hx-lbl') + '" x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '"' + (anchor ? ' text-anchor="' + anchor + '"' : '') + '>' + s + '</text>'); }
+
+    // linija zasićenja i oblast bez magle (za odsecanje)
+    var sat = [], tEnd = tmin;
+    for (var t = tmin; t <= tmax + 1e-9; t += 0.25) {
+      var xg = xSat(t, p) * 1000;
+      if (xg > xmax) break;
+      sat.push([xg, t]); tEnd = t;
+    }
+    var poly = ['0,' + Ymin].concat(sat.map(function (a) { return a[0] + ',' + Yof(a[1], a[0]); }));
+    var last = sat[sat.length - 1];
+    poly.push(last[0] + ',' + Ymax, '0,' + Ymax);
+    var polyPx = poly.map(function (s) { var a = s.split(','); return sx(+a[0]).toFixed(1) + ',' + sy(+a[1]).toFixed(1); }).join(' ');
+    out.push('<defs><clipPath id="hx-clip"><polygon points="' + polyPx + '"/></clipPath>' +
+      '<clipPath id="hx-plot"><rect x="' + ml + '" y="' + mt + '" width="' + (W - ml - mr) + '" height="' + (H - mt - mb) + '"/></clipPath>' +
+      '<marker id="hx-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="hx-arrowhead"/></marker></defs>');
+    out.push('<rect class="hx-fog" x="' + ml + '" y="' + mt + '" width="' + (W - ml - mr) + '" height="' + (H - mt - mb) + '"/>');
+    out.push('<polygon class="hx-air" points="' + polyPx + '" clip-path="url(#hx-plot)"/>');
+
+    // x mreža
+    out.push('<g clip-path="url(#hx-clip)">');
+    for (var xg2 = 1; xg2 < xmax; xg2++) out.push('<line class="' + (xg2 % 5 ? 'hx-grid' : 'hx-grid2') + '" x1="' + sx(xg2) + '" x2="' + sx(xg2) + '" y1="' + mt + '" y2="' + (H - mb) + '"/>');
+    // izentalpe
+    var hLo = Math.floor(Ymin / 5) * 5, hHi = Math.ceil((Ymax + 2.501 * xmax) / 5) * 5;
+    for (var h = hLo; h <= hHi; h += 5) line([sx(0) + ',' + sy(h), sx(xmax) + ',' + sy(h - 2.501 * xmax)], h % 10 ? 'hx-h' : 'hx-h2');
+    // izoterme
+    for (var ti = tmin; ti <= tmax; ti += 1) {
+      var xe = Math.min(xSat(ti, p) * 1000, xmax);
+      line([P(ti, 0), P(ti, xe)], ti % 5 ? 'hx-iso0' : (ti % 10 ? 'hx-iso' : 'hx-iso2'));
+    }
+    // linije φ = const
+    [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9].forEach(function (ph) {
+      var ptsP = [];
+      for (var t3 = tmin; t3 <= tmax + 1e-9; t3 += 0.5) { var x3 = xFromPw(ph * pws(t3), p) * 1000; if (x3 > xmax * 1.02) break; ptsP.push(P(t3, x3)); }
+      line(ptsP, 'hx-phi');
+    });
+    out.push('</g>');
+    line(sat.map(function (a) { return P(a[1], a[0]); }), 'hx-sat');
+
+    // oznake: t levo, x dole, h gore/na zasićenju, φ na krajevima
+    for (var tl = tmin; tl <= tmax; tl += 5) text(ml - 6, sy(Yof(tl, 0)) + 3.5, tl, 'hx-lbl', 'end');
+    for (var xl = 0; xl <= xmax; xl += (xmax > 30 ? 5 : 2)) text(sx(xl), H - mb + 16, xl, 'hx-lbl', 'middle');
+    text(sx(xmax / 2), H - 6, 'x [g/kg suvog vazduha]', 'hx-ax', 'middle');
+    text(12, mt + 4, 't [°C]', 'hx-ax', 'start');
+    for (var hl = hLo; hl <= hHi; hl += 10) {
+      var xTop = (hl - Ymax) / 2.501;
+      if (xTop > 0.3 && xTop < xmax - 3) { text(sx(xTop), mt - 3, hl, 'hx-hl', 'middle'); continue; }
+      if (xTop <= 0.3) continue;
+      var tsat = bisect(function (tt) { return hSat(tt, p) - hl; }, -60, 100);
+      var xs2 = xSat(tsat, p) * 1000;
+      if (tsat > tmin && tsat < tEnd && xs2 < xmax - 1) text(sx(xs2) + 4, sy(Yof(tsat, xs2)) + 12, hl, 'hx-hl', 'start');
+    }
+    text(W - mr, mt - 3, 'h [kJ/kg]', 'hx-hl', 'end');
+    [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8].forEach(function (ph) {
+      var tA = bisect(function (tt) { return xFromPw(ph * pws(tt), p) * 1000 - xmax; }, -60, 150);
+      if (tA < tmax) text(W - mr + 4, sy(Yof(tA, xmax)) + 3, Math.round(ph * 100) + ' %', 'hx-pl', 'start');
+      else { var xB = xFromPw(ph * pws(tmax), p) * 1000; text(sx(xB), mt + 12, Math.round(ph * 100) + '%', 'hx-pl', 'middle'); }
+    });
+    text(sx(last[0]) - 4, sy(Yof(last[1], last[0])) - 6, 'φ = 100 %', 'hx-pl', 'end');
+    out.push('<rect class="hx-frame" x="' + ml + '" y="' + mt + '" width="' + (W - ml - mr) + '" height="' + (H - mt - mb) + '"/>');
+
+    // procesi i tačke
+    segs.forEach(function (sg) {
+      out.push('<line class="' + sg.cls + '" x1="' + sx(sg.a.x * 1000) + '" y1="' + sy(Yof(sg.a.t, sg.a.x * 1000)) + '" x2="' + sx(sg.b.x * 1000) + '" y2="' + sy(Yof(sg.b.t, sg.b.x * 1000)) + '"' + (sg.arrow ? ' marker-end="url(#hx-arrow)"' : '') + '/>');
+    });
+    pts.forEach(function (q) {
+      var X = sx(q.s.x * 1000), Y = sy(Yof(q.s.t, q.s.x * 1000));
+      out.push('<circle class="' + (q.cls || 'hx-pt') + '" cx="' + X.toFixed(1) + '" cy="' + Y.toFixed(1) + '" r="' + (q.small ? 3.5 : 5.5) + '"><title>' + q.name + ': t = ' + fmt(q.s.t, 1) + ' °C, φ = ' + fmt(Math.min(q.s.phi, 9.99) * 100, 0) + ' %, x = ' + fmt(q.s.x * 1000, 2) + ' g/kg, h = ' + fmt(q.s.h, 1) + ' kJ/kg</title></circle>');
+      text(X + 8, Y - 8, q.name, q.small ? 'hx-ptl2' : 'hx-ptl', 'start');
+    });
+
+    host.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="h-x dijagram vlažnog vazduha">' + out.join('') + '</svg>';
+  }
+
+  // ---- h-x alat ----------------------------------------------------------------
+  function psyPointHtml(pfx, title, k1, v1, k2, v2) {
+    var opts = function (sel) { return Object.keys(PSY_PROPS).map(function (k) { return '<option value="' + k + '"' + (k === sel ? ' selected' : '') + '>' + PSY_PROPS[k].label + '</option>'; }).join(''); };
+    var one = function (n, k, v) {
+      return '<div class="hx-prop">' +
+        '<div class="tl-inp"><select id="tl-' + pfx + 'k' + n + '" aria-label="' + title + ' – veličina ' + n + '">' + opts(k) + '</select></div>' +
+        '<div class="tl-inp"><input id="tl-' + pfx + 'v' + n + '" type="number" inputmode="decimal" step="any" value="' + v + '" aria-label="' + title + ' – vrednost ' + n + '"><span class="u" id="tl-' + pfx + 'u' + n + '">' + PSY_PROPS[k].unit + '</span></div>' +
+        '</div>';
+    };
+    return '<div class="tl-field"><label>' + title + '</label>' + one(1, k1, v1) + one(2, k2, v2) + '</div>';
+  }
+
+  function renderHxCalc(el, menu) {
+    var procOpts = Object.keys(HX_PROCESSES).map(function (k) { return '<option value="' + k + '"' + (k === 'cool' ? ' selected' : '') + '>' + HX_PROCESSES[k].label + '</option>'; }).join('');
+    el.innerHTML =
+      '<div class="tool tool-wide">' +
+      '<div class="doc-meta">Alati · ' + menu.label + '</div>' +
+      '<h1>h-x dijagram</h1>' +
+      '<p class="tl-lede">Stanje vlažnog vazduha iz bilo koje dve veličine, promena stanja kroz proces i razmenjena toplota i voda za zadati protok. Dijagram je Mollier-ov (h-x), za uneti atmosferski pritisak.</p>' +
+      '<div class="tl-grid">' +
+      '<section class="tl-panel" aria-label="Ulazni podaci">' +
+        '<h2>Stanje 1</h2>' +
+        psyPointHtml('a', 'Dve poznate veličine', 't', 32, 'phi', 40) +
+        '<div class="tl-row">' + field('p', 'Atmosferski pritisak', 1013, 'hPa') + field('V', 'Protok vazduha V̇ (stanje 1)', 5000, 'm³/h') + '</div>' +
+        '<h2>Proces 1 → 2</h2>' +
+        '<div class="tl-field"><label for="tl-proc">Vrsta procesa</label><div class="tl-inp"><select id="tl-proc">' + procOpts + '</select></div></div>' +
+        '<div id="tl-proc-in" class="hx-procin"></div>' +
+        '<p class="tl-note" id="tl-proc-note"></p>' +
+      '</section>' +
+      '<section class="tl-panel" aria-label="Rezultati" aria-live="polite">' +
+        '<h2>Stanja vazduha</h2>' +
+        '<div class="tl-tbl"><table id="tl-states"></table></div>' +
+        '<h2>Razmenjena toplota i voda</h2>' +
+        '<div class="tl-big"><span class="lbl" id="tl-big-lbl">Ukupna toplota</span><span class="val" id="tl-big-val">—</span></div>' +
+        '<dl class="tl-kv" id="tl-kv"></dl>' +
+        '<p class="tl-err" id="tl-err" hidden></p>' +
+      '</section>' +
+      '</div>' +
+      '<section class="tl-panel hx-chart" aria-label="h-x dijagram"><h2>h-x dijagram</h2><div id="tl-chart"></div>' +
+      '<p class="tl-note">Pritisak zasićenja po Magnus-u (iznad vode, odnosno leda ispod 0 °C); t<sub>v</sub> po psihrometrijskoj jednačini (ASHRAE). Senzibilna toplota Q<sub>s</sub> = ṁ·(1,006 + 1,86·x₁)·Δt, latentna Q<sub>l</sub> = Q<sub>uk</sub> − Q<sub>s</sub>. Za parno ovlaživanje uzeta je entalpija pare 2676 kJ/kg (~100 °C).</p></section>' +
+      '</div>';
+
+    function $(id) { return el.querySelector('#tl-' + id); }
+    var last = {}; // poslednja izračunata stanja, za prenos vrednosti pri promeni veličine
+
+    function bindPoint(pfx, key) {
+      [1, 2].forEach(function (n) {
+        $(pfx + 'k' + n).addEventListener('change', function () {
+          var k = this.value;
+          $(pfx + 'u' + n).textContent = PSY_PROPS[k].unit;
+          if (last[key]) { var pr = PSY_PROPS[k]; $(pfx + 'v' + n).value = +pr.fromSI(last[key][k]).toFixed(pr.dec); }
+          calc();
+        });
+        $(pfx + 'v' + n).addEventListener('input', calc);
+      });
+    }
+    function readPoint(pfx, p) {
+      var k1 = $(pfx + 'k1').value, k2 = $(pfx + 'k2').value;
+      return stateFrom(k1, PSY_PROPS[k1].toSI(+$(pfx + 'v1').value), k2, PSY_PROPS[k2].toSI(+$(pfx + 'v2').value), p);
+    }
+
+    function renderProcInputs() {
+      var kind = $('proc').value, s1 = last.s1, html = '';
+      var t1 = s1 ? s1.t : 32, phi1 = s1 ? s1.phi * 100 : 40;
+      if (kind === 'points') html = psyPointHtml('b', 'Stanje 2 – dve poznate veličine', 't', 16, 'phi', 90);
+      if (kind === 'heat') html = field('t2', 'Temperatura posle grejača t₂', Math.round(t1 + 15), '°C');
+      if (kind === 'cool') html = '<div class="tl-row">' + field('t2', 'Temperatura posle hladnjaka t₂', 16, '°C') + field('tadp', 'Temp. površine hladnjaka (ADP)', 11, '°C') + '</div>';
+      if (kind === 'steam') html = field('phi2', 'Ciljna relativna vlažnost φ₂', Math.min(90, Math.round(phi1 + 30)), '%');
+      if (kind === 'adiab') html = field('eta', 'Efikasnost ovlaživača η', 85, '%');
+      if (kind === 'mix') html = psyPointHtml('c', 'Stanje B (druga struja)', 't', 24, 'phi', 50) + field('VB', 'Protok struje B', 5000, 'm³/h');
+      $('proc-in').innerHTML = html;
+      $('proc-in').querySelectorAll('input').forEach(function (i) { i.addEventListener('input', calc); });
+      if (kind === 'points') bindPoint('b', 's2in');
+      if (kind === 'mix') bindPoint('c', 'sB');
+      calc();
+    }
+
+    function stateRows(cols) {
+      var rows = [
+        ['t', '°C', 't', 1, 1], ['φ', '%', 'phi', 100, 0], ['x', 'g/kg', 'x', 1000, 2], ['h', 'kJ/kg', 'h', 1, 1],
+        ['t<sub>r</sub>', '°C', 'td', 1, 1], ['t<sub>v</sub>', '°C', 'twb', 1, 1], ['ρ', 'kg/m³', 'rho', 1, 3], ['v', 'm³/kg s.v.', 'v', 1, 3]
+      ];
+      var head = '<thead><tr><th>Veličina</th>' + cols.map(function (c) { return '<th>' + c.name + '</th>'; }).join('') + '</tr></thead>';
+      var body = rows.map(function (r) {
+        return '<tr><td><span class="sym">' + r[0] + '</span> [' + r[1] + ']</td>' + cols.map(function (c) { return '<td>' + fmt(c.s[r[2]] * r[3], r[4]) + '</td>'; }).join('') + '</tr>';
+      }).join('');
+      return head + '<tbody>' + body + '</tbody>';
+    }
+
+    function calc() {
+      var err = $('err'), kv = $('kv'), big = $('big-val'), note = $('proc-note');
+      function bad(msg) { err.textContent = msg; err.hidden = false; kv.innerHTML = ''; big.textContent = '—'; }
+      err.hidden = true; note.textContent = '';
+      var p = +$('p').value * 100, V = +$('V').value;
+      if (!(p > 50000 && p < 120000)) return bad('Unesite atmosferski pritisak u opsegu 500–1200 hPa.');
+      var r1 = readPoint('a', p);
+      if (r1.err) { $('states').innerHTML = ''; $('chart').innerHTML = ''; return bad('Stanje 1: ' + r1.err); }
+      var s1 = r1.state; last.s1 = s1;
+      var kind = $('proc').value, P = {}, s2, extra = {};
+      if (kind === 'points') {
+        var r2 = readPoint('b', p);
+        if (r2.err) { $('states').innerHTML = stateRows([{ name: '1', s: s1 }]); drawHx($('chart'), [{ s: s1, name: '1' }], [], p); return bad('Stanje 2: ' + r2.err); }
+        s2 = r2.state; last.s2in = s2;
+      } else {
+        if (kind === 'heat' || kind === 'cool') P.t2 = +$('t2').value;
+        if (kind === 'cool') P.tadp = +$('tadp').value;
+        if (kind === 'steam') P.phi2 = +$('phi2').value / 100;
+        if (kind === 'adiab') P.eta = +$('eta').value / 100;
+        if (kind === 'mix') {
+          var rB = readPoint('c', p);
+          if (rB.err) { $('states').innerHTML = stateRows([{ name: '1', s: s1 }]); drawHx($('chart'), [{ s: s1, name: '1' }], [], p); return bad('Stanje B: ' + rB.err); }
+          last.sB = rB.state; P.sB = rB.state; P.VA = V; P.VB = +$('VB').value;
+          if (!(P.VA > 0 && P.VB > 0)) return bad('Unesite protoke obe struje.');
+        }
+        var res = runProcess(kind, s1, P, p);
+        if (res.err) { $('states').innerHTML = stateRows([{ name: '1', s: s1 }]); drawHx($('chart'), [{ s: s1, name: '1' }], [], p); return bad(res.err); }
+        s2 = res.s2; extra = res.extra;
+      }
+      last.s2 = s2;
+
+      // tabela stanja i dijagram
+      var cols = [{ name: '1', s: s1 }], pts = [{ s: s1, name: '1' }], segs = [];
+      if (kind === 'mix') {
+        cols.push({ name: 'B', s: extra.B }, { name: 'M (2)', s: s2 });
+        pts.push({ s: extra.B, name: 'B' }, { s: s2, name: 'M', cls: 'hx-pt2' });
+        segs.push({ a: s1, b: extra.B, cls: 'hx-proc-dash' });
+      } else {
+        cols.push({ name: '2', s: s2 });
+        pts.push({ s: s2, name: '2', cls: 'hx-pt2' });
+        segs.push({ a: s1, b: s2, cls: 'hx-proc', arrow: true });
+      }
+      if (extra.adp) { pts.push({ s: extra.adp, name: 'ADP', small: true, cls: 'hx-pt3' }); segs.push({ a: s2, b: extra.adp, cls: 'hx-proc-dash' }); }
+      if (extra.sat) { pts.push({ s: extra.sat, name: 'zasićenje', small: true, cls: 'hx-pt3' }); segs.push({ a: s2, b: extra.sat, cls: 'hx-proc-dash' }); }
+      $('states').innerHTML = stateRows(cols);
+      drawHx($('chart'), pts, segs, p);
+
+      // energija i voda
+      if (!(V > 0)) return bad('Unesite protok vazduha veći od nule.');
+      var m = V / 3600 / s1.v; // kg s.v./s
+      var rows;
+      if (kind === 'mix') {
+        var mT = m + P.VB / 3600 / extra.B.v;
+        $('big-lbl').textContent = 'Stanje mešavine';
+        big.innerHTML = fmt(s2.t, 1) + '<small>°C</small> ' + fmt(s2.phi * 100, 0) + '<small>%</small>';
+        rows = [['ṁ<sub>1</sub>', fmt(m * 3600, 0) + ' kg/h'], ['ṁ<sub>B</sub>', fmt((mT - m) * 3600, 0) + ' kg/h'],
+                ['Udeo B', fmt(extra.share * 100, 1) + ' %'], ['V̇<sub>M</sub>', fmt(mT * s2.v * 3600, 0) + ' m³/h'],
+                ['x<sub>M</sub>', fmt(s2.x * 1000, 2) + ' g/kg'], ['h<sub>M</sub>', fmt(s2.h, 1) + ' kJ/kg']];
+      } else {
+        var Qt = m * (s2.h - s1.h), Qs = m * (1.006 + 1.86 * s1.x) * (s2.t - s1.t), Ql = Qt - Qs;
+        var W = m * (s2.x - s1.x) * 3600;
+        $('big-lbl').textContent = Qt >= 0 ? 'Ukupna dovedena toplota' : 'Ukupna odvedena toplota';
+        big.innerHTML = fmt(Math.abs(Qt), 2) + '<small>kW</small>';
+        rows = [['Q<sub>s</sub> senzibilna', fmt(Qs, 2) + ' kW'], ['Q<sub>l</sub> latentna', fmt(Ql, 2) + ' kW'],
+                ['Q<sub>uk</sub> ukupna', fmt(Qt, 2) + ' kW'], ['SHR = Q<sub>s</sub>/Q<sub>uk</sub>', Math.abs(Qt) > 1e-6 ? fmt(Qs / Qt, 2) : '—'],
+                [W < -1e-9 ? 'Izdvojeni kondenzat' : W > 1e-9 ? 'Dodata voda / para' : 'Promena vlage', fmt(Math.abs(W), 2) + ' kg/h'],
+                ['ṁ suvog vazduha', fmt(m * 3600, 0) + ' kg/h']];
+        if (extra.bf !== undefined) rows.push(['Bypass faktor', fmt(extra.bf, 2)], ['ADP', fmt(extra.adp.t, 1) + ' °C']);
+        if (kind === 'steam') rows.push(['Para (~100 °C)', fmt(W, 2) + ' kg/h']);
+      }
+      kv.innerHTML = rows.map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + r[1] + '</dd></div>'; }).join('');
+      if (extra.note) note.textContent = extra.note;
+    }
+
+    bindPoint('a', 's1');
+    $('p').addEventListener('input', calc);
+    $('V').addEventListener('input', calc);
+    $('proc').addEventListener('change', renderProcInputs);
+    renderProcInputs();
   }
 })();
