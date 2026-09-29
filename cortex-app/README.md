@@ -84,11 +84,13 @@ Each tool opens in the content area at `#tool/<id>` (e.g. `#tool/flow-calc`).
   round sizes) against the recommended velocity for the chosen duct section. Materials, velocity
   ranges and size series live in `DUCT_MATERIALS`, `DUCT_USE`, `ROUND_D`, `RECT_A` in `tools.js`.
 - **Air Tools → h-x dijagram** — moist-air state from any two of t, φ, x, h, t_dew, t_wb at a
-  given pressure (Magnus saturation pressure, ASHRAE wet-bulb equation); process 1 → 2 as two
-  entered states, heating, cooling with ADP (dry or dehumidifying, with bypass factor), steam
-  humidification to a target φ, adiabatic humidification with efficiency η, or mixing of two
-  streams. For the entered air flow it gives sensible, latent and total heat, SHR and condensate
-  or added water (kg/h), and draws everything on a Mollier h-x chart (SVG).
+  given pressure (Magnus saturation pressure, ASHRAE wet-bulb equation), followed by a chain of
+  processes (add, reorder, remove steps) — each step starts from the previous state: entered
+  state, heating, cooling with ADP (dry or dehumidifying, with bypass factor), steam
+  humidification to a target φ, adiabatic humidification with efficiency η, or mixing with a
+  second stream (which adds its dry-air mass flow to all following steps). Per step it gives
+  sensible, latent and total heat and condensate/added water (kg/h), plus totals, a table of all
+  states and a Mollier h-x chart (SVG) of the whole chain.
 
 To add a tool: add an entry to `MENU` (new menu = new object, new tool = new item in `tools`)
 and write its `render(el, menu)` function. No build step needed.
