@@ -154,7 +154,8 @@
     contentInner.innerHTML =
       '<h1>BBD Cortex</h1>' +
       '<p>Baza znanja BBD Engineering — pravilnici, zakoni i standardi na jednom mestu.</p>' +
-      '<p>Izaberite dokument iz levog menija ili pretražite iznad.</p>';
+      '<p>Izaberite dokument iz levog menija ili pretražite iznad.</p>' +
+      '<p>Inženjerski kalkulatori su u meniju u gornjoj traci (npr. <a href="#tool/flow-calc">Hydronic Tools → Flow Calc</a>).</p>';
   }
 
   // Chapter markdown embeds images as raw <img src="media/xxx.png"> (from
@@ -196,6 +197,11 @@
   function route() {
     var hash = location.hash.replace(/^#\/?/, '');
     if (!hash) { showWelcome(); return; }
+    if (hash.indexOf('tool/') === 0 && window.CortexTools) {
+      setActiveLink(null);
+      window.CortexTools.render(hash.slice(5), contentInner);
+      return;
+    }
     renderDoc(decodeURIComponent(hash));
   }
 
@@ -274,6 +280,24 @@
       searchResultsEl.hidden = true;
     }
   });
+
+  // ---- mobilni prikaz: sadržaj kao fioka koja se otvara dugmetom ---------
+
+  var appEl = document.getElementById('app');
+  var navToggle = document.getElementById('nav-toggle');
+  var backdrop = document.getElementById('sidebar-backdrop');
+
+  function setNav(open) {
+    appEl.classList.toggle('nav-open', open);
+    navToggle.setAttribute('aria-expanded', String(open));
+    navToggle.setAttribute('aria-label', open ? 'Sakrij sadržaj' : 'Prikaži sadržaj');
+    backdrop.hidden = !open;
+  }
+  navToggle.addEventListener('click', function () { setNav(!appEl.classList.contains('nav-open')); });
+  backdrop.addEventListener('click', function () { setNav(false); });
+  sidebarTree.addEventListener('click', function (e) { if (e.target.closest('.sb-link')) setNav(false); });
+  window.addEventListener('hashchange', function () { setNav(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setNav(false); });
 
   // ---- boot ------------------------------------------------------------
 

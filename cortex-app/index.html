@@ -10,17 +10,23 @@
 <body>
   <div id="app">
     <header id="topbar">
+      <button type="button" id="nav-toggle" aria-label="Prikaži sadržaj" aria-controls="sidebar" aria-expanded="false">
+        <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
       <div id="brand"><img src="assets/logo.png" alt="BBD Cortex" /></div>
       <div id="search-wrap">
         <input id="search-input" type="text" placeholder="Pretraži BBD Cortex…" autocomplete="off" />
         <div id="search-results" hidden></div>
       </div>
+      <nav id="toolmenu" aria-label="Alati"></nav>
     </header>
 
     <div id="body">
       <nav id="sidebar" aria-label="Sadržaj">
         <div id="sidebar-tree">Učitavanje…</div>
       </nav>
+
+      <div id="sidebar-backdrop" hidden></div>
 
       <main id="content">
         <div id="content-inner" class="prose">
@@ -31,6 +37,7 @@
   </div>
 
   <script src="assets/marked.umd.js"></script>
+  <script src="assets/tools.js"></script>
   <script src="assets/app.js"></script>
 </body>
 </html>

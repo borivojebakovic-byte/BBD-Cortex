@@ -56,11 +56,24 @@ No server-side code runs — it's static files end to end. Re-run `node build.js
 | --- | --- |
 | `index.html` | Page shell |
 | `assets/app.js` | All app logic: sidebar, routing, markdown fetch/render, search |
+| `assets/tools.js` | Tools menu in the top bar + the engineering calculators (route `#tool/<id>`) |
 | `assets/style.css` | Styling |
 | `assets/marked.umd.js` | Vendored markdown renderer (no CDN dependency) |
 | `build.js` | Regenerates `manifest.json` / `search-index.json` by scanning the whole repo root |
 | `serve.js` | Zero-dependency local preview server |
 | `manifest.json`, `search-index.json` | Generated — committed so the app works immediately; regenerate after content changes |
+
+## Tools (Alati)
+
+The top bar has a tools menu built from the `MENU` registry at the top of `assets/tools.js`.
+Each tool opens in the content area at `#tool/<id>` (e.g. `#tool/flow-calc`).
+
+- **Hydronic Tools → Flow Calc** — flow from heat load and ΔT, or heat load from flow
+  (Q = ṁ·cp·ΔT); water properties at mean temperature, glycol presets, manual ρ/cp, and
+  velocity check in EN 10255 steel pipes.
+
+To add a tool: add an entry to `MENU` (new menu = new object, new tool = new item in `tools`)
+and write its `render(el, menu)` function. No build step needed.
 
 ## Content structure
 
