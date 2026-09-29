@@ -375,3 +375,7 @@ html, body {
 .prose .tl-tbl th, .tl-pill { white-space: nowrap; }
 .tl-dt { font-variant-numeric: tabular-nums; }
 .tool h2 .nc { text-transform: none; letter-spacing: 0; }
+/* korisnikova dimenzija u tabeli alternativa */
+.prose .tl-tbl tr.user td { font-weight: 700; color: var(--text); box-shadow: inset 0 1px 0 var(--accent), inset 0 -1px 0 var(--accent); }
+.prose .tl-tbl tr.user td:first-child { box-shadow: inset 3px 0 0 var(--accent), inset 0 1px 0 var(--accent), inset 0 -1px 0 var(--accent); }
+.tl-pill.user { background: var(--accent-bg); color: var(--accent); margin-left: 6px; }

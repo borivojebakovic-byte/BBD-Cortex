@@ -456,17 +456,23 @@
       var list;
       if (shape === 'rect') {
         $('tbl-title').innerHTML = 'Alternativne širine pri visini <span class="nc">b = ' + fmt(b * 1000, 0) + ' mm</span>';
-        list = RECT_A.map(function (aa) { var A2 = aa / 1000 * b; return { name: aa + '×' + fmt(b * 1000, 0), A: A2, Dh: 2 * (aa / 1000) * b / (aa / 1000 + b) }; });
+        // korisnikova širina se ubacuje u niz standardnih na svoje mesto
+        var aUser = Math.round(a * 1000 * 10) / 10;
+        var widths = RECT_A.indexOf(aUser) === -1 ? RECT_A.concat([aUser]).sort(function (x, y) { return x - y; }) : RECT_A;
+        list = widths.map(function (aa) { return { name: Math.round(aa) + '×' + Math.round(b * 1000), A: aa / 1000 * b, Dh: 2 * (aa / 1000) * b / (aa / 1000 + b), user: aa === aUser, std: RECT_A.indexOf(aa) !== -1 }; });
       } else {
         $('tbl-title').textContent = 'Standardni kružni kanali EN 1506';
-        list = ROUND_D.map(function (dd) { return { name: 'Ø' + dd, A: Math.PI * Math.pow(dd / 1000, 2) / 4, Dh: dd / 1000 }; });
+        var dUser = Math.round(d * 1000 * 10) / 10;
+        var diams = ROUND_D.indexOf(dUser) === -1 ? ROUND_D.concat([dUser]).sort(function (x, y) { return x - y; }) : ROUND_D;
+        list = diams.map(function (dd) { return { name: 'Ø' + Math.round(dd), A: Math.PI * Math.pow(dd / 1000, 2) / 4, Dh: dd / 1000, user: dd === dUser, std: ROUND_D.indexOf(dd) !== -1 }; });
       }
       var best = null;
       tb.innerHTML = list.map(function (x, i) {
         var rr = ductR(V, x.A, x.Dh, rho, mu, k);
         var inRange = rr.w >= use.lo && rr.w <= use.hi;
-        if (inRange && best === null) best = i;
-        return '<tr data-i="' + i + '"><td>' + x.name + '</td><td>' + fmt(x.Dh * 1000, 0) + '</td><td>' + fmt(rr.w, 2) + '</td><td>' + fmt(rr.R, 2) + '</td><td>' + pill(rr.w, use) + '</td></tr>';
+        if (inRange && best === null && x.std) best = i;
+        var tag = x.user ? ' <span class="tl-pill user" title="' + (x.std ? 'Vaša dimenzija (standardna)' : 'Vaša dimenzija (nestandardna)') + '">unos</span>' : '';
+        return '<tr data-i="' + i + '"' + (x.user ? ' class="user"' : '') + '><td>' + x.name + tag + '</td><td>' + fmt(x.Dh * 1000, 0) + '</td><td>' + fmt(rr.w, 2) + '</td><td>' + fmt(rr.R, 2) + '</td><td>' + pill(rr.w, use) + '</td></tr>';
       }).join('');
       if (best !== null) tb.querySelector('[data-i="' + best + '"]').classList.add('best');
     }
