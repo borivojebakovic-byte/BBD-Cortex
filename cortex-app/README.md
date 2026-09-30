@@ -76,6 +76,13 @@ Each tool opens in the content area at `#tool/<id>` (e.g. `#tool/flow-calc`).
   ρ/cp/μ. For the selected pipe range (steel EN 10255 / EN 10220, Viega Prestabo, Viega
   Sanpress, copper EN 1057, PE-X, multilayer) it lists velocity and unit pressure drop R (Pa/m,
   Darcy–Weisbach + Colebrook-White) per size. Pipe ranges live in `PIPE_SETS` in `tools.js`.
+- **Hydronic Tools → Safety Valve** — safety valve of a closed hot-water heating system
+  (t ≤ 105 °C) per **SRPS EN 12828**: opening pressure p_sv ≤ PS − ρ·g·Δh (weakest component,
+  height difference), picked from standard set pressures, with the expansion-vessel check from
+  Annex D (p₀ ≥ p_st + p_D + 0.2 bar, p_e ≤ p_sv − 0.5 bar / 0.9·p_sv). Size either from the
+  table for diaphragm valves marked "H" (p_sv ≤ 3 bar, ≤ 900 kW per valve, DIN 4751-2) or by
+  steam discharge capacity per **SRPS EN ISO 4126-7** (Q_m = Q/r, A = Q_m / (0.2883·C·K_dr·√(p₀/v₀)))
+  giving the minimum seat diameter d₀. Tables live in `STEAM`, `SV_SET`, `SV_H` in `tools.js`.
 - **Air Tools → Duct Calc** — air flow from heating or sensible cooling load and the
   temperatures before/after the coil (or a known flow), air properties at the leaving-coil
   temperature and given pressure. For a rectangular (a×b) or round (D) duct and the selected

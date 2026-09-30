@@ -14,7 +14,8 @@
       id: 'hydronic',
       label: 'Hydronic Tools',
       tools: [
-        { id: 'flow-calc', label: 'Flow Calc', desc: 'Protok iz snage i ΔT, ili snaga iz protoka', render: renderFlowCalc }
+        { id: 'flow-calc', label: 'Flow Calc', desc: 'Protok iz snage i ΔT, ili snaga iz protoka', render: renderFlowCalc },
+        { id: 'safety-valve', label: 'Safety Valve', desc: 'Pritisak otvaranja i dimenzija sigurnosnog ventila (SRPS EN 12828)', render: renderSafetyValve }
       ]
     },
     {
@@ -1229,5 +1230,204 @@
       $(id).addEventListener(id === 'useb' ? 'change' : 'input', calc);
     });
     calc();
+  }
+  // ---- Safety Valve --------------------------------------------------------
+  // Sigurnosni ventil zatvorenog sistema toplovodnog grejanja (t ≤ 105 °C):
+  //   SRPS EN 12828 – projektovanje sistema za grejanje vodom (pritisak otvaranja, ekspanzija, Aneks D)
+  //   SRPS EN ISO 4126-1 / -7 – sigurnosni ventili, proračun kapaciteta ispuštanja (para)
+  //   Tabela za membranske ventile oznake „H” (p_sv ≤ 3 bar, Q ≤ 900 kW) prema DIN 4751-2.
+
+  // Zasićena vodena para: [p bar aps., t_s °C, r kJ/kg, v'' m³/kg]
+  var STEAM = [[1.0, 99.6, 2257.5, 1.694], [1.5, 111.4, 2226.5, 1.159], [2, 120.2, 2201.6, 0.8857], [2.5, 127.4, 2181.2, 0.7187],
+               [3, 133.5, 2163.5, 0.6058], [4, 143.6, 2133.4, 0.4624], [5, 151.8, 2107.4, 0.3748], [6, 158.8, 2085.8, 0.3156],
+               [7, 165.0, 2065.8, 0.2728], [8, 170.4, 2047.7, 0.2403], [10, 179.9, 2014.6, 0.1944], [12, 188.0, 1985.4, 0.1633],
+               [14, 195.0, 1959.0, 0.1408], [16, 201.4, 1933.6, 0.1237]];
+  function steamAt(pAbs) {
+    var T = STEAM, n = T.length;
+    if (pAbs <= T[0][0]) return { t: T[0][1], r: T[0][2], v: T[0][3] * T[0][0] / pAbs };
+    for (var i = 0; i < n - 1; i++) {
+      var a = T[i], b = T[i + 1];
+      if (pAbs <= b[0]) {
+        var f = (pAbs - a[0]) / (b[0] - a[0]);
+        // v'' interpolacija u log-log (≈ v ~ 1/p)
+        var lv = Math.log(a[3]) + (Math.log(b[3]) - Math.log(a[3])) * (Math.log(pAbs) - Math.log(a[0])) / (Math.log(b[0]) - Math.log(a[0]));
+        return { t: a[1] + f * (b[1] - a[1]), r: a[2] + f * (b[2] - a[2]), v: Math.exp(lv) };
+      }
+    }
+    return null;
+  }
+  // Pritisak isparavanja (natpritisak, bar) na temperaturi t; 0 ispod 100 °C
+  function evapGauge(t) {
+    var P0 = 1.01325;
+    if (t <= 100) return 0;
+    for (var i = 0; i < STEAM.length - 1; i++) {
+      var a = STEAM[i], b = STEAM[i + 1];
+      if (t <= b[1]) return Math.max(0, a[0] + (b[0] - a[0]) * (t - a[1]) / (b[1] - a[1]) - P0);
+    }
+    return NaN;
+  }
+  // Standardni pritisci otvaranja (bar)
+  var SV_SET = [1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 6, 7, 8, 10];
+  // Membranski ventili oznake H (DIN 4751-2): [ulaz DN, izlaz DN, Q max kW]
+  var SV_H = [[15, 20, 50], [20, 25, 100], [25, 32, 200], [32, 40, 350], [40, 50, 600], [50, 65, 900]];
+  var SV_DN = [15, 20, 25, 32, 40, 50, 65, 80, 100, 125, 150];
+
+  function renderSafetyValve(el, menu) {
+    var setOpts = '<option value="auto">Automatski (najveći standardni ≤ p_sv,max)</option>' +
+      SV_SET.map(function (v) { return '<option value="' + v + '">' + fmt(v, 1) + ' bar</option>'; }).join('');
+    el.innerHTML =
+      '<div class="tool">' +
+      '<div class="doc-meta">Alati · ' + menu.label + '</div>' +
+      '<h1>Safety Valve</h1>' +
+      '<p class="tl-lede">Pritisak otvaranja i dimenzija sigurnosnog ventila zatvorenog sistema toplovodnog grejanja (t<sub>max</sub> ≤ 105 °C) prema <b>SRPS EN 12828</b>, sa proračunom kapaciteta ispuštanja prema <b>SRPS EN ISO 4126-7</b>.</p>' +
+      '<div class="tl-grid">' +
+      '<section class="tl-panel" aria-label="Ulazni podaci">' +
+        '<h2>1 · Pritisak otvaranja</h2>' +
+        field('ps', 'Najveći dozvoljeni radni pritisak najslabije komponente PS', 3, 'bar') +
+        field('dh', 'Visina ventila iznad najslabije komponente Δh (− ako je ispod)', 0, 'm') +
+        '<div class="tl-row">' + field('hst', 'Statička visina iznad ventila H<sub>st</sub>', 12, 'm') + field('tmax', 'Najviša temperatura t<sub>max</sub>', 90, '°C') + '</div>' +
+        '<div class="tl-field"><label for="tl-set">Izabrani pritisak otvaranja p<sub>sv</sub></label><div class="tl-inp"><select id="tl-set">' + setOpts + '</select></div></div>' +
+        '<p class="tl-note">PS je najmanji od dozvoljenih radnih pritisaka kotla, izmenjivača, grejnih tela, armature i ekspanzione posude (sa tablice/kataloga). Ako je najslabija komponenta ispod ventila, na njoj je pritisak veći za ρ·g·Δh.</p>' +
+        '<h2>2 · Dimenzija ventila</h2>' +
+        '<div class="tl-row">' + field('q', 'Nazivna snaga generatora toplote Q', 250, 'kW') + field('n', 'Broj ventila na generatoru', 1, 'kom') + '</div>' +
+        '<div class="tl-seg" role="group" aria-label="Metod dimenzionisanja">' +
+          '<button type="button" id="tl-m-h" aria-pressed="true">Ventil oznake H (tabela)</button>' +
+          '<button type="button" id="tl-m-iso" aria-pressed="false">EN ISO 4126-7 (K<sub>dr</sub>)</button>' +
+        '</div>' +
+        '<div class="tl-row" id="tl-iso-in" hidden>' + field('kdr', 'Koef. ispuštanja K<sub>dr</sub> (proizvođač)', 0.45, '–') + field('over', 'Prekoračenje pritiska', 10, '%') + '</div>' +
+        '<p class="tl-note" id="tl-mnote"></p>' +
+      '</section>' +
+      '<section class="tl-panel" aria-label="Rezultati" aria-live="polite">' +
+        '<h2>Pritisak otvaranja</h2>' +
+        '<div class="tl-big"><span class="lbl">Pritisak otvaranja p<sub>sv</sub></span><span class="val" id="tl-pval">—</span></div>' +
+        '<dl class="tl-kv" id="tl-pkv"></dl>' +
+        '<div class="tl-formula wrap" id="tl-pformula"></div>' +
+        '<p class="tl-err" id="tl-perr" hidden></p>' +
+        '<h2>Dimenzija sigurnosnog ventila</h2>' +
+        '<div class="tl-big"><span class="lbl" id="tl-dlbl">Ulaz / izlaz ventila</span><span class="val" id="tl-dval">—</span></div>' +
+        '<dl class="tl-kv" id="tl-dkv"></dl>' +
+        '<p class="tl-err" id="tl-derr" hidden></p>' +
+        '<div class="tl-formula wrap" id="tl-dformula"></div>' +
+        '<div class="tl-tbl"><table id="tl-htbl"></table></div>' +
+      '</section>' +
+      '</div>' +
+      '<section class="tl-panel" aria-label="Standard i zahtevi"><h2>Standard i zahtevi za ugradnju</h2>' +
+        '<ul class="tl-note sv-std">' +
+        '<li><b>SRPS EN 12828</b> — Sistemi za grejanje u zgradama — Projektovanje sistema za grejanje vodom (preuzet EN 12828:2012+A1:2014). Zahteva da svaki generator toplote u zatvorenom sistemu ima najmanje jedan sigurnosni ventil koji sprečava da pritisak pređe najveći dozvoljeni radni pritisak sistema; određuje pritisak otvaranja i vezu sa ekspanzionom posudom (Aneks D: p<sub>0</sub> ≥ p<sub>st</sub> + p<sub>D</sub> + 0,2 bar; p<sub>e</sub> ≤ p<sub>sv</sub> − 0,5 bar za p<sub>sv</sub> ≤ 5 bar, odnosno p<sub>e</sub> ≤ 0,9·p<sub>sv</sub> za p<sub>sv</sub> &gt; 5 bar).</li>' +
+        '<li><b>SRPS EN ISO 4126-1</b> — Sigurnosni uređaji za zaštitu od prekomernog pritiska — Sigurnosni ventili; <b>SRPS EN ISO 4126-7</b> — Zajednički podaci (proračun kapaciteta: Q<sub>m</sub> = 0,2883·C·A·K<sub>dr</sub>·√(p<sub>0</sub>/v<sub>0</sub>)). Ventil se dimenzioniše da ispusti paru u količini ekvivalentnoj nazivnoj snazi generatora pri p<sub>sv</sub> + prekoračenje (10 %).</li>' +
+        '<li>Tabela za membranske ventile oznake <b>H</b> (p<sub>sv</sub> ≤ 3 bar, Q ≤ 900 kW) potiče iz DIN 4751-2; zamenjen je standardom EN 12828, ali se tabela i dalje koristi u katalozima proizvođača.</li>' +
+        '<li>Oprema pod pritiskom: Pravilnik o tehničkim zahtevima za projektovanje, izradu i ocenjivanje usaglašenosti opreme pod pritiskom (Sl. glasnik RS 87/2011) — ventil mora imati oznaku usaglašenosti. Proveriti važeća izdanja standarda i propisa.</li>' +
+        '<li>Ventil se ugrađuje na polazni vod neposredno uz generator toplote (na najvišem mestu ili na polaznom vodu blizu kotla), <b>bez zaporne armature</b> između generatora i ventila; ulazni vod najmanje DN 15 i ne manji od ulaza ventila. Ispusni vod najmanje dimenzije izlaza ventila, sa padom, bez zatvaranja, sa vidljivim i bezbednim ispustom (levak/odvod); ako je duži od 2 m ili ima više od 2 kolena, povećava se za jednu dimenziju.</li>' +
+        '</ul>' +
+      '</section>' +
+      '</div>';
+
+    function $(id) { return el.querySelector('#tl-' + id); }
+    var mode = 'h';
+    function setMode(m) {
+      mode = m;
+      $('m-h').setAttribute('aria-pressed', String(m === 'h'));
+      $('m-iso').setAttribute('aria-pressed', String(m === 'iso'));
+      $('iso-in').hidden = m !== 'iso';
+      $('mnote').innerHTML = m === 'h'
+        ? 'Membranski sigurnosni ventili oznake H za grejanje: pritisak otvaranja do 3 bar i snaga po ventilu do 900 kW. Za veće pritiske ili snage koristite proračun po EN ISO 4126-7.'
+        : 'K<sub>dr</sub> je sertifikovani (redukovani) koeficijent ispuštanja za paru iz tehničkog lista ventila (tipično 0,4–0,5 za membranske i 0,6–0,8 za ventile sa punim hodom). Rezultat je potreban protočni presek; ventil se bira iz kataloga sa d<sub>0</sub> ≥ d<sub>0,min</sub>.';
+      calc();
+    }
+    $('m-h').onclick = function () { setMode('h'); };
+    $('m-iso').onclick = function () { setMode('iso'); };
+
+    function kvHtml(rows) { return rows.map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + r[1] + '</dd></div>'; }).join(''); }
+
+    function calc() {
+      var PS = +$('ps').value, dh = +$('dh').value, hst = +$('hst').value, tmax = +$('tmax').value;
+      var Q = +$('q').value, n = Math.round(+$('n').value), kdr = +$('kdr').value, over = +$('over').value / 100;
+      var perr = $('perr'), pval = $('pval'), pkv = $('pkv'), pfx = $('pformula');
+      var dval = $('dval'), dkv = $('dkv'), dfx = $('dformula'), htbl = $('htbl');
+      function badP(msg) { pval.textContent = '—'; pkv.innerHTML = ''; pfx.textContent = ''; perr.hidden = false; perr.textContent = msg; badD(''); }
+      var derr = $('derr');
+      function badD(msg) { dval.textContent = '—'; dkv.innerHTML = ''; derr.hidden = !msg; derr.textContent = msg; dfx.textContent = ''; htbl.innerHTML = ''; }
+      perr.hidden = true; derr.hidden = true;
+      if (!(PS > 0)) return badP('Unesite PS veći od nule.');
+      if (!(hst >= 0)) return badP('Statička visina ne može biti negativna.');
+      if (!(tmax > 0 && tmax <= 110)) return badP('Alat važi za toplovodne sisteme do 105 °C (EN 12828: t ≤ 105 °C, graničnik 110 °C).');
+
+      var rho = waterRho(Math.min(tmax, 100)), g = 9.81;
+      var dpDh = rho * g * dh / 1e5;               // bar
+      var psvMax = PS - dpDh;
+      var pst = rho * g * hst / 1e5;               // statički pritisak na ventilu (bar)
+      var pD = evapGauge(tmax);
+      var p0 = pst + pD + 0.2;                     // min. početni pritisak (EN 12828, Aneks D)
+      var sel = $('set').value, psv;
+      if (sel === 'auto') {
+        psv = null;
+        for (var i = SV_SET.length - 1; i >= 0; i--) if (SV_SET[i] <= psvMax + 1e-9) { psv = SV_SET[i]; break; }
+        if (psv === null) return badP('p_sv,max = ' + fmt(psvMax, 2) + ' bar je manji od najmanjeg standardnog pritiska otvaranja. Smanjite Δh ili izaberite komponente većeg PS.');
+      } else psv = +sel;
+      var dpc = psv <= 5 ? 0.5 : 0.1 * psv;
+      var pe = psv - dpc;                          // najveći krajnji pritisak ekspanzione posude
+      var warn = [];
+      if (psv > psvMax + 1e-9) warn.push('Izabrani p_sv = ' + fmt(psv, 1) + ' bar je veći od dozvoljenog p_sv,max = ' + fmt(psvMax, 2) + ' bar — najslabija komponenta nije zaštićena.');
+      if (pe - p0 < 0.3) warn.push('Premalo prostora za ekspanziju: p_e,max − p_0 = ' + fmt(pe - p0, 2) + ' bar. Povećajte p_sv (uz komponente većeg PS) ili smanjite statičku visinu iznad ventila (ventil/posudu postaviti više).');
+
+      pval.innerHTML = fmt(psv, 1) + '<small>bar</small>';
+      pkv.innerHTML = kvHtml([
+        ['p<sub>sv,max</sub>', fmt(psvMax, 2) + ' bar'], ['ρ·g·Δh', fmt(dpDh, 3) + ' bar'],
+        ['p<sub>st</sub>', fmt(pst, 2) + ' bar'], ['p<sub>D</sub>', fmt(pD, 2) + ' bar'],
+        ['p<sub>0,min</sub>', fmt(p0, 2) + ' bar'], ['p<sub>e,max</sub>', fmt(pe, 2) + ' bar'],
+        ['Δp zatvaranja', fmt(dpc, 2) + ' bar'], ['p<sub>e</sub> − p<sub>0</sub>', fmt(pe - p0, 2) + ' bar']
+      ]);
+      pfx.innerHTML = 'p<sub>sv</sub> ≤ PS − ρ·g·Δh = ' + fmt(PS, 2) + ' − ' + fmt(dpDh, 3) + ' = ' + fmt(psvMax, 2) + ' bar &nbsp;→&nbsp; p<sub>sv</sub> = ' + fmt(psv, 1) + ' bar;&nbsp; p<sub>0</sub> ≥ p<sub>st</sub> + p<sub>D</sub> + 0,2 = ' + fmt(p0, 2) + ' bar;&nbsp; p<sub>e</sub> ≤ p<sub>sv</sub> − ' + fmt(dpc, 2) + ' = ' + fmt(pe, 2) + ' bar (natpritisci).';
+      if (warn.length) { perr.hidden = false; perr.textContent = warn.join(' '); }
+
+      // ---- dimenzija
+      if (!(Q > 0)) return badD('Unesite snagu generatora veću od nule.');
+      if (!(n >= 1)) return badD('Broj ventila mora biti najmanje 1.');
+      var Qv = Q / n;
+      if (mode === 'h') {
+        $('dlbl').textContent = 'Ulaz / izlaz ventila oznake H';
+        htbl.innerHTML = '<thead><tr><th>Ulaz</th><th>Izlaz</th><th>Q max [kW]</th><th></th></tr></thead><tbody>' +
+          SV_H.map(function (h, i) { return '<tr data-i="' + i + '"><td>DN ' + h[0] + '</td><td>DN ' + h[1] + '</td><td>' + fmt(h[2], 0) + '</td><td>' + (Qv <= h[2] ? '<span class="tl-pill ok">zadovoljava</span>' : '<span class="tl-pill hi">premalo</span>') + '</td></tr>'; }).join('') + '</tbody>';
+        if (psv > 3) { dval.textContent = '—'; dkv.innerHTML = ''; dfx.textContent = ''; derr.hidden = false; derr.textContent = 'Ventili oznake H važe do p_sv = 3 bar. Za p_sv = ' + fmt(psv, 1) + ' bar koristite proračun po EN ISO 4126-7.'; return; }
+        var hit = null;
+        for (var j = 0; j < SV_H.length; j++) if (Qv <= SV_H[j][2]) { hit = j; break; }
+        if (hit === null) { dval.textContent = '—'; dkv.innerHTML = ''; dfx.textContent = ''; derr.hidden = false; derr.textContent = 'Snaga po ventilu ' + fmt(Qv, 0) + ' kW je veća od 900 kW. Povećajte broj ventila ili koristite proračun po EN ISO 4126-7.'; return; }
+        htbl.querySelector('[data-i="' + hit + '"]').classList.add('best');
+        var h = SV_H[hit];
+        dval.innerHTML = (n > 1 ? n + ' × ' : '') + 'DN ' + h[0] + ' / DN ' + h[1] + '<small>' + fmt(psv, 1) + ' bar</small>';
+        dkv.innerHTML = kvHtml([
+          ['Snaga po ventilu', fmt(Qv, 1) + ' kW'], ['Kapacitet DN ' + h[0], fmt(h[2], 0) + ' kW'],
+          ['Ulazni vod', '≥ DN ' + h[0]], ['Ispusni vod', '≥ DN ' + h[1] + ' (≤ 2 m, ≤ 2 kolena)']
+        ]);
+        dfx.innerHTML = 'Izbor po tabeli za ventile oznake H: najmanji ulaz za koji je Q/n = ' + fmt(Qv, 1) + ' kW ≤ Q<sub>max</sub>.';
+        return;
+      }
+      // EN ISO 4126-7: suvozasićena para, k = 1,3
+      if (!(kdr > 0 && kdr <= 1)) return badD('K_dr mora biti između 0 i 1.');
+      if (!(over >= 0 && over <= 0.2)) return badD('Prekoračenje pritiska unesite u opsegu 0–20 %.');
+      var pAbs = psv * (1 + over) + 1.01325;
+      var st = steamAt(pAbs);
+      if (!st) return badD('Pritisak van opsega tablice pare (do 16 bar aps.).');
+      var k = 1.3, C = 3.948 * Math.sqrt(k * Math.pow(2 / (k + 1), (k + 1) / (k - 1)));
+      var qm = Qv * 3600 / st.r;                         // kg/h
+      var A = qm / (0.2883 * C * kdr * Math.sqrt(pAbs / st.v)); // mm²
+      var d0 = Math.sqrt(4 * A / Math.PI);
+      var dnMin = null;
+      for (var m = 0; m < SV_DN.length; m++) if (SV_DN[m] >= d0) { dnMin = SV_DN[m]; break; }
+      $('dlbl').textContent = 'Potreban prečnik sedišta d₀,min';
+      dval.innerHTML = fmt(d0, 1) + '<small>mm' + (n > 1 ? ' · ' + n + ' ventila' : '') + '</small>';
+      dkv.innerHTML = kvHtml([
+        ['Snaga po ventilu', fmt(Qv, 1) + ' kW'], ['p<sub>0</sub> (aps.)', fmt(pAbs, 3) + ' bar'],
+        ['t<sub>s</sub>', fmt(st.t, 1) + ' °C'], ['r', fmt(st.r, 1) + ' kJ/kg'],
+        ['v″', fmt(st.v, 4) + ' m³/kg'], ['C (k = 1,3)', fmt(C, 3)],
+        ['Q<sub>m</sub>', fmt(qm, 1) + ' kg/h'], ['A<sub>min</sub>', fmt(A, 1) + ' mm²'],
+        ['Ulaz ventila', dnMin ? 'orijentaciono ≥ DN ' + dnMin : '> DN 150'], ['K<sub>dr</sub>', fmt(kdr, 2)]
+      ]);
+      dfx.innerHTML = 'Q<sub>m</sub> = Q/r = ' + fmt(Qv, 1) + '·3600 / ' + fmt(st.r, 1) + ' = ' + fmt(qm, 1) + ' kg/h;&nbsp; A = Q<sub>m</sub> / (0,2883·C·K<sub>dr</sub>·√(p<sub>0</sub>/v<sub>0</sub>)) = ' + fmt(A, 1) + ' mm²;&nbsp; d<sub>0</sub> = √(4A/π) = ' + fmt(d0, 1) + ' mm. Izaberite ventil iz kataloga sa d<sub>0</sub> ≥ ' + fmt(d0, 1) + ' mm (ili A<sub>0</sub> ≥ ' + fmt(A, 0) + ' mm²), sa pritiskom otvaranja ' + fmt(psv, 1) + ' bar.';
+      htbl.innerHTML = '';
+    }
+
+    ['ps', 'dh', 'hst', 'tmax', 'set', 'q', 'n', 'kdr', 'over'].forEach(function (id) { $(id).addEventListener('input', calc); });
+    setMode('h');
   }
 })();

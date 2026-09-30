@@ -318,6 +318,10 @@ html, body {
 .tl-kv dt { color: var(--text-muted); font-size: 14px; }
 .tl-kv dd { margin: 0; font: 600 14px var(--num); font-variant-numeric: tabular-nums; text-align: right; }
 .tl-formula { font: 12.5px/1.6 var(--mono); background: var(--bg-sidebar); border-radius: 8px; padding: 10px 12px; overflow-x: auto; white-space: nowrap; }
+.tl-formula.wrap { white-space: normal; }
+.tl-formula.wrap:empty { display: none; }
+.sv-std { padding-left: 18px; }
+.sv-std li { margin-bottom: 6px; }
 .tl-err { color: var(--supply); font-weight: 600; font-size: 14px; margin: 0; }
 .tl-tbl { overflow-x: auto; }
 .prose .tl-tbl table { margin: 0; font: 13.5px var(--num); font-variant-numeric: tabular-nums; }
