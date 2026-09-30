@@ -122,6 +122,14 @@ def md_files(base):
                 if f.endswith(".md") and f not in SKIP_FILES and not f.startswith("00-"):
                     yield os.path.relpath(os.path.join(dp, f), base).replace(os.sep, "/")
 
+def load_paths(base):
+    """U ZIP-u su imena fajlova očišćena; _putanje.json vraća originalnu putanju iz repoa."""
+    p = os.path.join(base, "_putanje.json")
+    if os.path.exists(p):
+        with open(p, encoding="utf-8") as f:
+            return json.load(f)
+    return {}
+
 def build_index(base):
     files = list(md_files(base))
     sig = hashlib.md5("".join(f + str(os.path.getmtime(os.path.join(base, f))) for f in files).encode()).hexdigest()
@@ -141,7 +149,7 @@ def build_index(base):
                      + tokens(docs[c["file"]]["title"]))
         tfs.append(tf); df.update(tf.keys())
     avgdl = sum(sum(t.values()) for t in tfs) / max(len(tfs), 1)
-    idx = {"docs": docs, "chunks": chunks, "tfs": tfs, "df": df, "avgdl": avgdl}
+    idx = {"docs": docs, "chunks": chunks, "tfs": tfs, "df": df, "avgdl": avgdl, "orig": load_paths(base)}
     try:
         with open(cache, "wb") as f:
             pickle.dump(idx, f)
@@ -166,11 +174,13 @@ def search(idx, query, top, izvor=None, k1=1.4, b=0.75):
     return scores[:top]
 
 # ---------- ispis ----------
+idx_orig = {}
+
 def link(cfg, c):
     tpl = cfg.get("viewer_url_template")
     if not tpl:
         return ""
-    return tpl.replace("{path}", c["file"]).replace("{anchor}", c["heading"].replace(" ", "%20"))
+    return tpl.replace("{path}", idx_orig.get(c["file"], c["file"])).replace("{anchor}", c["heading"].replace(" ", "%20"))
 
 def show(idx, cfg, c, score=None, full=False):
     d = idx["docs"][c["file"]]
@@ -199,6 +209,7 @@ def main():
     a = ap.parse_args()
     base, cfg = find_base(), load_config()
     idx = build_index(base)
+    idx_orig.update(idx.get("orig", {}))
     ver = cfg.get("verzija_baze", "lokalni repo")
     if a.list:
         print(f"BBD Cortex baza — verzija: {ver} — {len(idx['docs'])} dokumenata, {len(idx['chunks'])} delova\n")

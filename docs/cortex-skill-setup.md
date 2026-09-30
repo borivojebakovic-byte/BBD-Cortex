@@ -15,16 +15,16 @@ docs/cortex-skill-uputstvo.md  <- uputstvo za kolege
 
 Cloudflare → Workers & Pages → projekat → Settings → Build:
 
-- **Build command:** `python3 scripts/build_skill_zip.py --out cortex-app/downloads`
-- **Build output directory:** `cortex-app` (ostaje kao i do sada)
+- **Build command:** `node cortex-app/build.js && (python3 scripts/build_skill_zip.py --out downloads || true)`
+- **Build output directory:** `.` (ostaje kao i do sada)
 - (opciono) Environment variable `CORTEX_VIEWER_URL` = šablon linka ka vieweru, npr. `https://cortex.bbdcons.com/#/{path}#{anchor}` — upisati tačan format koji viewer koristi.
 
-Posle svakog push-a Pages pravi `cortex-app/downloads/bbd-cortex-skill.zip` i `bbd-cortex-skill.json` (verzija, broj dokumenata). ZIP se ne commit-uje u repo; dodati u `.gitignore`:
+Posle svakog push-a Pages pravi `downloads/bbd-cortex-skill.zip` i `bbd-cortex-skill.json` (verzija, broj dokumenata). ZIP se ne commit-uje u repo; dodati u `.gitignore`:
 
 ```
 dist/
 .build-skill/
-cortex-app/downloads/
+downloads/
 ```
 
 Ako build command već postoji, dodati ovu komandu ispred nje sa `&&`.
