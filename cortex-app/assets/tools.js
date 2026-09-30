@@ -24,6 +24,13 @@
         { id: 'duct-calc', label: 'Duct Calc', desc: 'Protok vazduha iz snage, brzina i pad pritiska u kanalu', render: renderDuctCalc },
         { id: 'hx', label: 'h-x dijagram', desc: 'Stanja vlažnog vazduha, procesi, senzibilna/latentna toplota', render: renderHxCalc }
       ]
+    },
+    {
+      id: 'gas',
+      label: 'Gas Tools',
+      tools: [
+        { id: 'gas-calc', label: 'Gas Calc', desc: 'Potrošnja gasa iz snage i η, dimenzionisanje gasovoda', render: renderGasCalc }
+      ]
     }
   ];
 
@@ -56,7 +63,17 @@
         }).join('') +
         '</div></div>'
       );
-    }).join('');
+    }).join('') +
+    // na telefonu: svi alati u jednom meniju „Alati”, grupisani po oblastima
+    '<div class="tm-menu tm-all">' +
+    '<button type="button" class="tm-btn" id="tm-all" aria-haspopup="true" aria-expanded="false">Alati</button>' +
+    '<div class="tm-dropdown" role="menu" hidden>' +
+    MENU.map(function (m) {
+      return '<div class="tm-grp">' + m.label + '</div>' + m.tools.map(function (t) {
+        return '<a role="menuitem" href="#tool/' + t.id + '"><b>' + t.label + '</b><span>' + t.desc + '</span></a>';
+      }).join('');
+    }).join('') +
+    '</div></div>';
     host.querySelectorAll('.tm-btn').forEach(function (btn) {
       btn.addEventListener('click', function (e) {
         e.stopPropagation();
@@ -968,5 +985,249 @@
       { id: nextId++, kind: 'heat', d: { t2: 18 } }
     ];
     renderSteps();
+  }
+  // ---- Gas Calc ----------------------------------------------------------------
+  // Referentno (standardno) stanje: 15 °C, 1013,25 mbar. Vrednosti su orijentacione i mogu se menjati.
+  var GASES = {
+    ng:     { label: 'Prirodni gas (H, Srbija)', hd: 33.338, rho: 0.70, mu: 1.10e-5 },
+    propan: { label: 'Propan (TNG, gasna faza)', hd: 86.4, rho: 1.87, mu: 0.80e-5 },
+    butan:  { label: 'Butan (gasna faza)', hd: 112.4, rho: 2.46, mu: 0.74e-5 },
+    custom: { label: 'Ručni unos H_d, ρ, μ' }
+  };
+  var PN = 101325, TN = 288.15;
+
+  var PE_GAS = { label: 'PE 100 SDR 11 (gasovod)', k: 0.007, pipes: [
+    ['d20×3,0', 14.0], ['d25×3,0', 19.0], ['d32×3,0', 26.0], ['d40×3,7', 32.6], ['d50×4,6', 40.8], ['d63×5,8', 51.4],
+    ['d75×6,8', 61.4], ['d90×8,2', 73.6], ['d110×10,0', 90.0], ['d125×11,4', 102.2], ['d160×14,6', 130.8],
+    ['d180×16,4', 147.2], ['d200×18,2', 163.6], ['d225×20,5', 184.0]] };
+
+  // Delovi instalacije i podrazumevani kriterijumi
+  var GAS_SECTIONS = {
+    ext: { label: 'Spoljni gasovod do KMRS (1–4 bar)', unit: 'bar', p: 3, wmax: 20,
+           mats: { pe: PE_GAS, en10220: PIPE_SETS.en10220, en10255: PIPE_SETS.en10255 },
+           note: 'Srednji pritisak: pad pritiska po jednačini za stišljiv gas (izotermno). Kriterijumi su orijentacioni — uskladiti sa uslovima distributera.' },
+    int: { label: 'Unutrašnja instalacija posle KMRS (≤ 100 mbar)', unit: 'mbar', p: 22, wmax: 6,
+           mats: { en10255: { label: 'Čelične navojne EN 10255 (i Viega Megapress G)', k: 0.045, pipes: PIPE_SETS.en10255.pipes },
+                   en10220: PIPE_SETS.en10220,
+                   cu: { label: 'Bakarne EN 1057 (i Viega Profipress G)', k: 0.0015, pipes: PIPE_SETS.cu.pipes.slice(1) },
+                   mlc: { label: 'Višeslojne PE-X/Al/PE-X za gas', k: 0.007, pipes: PIPE_SETS.mlc.pipes } },
+           note: 'Niski pritisak (Pravilnik o unutrašnjim gasnim instalacijama, čl. 84): dozvoljeni ukupni pad 2,6 mbar; pojedini delovi smeju imati veći pad samo ako brzina nije veća od 6 m/s.' }
+  };
+  // Dozvoljeni padovi pritiska po delovima niskopritisne instalacije (čl. 84), mbar
+  var GAS_PARTS = {
+    razv:  { label: 'Razvodni vod', dp: 0.3 },
+    vod:   { label: 'Vod za gasni aparat', dp: 0.8 },
+    ogr:   { label: 'Ogranak i priključni vod aparata', dp: 0.5 },
+    total: { label: 'Cela trasa (bez merila)', dp: 1.6 },
+    free:  { label: 'Slobodan unos', dp: 1.0 }
+  };
+
+  // Izotermni proticaj: p1² − p2² = λ·(L/d)·ρn·wn²·pn·(T/Tn)
+  function gasDrop(Vn, d, L, p1abs, T, rhoN, mu, k) {
+    var A = Math.PI * d * d / 4, wn = Vn / A;
+    var Re = rhoN * wn * d / mu, lam = frictionFactor(Re, k / d);
+    var d2 = lam * (L / d) * rhoN * wn * wn * PN * (T / TN);
+    var p2sq = p1abs * p1abs - d2;
+    var p2 = p2sq > 0 ? Math.sqrt(p2sq) : NaN;
+    var w1 = wn * (PN / p1abs) * (T / TN);
+    return { wn: wn, w: w1, Re: Re, lam: lam, dp: p1abs - p2, p2: p2 };
+  }
+
+  function renderGasCalc(el, menu) {
+    var gasOpts = Object.keys(GASES).map(function (k) { return '<option value="' + k + '">' + GASES[k].label + '</option>'; }).join('');
+    var secOpts = Object.keys(GAS_SECTIONS).map(function (k) { return '<option value="' + k + '"' + (k === 'int' ? ' selected' : '') + '>' + GAS_SECTIONS[k].label + '</option>'; }).join('');
+    var partOpts = Object.keys(GAS_PARTS).map(function (k) { var g = GAS_PARTS[k]; return '<option value="' + k + '"' + (k === 'vod' ? ' selected' : '') + '>' + g.label + (k === 'free' ? '' : ' (' + fmt(g.dp, 1) + ' mbar)') + '</option>'; }).join('');
+    el.innerHTML =
+      '<div class="tool">' +
+      '<div class="doc-meta">Alati · ' + menu.label + '</div>' +
+      '<h1>Gas Calc</h1>' +
+      '<p class="tl-lede">Potrošnja gasa iz snage uređaja, donje toplotne moći gasa i stepena korisnosti, pa dimenzionisanje gasovoda za spoljni deo do KMRS ili unutrašnju instalaciju posle KMRS. Zapremine su svedene na standardno stanje (15 °C, 1013,25 mbar).</p>' +
+
+      '<div class="gc-formula" aria-label="Formula za potrošnju gasa">' +
+        '<div class="gc-eq"><span class="gc-B">B</span> = <span class="gc-frac"><span>Q</span><span>H<sub>d</sub> · η</span></span></div>' +
+        '<div class="gc-legend"><span><b>B</b> potrošnja gasa [m³/h]</span><span><b>Q</b> nazivna snaga uređaja [kW]</span><span><b>H<sub>d</sub></b> donja toplotna moć [kWh/m³]</span><span><b>η</b> stepen korisnosti uređaja [–]</span></div>' +
+        '<div class="gc-sub" id="tl-gformula"></div>' +
+      '</div>' +
+
+      '<div class="tl-grid">' +
+      '<section class="tl-panel" aria-label="Potrošnja gasa – ulazni podaci">' +
+        '<h2>1 · Potrošnja gasa</h2>' +
+        '<div class="tl-pipe-sel"><div class="tl-field"><label for="tl-gas">Gas</label><div class="tl-inp"><select id="tl-gas">' + gasOpts + '</select></div></div>' +
+          field('hd', 'H<sub>d</sub>', '', 'MJ/m³') + '</div>' +
+        '<div class="tl-row">' + field('rho', 'Gustina ρ<sub>n</sub>', '', 'kg/m³') + field('mu', 'Viskoznost μ', '', 'μPa·s') + '</div>' +
+        '<div class="gc-devs"><div class="gc-devhead"><span>Uređaj</span><span>Q [kW]</span><span>η [%]</span><span>kom</span><span></span></div><div id="tl-devs"></div></div>' +
+        '<button type="button" class="hx-btn gc-add" id="tl-adddev">+ Dodaj uređaj</button>' +
+        '<div class="tl-row">' + field('fi', 'Faktor istovremenosti', 1, '–') + '<div></div></div>' +
+        '<p class="tl-note">Q je nazivna (korisna) snaga uređaja. Ako proizvođač daje toplotno opterećenje (snagu na ulazu), unesite η = 100 %.</p>' +
+      '</section>' +
+      '<section class="tl-panel" aria-label="Potrošnja gasa – rezultat" aria-live="polite">' +
+        '<h2>Rezultat</h2>' +
+        '<div class="tl-big"><span class="lbl">Merodavna potrošnja gasa B</span><span class="val" id="tl-bval">—</span></div>' +
+        '<dl class="tl-kv" id="tl-gkv"></dl>' +
+        '<div class="tl-tbl"><table id="tl-devtbl"></table></div>' +
+        '<p class="tl-err" id="tl-gerr" hidden></p>' +
+      '</section>' +
+      '</div>' +
+
+      '<div class="tl-grid gc-part2">' +
+      '<section class="tl-panel" aria-label="Dimenzionisanje – ulazni podaci">' +
+        '<h2>2 · Dimenzionisanje gasovoda</h2>' +
+        '<div class="tl-field"><label for="tl-sec">Deo instalacije</label><div class="tl-inp"><select id="tl-sec">' + secOpts + '</select></div></div>' +
+        '<div class="tl-row">' + field('pg', 'Radni pritisak (natpritisak)', 22, 'mbar') + field('tg', 'Temperatura gasa', 15, '°C') + '</div>' +
+        '<div class="tl-field"><label class="gc-check"><input type="checkbox" id="tl-useb" checked> Protok iz dela 1 (merodavna potrošnja B)</label></div>' +
+        field('vn', 'Protok gasa V̇<sub>n</sub>', 3, 'm³/h') +
+        '<div class="tl-row">' + field('L', 'Dužina deonice L', 15, 'm') + field('zeta', 'Dodatak za lokalne otpore', 30, '%') + '</div>' +
+        '<div class="tl-pipe-sel"><div class="tl-field"><label for="tl-mat">Materijal cevi</label><div class="tl-inp"><select id="tl-mat"></select></div></div>' + field('k', 'Hrapavost k', '', 'mm') + '</div>' +
+        '<div class="tl-field" id="f-part"><label for="tl-part">Deo niskopritisne instalacije (čl. 84)</label><div class="tl-inp"><select id="tl-part">' + partOpts + '</select></div></div>' +
+        '<div class="tl-row">' + field('wmax', 'w max', 6, 'm/s') + field('dpmax', 'Δp max na deonici', 0.8, 'mbar') + '</div>' +
+        '<p class="tl-note" id="tl-secnote"></p>' +
+      '</section>' +
+      '<section class="tl-panel" aria-label="Dimenzionisanje – rezultat" aria-live="polite">' +
+        '<h2>Predlog dimenzije</h2>' +
+        '<div class="tl-big"><span class="lbl" id="tl-dlbl">Predlog</span><span class="val" id="tl-dval">—</span></div>' +
+        '<dl class="tl-kv" id="tl-dkv"></dl>' +
+        '<div class="tl-formula" id="tl-dformula"></div>' +
+      '</section>' +
+      '</div>' +
+      '<section class="tl-panel gc-part2" aria-label="Rezultat po dimenzijama"><h2 id="tl-gtitle">Brzina i pad pritiska po dimenzijama</h2>' +
+        '<div class="tl-tbl"><table><thead><tr><th>Dimenzija</th><th><span class="sym">d</span><sub>u</sub> [mm]</th><th><span class="sym">w</span> [m/s]</th><th><span class="sym">R</span> [Pa/m]</th><th>Δ<span class="sym">p</span> [mbar]</th><th>Pritisak na kraju</th><th></th></tr></thead><tbody id="tl-gpipes"></tbody></table></div>' +
+        '<p class="tl-note">Pad pritiska po jednačini izotermnog proticanja p₁² − p₂² = λ·(L<sub>e</sub>/d)·ρ<sub>n</sub>·w<sub>n</sub>²·p<sub>n</sub>·(T/T<sub>n</sub>), faktor trenja po Colebrook-White-u; za niski pritisak ovo se svodi na Darcy–Weisbach za nestišljiv gas. w je stvarna brzina pri radnom pritisku, L<sub>e</sub> = L·(1 + dodatak). Zeleno je najmanja dimenzija koja zadovoljava oba kriterijuma. Oznaka „uslovno (čl. 84)” znači da je pad na deonici veći od dozvoljenog za taj deo, ali je brzina ≤ 6 m/s i pad ≤ 2,6 mbar, što Pravilnik dozvoljava uz proveru ukupnog pada cele trase.</p>' +
+      '</section>' +
+      '</div>';
+
+    function $(id) { return el.querySelector('#tl-' + id); }
+    var devs = [
+      { name: 'Kondenzacioni kotao', q: 24, eta: 98, n: 1 },
+      { name: 'Štednjak', q: 8, eta: 100, n: 1 }
+    ];
+    var lastGas = null, lastSec = null, lastMat = null, lastPart = null, Bm = 0;
+
+    function renderDevs() {
+      $('devs').innerHTML = devs.map(function (d, i) {
+        return '<div class="gc-dev" data-i="' + i + '">' +
+          '<div class="tl-inp"><input type="text" data-f="name" value="' + d.name.replace(/"/g, '&quot;') + '" aria-label="Naziv uređaja ' + (i + 1) + '"></div>' +
+          '<div class="tl-inp"><input type="number" step="any" inputmode="decimal" data-f="q" value="' + d.q + '" aria-label="Snaga uređaja ' + (i + 1) + ' u kW"></div>' +
+          '<div class="tl-inp"><input type="number" step="any" inputmode="decimal" data-f="eta" value="' + d.eta + '" aria-label="Stepen korisnosti uređaja ' + (i + 1) + ' u %"></div>' +
+          '<div class="tl-inp"><input type="number" step="1" min="1" inputmode="numeric" data-f="n" value="' + d.n + '" aria-label="Broj komada uređaja ' + (i + 1) + '"></div>' +
+          '<button type="button" class="hx-icon" data-del="' + i + '" aria-label="Ukloni uređaj ' + (i + 1) + '"' + (devs.length === 1 ? ' disabled' : '') + '>×</button></div>';
+      }).join('');
+    }
+    $('devs').addEventListener('input', function (e) {
+      var row = e.target.closest('.gc-dev'); if (!row) return;
+      var d = devs[+row.getAttribute('data-i')], f = e.target.getAttribute('data-f');
+      d[f] = f === 'name' ? e.target.value : +e.target.value;
+      calc();
+    });
+    $('devs').addEventListener('click', function (e) {
+      var b = e.target.closest('[data-del]'); if (!b || devs.length === 1) return;
+      devs.splice(+b.getAttribute('data-del'), 1); renderDevs(); calc();
+    });
+    $('adddev').addEventListener('click', function () { devs.push({ name: 'Uređaj ' + (devs.length + 1), q: 20, eta: 92, n: 1 }); renderDevs(); calc(); });
+
+    function syncSection() {
+      var sk = $('sec').value, sec = GAS_SECTIONS[sk];
+      if (sk !== lastSec) {
+        lastSec = sk;
+        el.querySelector('#f-pg .u').textContent = sec.unit;
+        $('pg').value = sec.p; $('wmax').value = sec.wmax;
+        $('mat').innerHTML = Object.keys(sec.mats).map(function (k) { return '<option value="' + k + '">' + sec.mats[k].label + '</option>'; }).join('');
+        lastMat = null; lastPart = null;
+        el.querySelector('#f-part').hidden = sk !== 'int';
+        if (sk === 'ext') $('dpmax').value = 150;
+        $('secnote').textContent = sec.note;
+      }
+      var mk = $('mat').value;
+      if (mk !== lastMat) { $('k').value = sec.mats[mk].k; lastMat = mk; }
+      if (sk === 'int') {
+        var pk = $('part').value;
+        if (pk !== lastPart) { if (pk !== 'free') $('dpmax').value = GAS_PARTS[pk].dp; lastPart = pk; }
+      }
+      return sec;
+    }
+
+    function calc() {
+      // --- deo 1 ---
+      var gk = $('gas').value, g = GASES[gk];
+      var manual = gk === 'custom';
+      ['hd', 'rho', 'mu'].forEach(function (id) { $(id).readOnly = !manual; });
+      if (gk !== lastGas) { if (!manual) { $('hd').value = g.hd; $('rho').value = g.rho; $('mu').value = +(g.mu * 1e6).toFixed(2); } lastGas = gk; }
+      var hdMJ = +$('hd').value, hd = hdMJ / 3.6, rhoN = +$('rho').value, mu = +$('mu').value / 1e6, fi = +$('fi').value;
+      var gerr = $('gerr'); gerr.hidden = true;
+      function gbad(m) { gerr.textContent = m; gerr.hidden = false; $('bval').textContent = '—'; $('gkv').innerHTML = ''; $('devtbl').innerHTML = ''; $('gformula').textContent = ''; Bm = NaN; }
+      var ok = hd > 0 && rhoN > 0 && mu > 0 && fi > 0 && fi <= 1;
+      if (!ok) gbad('Proverite H_d, ρ, μ i faktor istovremenosti (0 < f ≤ 1).');
+      else {
+        var rows = [], sumB = 0, sumQ = 0, sumQin = 0, bad = null;
+        devs.forEach(function (d, i) {
+          if (!(d.q > 0 && d.eta > 0 && d.eta <= 110 && d.n >= 1)) { bad = bad || ('Uređaj ' + (i + 1) + ': unesite snagu > 0, η između 0 i 110 % i broj komada ≥ 1.'); return; }
+          var qin = d.q / (d.eta / 100), b = qin / hd;
+          rows.push({ name: d.name, q: d.q, eta: d.eta, n: d.n, qin: qin * d.n, b: b * d.n });
+          sumB += b * d.n; sumQ += d.q * d.n; sumQin += qin * d.n;
+        });
+        if (bad) gbad(bad);
+        else {
+          Bm = sumB * fi;
+          $('bval').innerHTML = fmt(Bm, 3) + '<small>m³/h</small>';
+          var d0 = devs[0];
+          $('gformula').innerHTML = 'Za „' + d0.name.replace(/</g, '&lt;') + '”: B = ' + fmt(d0.q, 1) + ' kW / (' + fmt(hd, 3) + ' kWh/m³ · ' + fmt(d0.eta / 100, 3) + ') = <b>' + fmt(d0.q / (d0.eta / 100) / hd, 3) + ' m³/h</b>' +
+            (devs.length > 1 || d0.n > 1 || fi !== 1 ? ' &nbsp;·&nbsp; ukupno B = f · ΣB<sub>i</sub> = ' + fmt(fi, 2) + ' · ' + fmt(sumB, 3) + ' = <b>' + fmt(Bm, 3) + ' m³/h</b>' : '');
+          $('gkv').innerHTML = [
+            ['ΣQ nazivna', fmt(sumQ, 1) + ' kW'], ['ΣQ opterećenje', fmt(sumQin, 1) + ' kW'],
+            ['ΣB<sub>i</sub>', fmt(sumB, 3) + ' m³/h'], ['f', fmt(fi, 2)],
+            ['B (maseno)', fmt(Bm * rhoN, 2) + ' kg/h'], ['H<sub>d</sub>', fmt(hd, 3) + ' kWh/m³']
+          ].map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + r[1] + '</dd></div>'; }).join('');
+          $('devtbl').innerHTML = '<thead><tr><th>Uređaj</th><th><span class="sym">Q</span> [kW]</th><th><span class="sym">η</span> [%]</th><th>kom</th><th><span class="sym">B</span> [m³/h]</th></tr></thead><tbody>' +
+            rows.map(function (r) { return '<tr><td>' + r.name.replace(/</g, '&lt;') + '</td><td>' + fmt(r.q, 1) + '</td><td>' + fmt(r.eta, 0) + '</td><td>' + r.n + '</td><td>' + fmt(r.b, 3) + '</td></tr>'; }).join('') + '</tbody>';
+        }
+      }
+
+      // --- deo 2 ---
+      var sec = syncSection();
+      var useB = $('useb').checked;
+      $('vn').readOnly = useB;
+      if (useB && isFinite(Bm)) $('vn').value = +Bm.toFixed(3);
+      var Vh = +$('vn').value, pIn = +$('pg').value, T = +$('tg').value + 273.15, L = +$('L').value, add = +$('zeta').value / 100;
+      var k = +$('k').value / 1000, wMax = +$('wmax').value, dpMax = +$('dpmax').value;
+      var tb = $('gpipes'), dkv = $('dkv'), dv = $('dval'), fx = $('dformula');
+      function dbad(m) { tb.innerHTML = ''; dkv.innerHTML = '<p class="tl-err">' + m + '</p>'; dv.textContent = '—'; fx.textContent = ''; }
+      if (!(Vh > 0)) return dbad('Unesite protok gasa veći od nule.');
+      if (!(pIn >= 0 && L > 0 && add >= 0 && k >= 0 && wMax > 0 && dpMax > 0 && T > 0)) return dbad('Proverite pritisak, dužinu, dodatak, hrapavost i kriterijume.');
+      var pg = sec.unit === 'bar' ? pIn * 1e5 : pIn * 100;
+      if (lastSec === 'int' && pg > 10000) return dbad('Unutrašnja instalacija posle KMRS je ovde definisana za niski pritisak do 100 mbar.');
+      if (lastSec === 'ext' && (pg < 1e5 || pg > 4e5)) return dbad('Za spoljni gasovod do KMRS unesite pritisak između 1 i 4 bar.');
+      var p1 = pg + PN, Le = L * (1 + add), Vn = Vh / 3600;
+      var mat = sec.mats[$('mat').value];
+      var best = null, bestR = null;
+      var rowsH = mat.pipes.map(function (p, i) {
+        var d = p[1] / 1000, r = gasDrop(Vn, d, Le, p1, T, rhoN, mu, k);
+        var dpm = r.dp / 100, R = r.dp / Le;
+        var okW = r.w <= wMax, okP = isFinite(dpm) && dpm <= dpMax;
+        // niski pritisak: veći pad dozvoljen ako w ≤ 6 m/s (čl. 84) – prikazujemo kao napomenu
+        var cond = lastSec === 'int' && !okP && isFinite(dpm) && r.w <= 6 && dpm <= 2.6;
+        var cls = !isFinite(dpm) ? 'hi' : !okW ? 'hi' : !okP ? (cond ? 'cond' : 'rhi') : 'ok';
+        if (cls === 'ok' && best === null) { best = i; bestR = { p: p, r: r, dpm: dpm, R: R }; }
+        var tag = cls === 'ok' ? '<span class="tl-pill ok">zadovoljava</span>' : !isFinite(dpm) ? '<span class="tl-pill hi">Δp &gt; p₁</span>' : !okW ? '<span class="tl-pill hi">w visoka</span>' : cls === 'cond' ? '<span class="tl-pill lo">uslovno (čl. 84)</span>' : '<span class="tl-pill hi">Δp &gt; ' + fmt(dpMax, dpMax < 10 ? 1 : 0) + '</span>';
+        return '<tr data-i="' + i + '"><td>' + p[0] + '</td><td>' + fmt(p[1], 1) + '</td><td' + (!okW ? ' class="tl-bad"' : '') + '>' + fmt(r.w, 2) + '</td><td>' + fmt(R, R < 10 ? 2 : 1) + '</td><td' + (!okP ? ' class="tl-bad"' : '') + '>' + (isFinite(dpm) ? fmt(dpm, dpm < 10 ? 2 : 0) : '—') + '</td><td>' + (isFinite(dpm) ? (sec.unit === 'bar' ? fmt((r.p2 - PN) / 1e5, 3) + ' bar' : fmt((r.p2 - PN) / 100, 2) + ' mbar') : '—') + '</td><td>' + tag + '</td></tr>';
+      });
+      tb.innerHTML = rowsH.join('');
+      if (best !== null) tb.querySelector('[data-i="' + best + '"]').classList.add('best');
+      $('dlbl').textContent = best !== null ? 'Najmanja dimenzija koja zadovoljava' : 'Nijedna dimenzija ne zadovoljava kriterijume';
+      if (bestR) {
+        dv.innerHTML = bestR.p[0] + ' <small>' + fmt(bestR.r.w, 2) + ' m/s · ' + fmt(bestR.dpm, bestR.dpm < 10 ? 2 : 0) + ' mbar</small>';
+        var p2over = (bestR.r.p2 - PN);
+        dkv.innerHTML = [
+          ['V̇<sub>n</sub>', fmt(Vh, 3) + ' m³/h'], ['V̇ pri p, T', fmt(Vh * PN / p1 * T / TN, 3) + ' m³/h'],
+          ['L<sub>e</sub>', fmt(Le, 1) + ' m'], ['Re', fmt(bestR.r.Re, 0)],
+          ['λ', fmt(bestR.r.lam, 4)], ['p na kraju', sec.unit === 'bar' ? fmt(p2over / 1e5, 3) + ' bar' : fmt(p2over / 100, 2) + ' mbar']
+        ].map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + r[1] + '</dd></div>'; }).join('');
+        fx.innerHTML = 'Δp = p₁ − √(p₁² − λ·L<sub>e</sub>/d·ρ<sub>n</sub>·w<sub>n</sub>²·p<sub>n</sub>·T/T<sub>n</sub>) = ' + fmt(bestR.dpm, 3) + ' mbar &nbsp;(d = ' + fmt(bestR.p[1], 1) + ' mm, λ = ' + fmt(bestR.r.lam, 4) + ', w<sub>n</sub> = ' + fmt(bestR.r.wn, 2) + ' m/s)';
+      } else { dv.textContent = '—'; dkv.innerHTML = ''; fx.textContent = 'Povećajte dozvoljeni pad pritiska ili izaberite drugi materijal / veći asortiman.'; }
+    }
+
+    renderDevs();
+    ['gas', 'hd', 'rho', 'mu', 'fi', 'sec', 'pg', 'tg', 'useb', 'vn', 'L', 'zeta', 'mat', 'k', 'part', 'wmax', 'dpmax'].forEach(function (id) {
+      $(id).addEventListener(id === 'useb' ? 'change' : 'input', calc);
+    });
+    calc();
   }
 })();

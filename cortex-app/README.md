@@ -91,6 +91,15 @@ Each tool opens in the content area at `#tool/<id>` (e.g. `#tool/flow-calc`).
   second stream (which adds its dry-air mass flow to all following steps). Per step it gives
   sensible, latent and total heat and condensate/added water (kg/h), plus totals, a table of all
   states and a Mollier h-x chart (SVG) of the whole chain.
+- **Gas Tools → Gas Calc** — gas consumption B = Q / (H_d · η) for a list of appliances (power,
+  efficiency, count) with a simultaneity factor; natural gas / propane / butane / manual
+  properties at standard conditions (15 °C, 1013.25 mbar). Pipe sizing for the outdoor line up to
+  the KMRS (1–4 bar: PE 100 SDR 11, steel EN 10220 / EN 10255) or the indoor low-pressure
+  installation after the KMRS (≤ 100 mbar: steel EN 10255 / Megapress G, EN 10220, copper EN 1057 /
+  Profipress G, multilayer) using the isothermal flow equation with Colebrook-White friction;
+  criteria w_max and Δp_max, with the low-pressure limits from the Serbian regulation (čl. 84:
+  2.6 mbar total, 0.3 / 0.8 / 0.5 mbar per part, exceedance only at w ≤ 6 m/s).
+- On phones all tool menus collapse into one **Alati** menu grouped by area.
 
 To add a tool: add an entry to `MENU` (new menu = new object, new tool = new item in `tools`)
 and write its `render(el, menu)` function. No build step needed.
