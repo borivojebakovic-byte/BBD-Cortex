@@ -93,6 +93,7 @@
   // ---- javni API (koristi app.js) ------------------------------------------
 
   window.CortexTools = {
+    menu: MENU, // za kartice alata na naslovnoj strani (app.js)
     render: function (id, el) {
       var found = findTool(id);
       if (!found) { el.innerHTML = '<p>Alat nije pronađen.</p>'; return; }

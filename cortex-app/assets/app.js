@@ -148,14 +148,168 @@
 
   // ---- content ---------------------------------------------------------
 
-  function showWelcome() {
+  // ---- naslovna strana (Home) i stranice oblasti ---------------------------
+
+  // Kartice baze znanja. `slug` = top-level folder iz manifest.json;
+  // `chapters: true` = svi numerisani folderi (01-…, 02-…) zajedno.
+  var SECTIONS = [
+    { id: 'pravilnici', slug: 'pravilnici', title: 'Pravilnici',
+      desc: 'Zakoni, pravilnici i odluke — HVAC, gas, PP zaštita, garaže, buka, izgradnja.', icon: 'para' },
+    { id: 'standardi', slug: 'standardi', title: 'Standardi',
+      desc: 'Kartice standarda — SRPS EN, ASHRAE, DIN, NFPA, BS, IBC, SNiP.', icon: 'std' },
+    { id: 'knjige', slug: 'knjige', title: 'Knjige',
+      desc: 'Stručna literatura — ASHRAE Fundamentals Handbook i druge knjige.', icon: 'book' },
+    { id: 'obuka', chapters: true, title: 'Program obuke',
+      desc: 'Poglavlja interne obuke — standardi BBD-a, proračuni i izbor opreme.', icon: 'cap' }
+  ];
+
+  var ICONS = {
+    para: '<text x="16" y="23" text-anchor="middle" font-size="21" font-weight="700" fill="currentColor" stroke="none">§</text>',
+    std: '<rect x="7" y="5" width="18" height="22" rx="1.5"/><path d="M11 11h10M11 15h10M11 19h6"/>',
+    book: '<path d="M6 7.5c3-1.5 7-1.5 10 .5v18c-3-2-7-2-10-.5zM26 7.5c-3-1.5-7-1.5-10 .5v18c3-2 7-2 10-.5z"/>',
+    cap: '<path d="M3 13l13-6 13 6-13 6zM9 16v6c4 3 10 3 14 0v-6M29 13v7"/>',
+    help: '<circle cx="16" cy="16" r="11"/><path d="M12.5 13a3.5 3.5 0 1 1 5 3.2c-1 .5-1.5 1.2-1.5 2.3"/><circle cx="16" cy="22.5" r=".6" fill="currentColor"/>'
+  };
+  function icon(name) {
+    return '<svg viewBox="0 0 32 32" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[name] + '</svg>';
+  }
+
+  // Oznaka alata u kartici: fizička veličina koju alat računa
+  var TOOL_GLYPH = { 'flow-calc': 'ṁ', 'safety-valve': 'p<sub>sv</sub>', 'duct-calc': 'w', 'hx': 'h‑x', 'gas-calc': 'B' };
+
+  var ARROW = '<svg class="hc-arrow" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 8h9M8.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  function findNode(slug, nodes) {
+    nodes = nodes || tree;
+    for (var i = 0; i < nodes.length; i++) {
+      var n = nodes[i];
+      if (n.type !== 'doc' && n.slug === slug) return n;
+      if (n.type !== 'doc' && slug.indexOf(n.slug + '/') === 0) {
+        var r = findNode(slug, n.children);
+        if (r) return r;
+      }
+    }
+    return null;
+  }
+
+  function chapterNodes() {
+    return tree.filter(function (n) { return n.type !== 'doc' && /^\d+-/.test(n.slug); });
+  }
+
+  function sectionCount(sec) {
+    if (sec.chapters) return { n: chapterNodes().length, unit: 'poglavlja' };
+    var node = findNode(sec.slug);
+    return { n: node ? countDocs(node) : 0, unit: 'dok.' };
+  }
+
+  function homeCard(href, glyphHtml, title, desc, badge, extra) {
+    return (
+      '<a class="hcard" href="' + href + '">' +
+      '<span class="hc-hatch" aria-hidden="true"></span>' +
+      '<span class="hc-glyph" aria-hidden="true">' + glyphHtml + '</span>' +
+      '<span class="hc-body"><span class="hc-title">' + esc(title) +
+      (badge ? '<span class="hc-badge">' + badge + '</span>' : '') + '</span>' +
+      '<span class="hc-desc">' + esc(desc) + '</span>' + (extra || '') + '</span>' +
+      ARROW + '</a>'
+    );
+  }
+
+  function showHome() {
     setActiveLink(null);
     document.title = 'BBD Cortex';
+
+    var docTotal = tree.reduce(function (s, n) { return s + (n.type === 'doc' ? 1 : countDocs(n)); }, 0);
+    var menu = (window.CortexTools && window.CortexTools.menu) || [];
+    var toolTotal = menu.reduce(function (s, m) { return s + m.tools.length; }, 0);
+
+    var left = SECTIONS.map(function (sec) {
+      var c = sectionCount(sec);
+      return homeCard('#cat/' + sec.id, icon(sec.icon), sec.title, sec.desc, c.n ? c.n + ' ' + c.unit : 'uskoro');
+    }).join('') +
+      homeCard('#/docs%2Fcortex-skill-uputstvo.md', icon('help'), 'Help',
+        'Uputstvo za korišćenje BBD Cortex skill-a u Claude-u i kako postavljati pitanja.', '');
+
+    var right = menu.map(function (m) {
+      return '<div class="home-tgroup">' + esc(m.label) + '</div>' + m.tools.map(function (t) {
+        return homeCard('#tool/' + t.id, '<span class="hc-sym">' + (TOOL_GLYPH[t.id] || esc(t.label.charAt(0))) + '</span>', t.label, t.desc, '');
+      }).join('');
+    }).join('');
+
     contentInner.innerHTML =
-      '<h1>BBD Cortex</h1>' +
-      '<p>Baza znanja BBD Engineering — pravilnici, zakoni i standardi na jednom mestu.</p>' +
-      '<p>Izaberite dokument iz levog menija ili pretražite iznad.</p>' +
-      '<p>Inženjerski kalkulatori su u meniju u gornjoj traci (npr. <a href="#tool/flow-calc">Hydronic Tools → Flow Calc</a>).</p>';
+      '<div class="home">' +
+      '<section class="home-hero">' +
+      '<img class="home-logo" src="assets/logo.png" alt="BBD Cortex" />' +
+      '<p class="home-lede">Baza znanja BBD Engineering — pravilnici, standardi, stručna literatura, interna obuka i inženjerski alati na jednom mestu.</p>' +
+      '<div class="home-stats">' +
+      '<span><b>' + docTotal + '</b> dokumenata</span>' +
+      '<span><b>' + toolTotal + '</b> alata</span>' +
+      '<span class="home-skill" hidden></span>' +
+      '</div>' +
+      '<div class="home-band" aria-hidden="true"></div>' +
+      '</section>' +
+      '<div class="home-grid">' +
+      '<section><h2 class="home-h">Baza znanja</h2><div class="home-cards">' + left + '</div></section>' +
+      '<section><h2 class="home-h">Alati</h2><div class="home-cards">' + right + '</div></section>' +
+      '</div></div>';
+
+    // Claude skill (ZIP) — postoji samo na Cloudflare build-u; lokalno se link ne prikazuje.
+    fetch('/downloads/bbd-cortex-skill.json')
+      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function (v) {
+        var el = contentInner.querySelector('.home-skill');
+        if (!el) return;
+        el.innerHTML = '<a href="/downloads/bbd-cortex-skill.zip" download>Preuzmi Claude skill (ZIP)</a>' +
+          (v && v.verzija ? ' · ' + esc(v.verzija) : '');
+        el.hidden = false;
+      })
+      .catch(function () {});
+  }
+
+  // Stranica oblasti: #cat/<id> — spisak svih dokumenata u oblasti, po podfolderima
+  function docListHtml(node) {
+    var docs = node.children.filter(function (c) { return c.type === 'doc'; });
+    var folders = node.children.filter(function (c) { return c.type !== 'doc' && countDocs(c) > 0; });
+    var html = docs.length
+      ? '<ul class="cat-list">' + docs.map(function (d) {
+          return '<li><a href="#/' + encodeURIComponent(d.path) + '">' + esc(d.title) + '</a></li>';
+        }).join('') + '</ul>'
+      : '';
+    folders.forEach(function (f) {
+      html += '<div class="cat-group"><h3 class="cat-h">' + esc(f.label) +
+        ' <span class="cat-n">' + countDocs(f) + '</span></h3>' + docListHtml(f) + '</div>';
+    });
+    return html;
+  }
+
+  function renderCategory(id) {
+    var sec = SECTIONS.filter(function (s) { return s.id === id; })[0];
+    if (!sec) { contentInner.innerHTML = '<p>Oblast nije pronađena.</p>'; return; }
+    setActiveLink(null);
+    document.title = sec.title + ' — BBD Cortex';
+    var body;
+    if (sec.chapters) {
+      body = '<ul class="cat-list cat-chapters">' + chapterNodes().map(function (n) {
+        var first = n.children.filter(function (c) { return c.type === 'doc'; })[0];
+        var href = first ? '#/' + encodeURIComponent(first.path) : '#';
+        return '<li><a href="' + href + '">' + esc(n.label) + '</a></li>';
+      }).join('') + '</ul>';
+    } else {
+      var node = findNode(sec.slug);
+      body = node && countDocs(node) ? docListHtml(node) : '<p class="cat-empty">U ovoj oblasti još nema dokumenata.</p>';
+      // proširi istu granu u levom meniju
+      if (node && !expanded[node.slug]) {
+        expanded[node.slug] = true;
+        var g = sidebarTree.querySelector('.sb-group[data-slug="' + CSS.escape(node.slug) + '"]');
+        if (g) { g.classList.add('open'); g.querySelector(':scope > .sb-group-toggle').setAttribute('aria-expanded', 'true'); }
+      }
+    }
+    contentInner.innerHTML =
+      '<div class="cat">' +
+      '<nav class="cat-crumb"><a href="#/">Početna</a> / ' + esc(sec.title) + '</nav>' +
+      '<div class="cat-head"><span class="hc-glyph" aria-hidden="true">' + icon(sec.icon) + '</span>' +
+      '<div><h1>' + esc(sec.title) + '</h1><p class="cat-lede">' + esc(sec.desc) + '</p></div></div>' +
+      '<div class="home-band" aria-hidden="true"></div>' +
+      body + '</div>';
   }
 
   // Chapter markdown embeds images as raw <img src="media/xxx.png"> (from
@@ -196,7 +350,10 @@
 
   function route() {
     var hash = location.hash.replace(/^#\/?/, '');
-    if (!hash) { showWelcome(); return; }
+    contentInner.classList.toggle('wide', !hash);
+    document.getElementById('content').scrollTop = 0;
+    if (!hash) { showHome(); return; }
+    if (hash.indexOf('cat/') === 0) { renderCategory(hash.slice(4)); return; }
     if (hash.indexOf('tool/') === 0 && window.CortexTools) {
       setActiveLink(null);
       window.CortexTools.render(hash.slice(5), contentInner);

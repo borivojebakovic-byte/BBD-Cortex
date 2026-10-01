@@ -66,6 +66,24 @@ No server-side code runs — it's static files end to end. Re-run `node build.js
 | `serve.js` | Zero-dependency local preview server |
 | `manifest.json`, `search-index.json` | Generated — committed so the app works immediately; regenerate after content changes |
 
+## Home (naslovna strana)
+
+The page shown at `#/` (no hash). The **logo in the top-left corner links back to it** from any
+document or tool. It has a larger logo, a short description with document/tool counts, and two
+columns of cards (built in `showHome()` in `assets/app.js`):
+
+- **Baza znanja** — Pravilnici, Standardi, Knjige, Program obuke (from the `SECTIONS` list) and
+  Help (`docs/cortex-skill-uputstvo.md`). Counts come from `manifest.json`. Each section card
+  opens a section page `#cat/<id>` listing all its documents grouped by subfolder.
+- **Alati** — one card per tool, generated from `MENU` in `tools.js` (exposed as
+  `CortexTools.menu`), so a new tool shows up on Home automatically.
+- If `/downloads/bbd-cortex-skill.json` exists (Cloudflare build), a "Preuzmi Claude skill (ZIP)"
+  link with the version is shown under the counts.
+
+Styling: hatch (blue diagonal hatching, `--hatch` / `--hatch-x` in `style.css`) marks the
+highlighted parts; on hover a card's hatch strip widens, turns into a moving cross-hatch, and
+the icon fills blue.
+
 ## Tools (Alati)
 
 The top bar has a tools menu built from the `MENU` registry at the top of `assets/tools.js`.
@@ -133,8 +151,7 @@ plain references, not as working links, since the app itself can't reach network
   Fine at this content size; as more chapters and standards are added, this is the first thing
   to revisit (e.g. move to the Phase 2 chat/RAG layer, which needs server-side retrieval anyway).
 - No accounts or access control — anyone who can reach the URL can read everything.
-- No categorized landing pages yet — category README files are skipped in the sidebar and not
-  yet shown anywhere.
+- Category README files are skipped in the sidebar and not yet shown anywhere.
 
 ## Why not Docusaurus (as originally planned)?
 
