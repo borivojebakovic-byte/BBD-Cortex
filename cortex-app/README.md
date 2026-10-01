@@ -80,9 +80,9 @@ columns of cards (built in `showHome()` in `assets/app.js`):
 - If `/downloads/bbd-cortex-skill.json` exists (Cloudflare build), a "Preuzmi Claude skill (ZIP)"
   link with the version is shown under the counts.
 
-Styling: hatch (blue diagonal hatching, `--hatch` / `--hatch-x` in `style.css`) marks the
-highlighted parts; on hover a card's hatch strip widens, turns into a moving cross-hatch, and
-the icon fills blue.
+Styling: accents are thin/thick blue lines and solid blue fills at different opacities
+(`--a-05` … `--a-30` in `style.css`); on hover a card's left line thickens to full blue, the card
+gets a light blue fill and the icon fills solid blue.
 
 ## Tools (Alati)
 

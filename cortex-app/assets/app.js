@@ -205,7 +205,7 @@
   function homeCard(href, glyphHtml, title, desc, badge, extra) {
     return (
       '<a class="hcard" href="' + href + '">' +
-      '<span class="hc-hatch" aria-hidden="true"></span>' +
+      '<span class="hc-line" aria-hidden="true"></span>' +
       '<span class="hc-glyph" aria-hidden="true">' + glyphHtml + '</span>' +
       '<span class="hc-body"><span class="hc-title">' + esc(title) +
       (badge ? '<span class="hc-badge">' + badge + '</span>' : '') + '</span>' +
