@@ -312,889 +312,1591 @@
       "type": "folder",
       "slug": "standardi",
       "label": "Standardi",
+      "children": [
+        {
+          "type": "folder",
+          "slug": "standardi/ASHRAE",
+          "label": "Ashrae",
+          "children": []
+        },
+        {
+          "type": "folder",
+          "slug": "standardi/BS",
+          "label": "Bs",
+          "children": []
+        },
+        {
+          "type": "folder",
+          "slug": "standardi/DIN",
+          "label": "Din",
+          "children": []
+        },
+        {
+          "type": "folder",
+          "slug": "standardi/EN",
+          "label": "En",
+          "children": [
+            {
+              "type": "doc",
+              "path": "standardi/EN/SRPS-CEN-TR-12101-5-2009.md",
+              "title": "SRPS CEN/TR 12101-5:2009 — Smernice za projektovanje i proračun SHEVS",
+              "category": "Standardi / En",
+              "sizeBytes": 20798,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "standardi/EN/SRPS-EN-12101-13-2022.md",
+              "title": "SRPS EN 12101-13:2022 — Sistemi sa natpritiskom (PDS)",
+              "category": "Standardi / En",
+              "sizeBytes": 18167,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "standardi/EN/SRPS-EN-12828-2015.md",
+              "title": "SRPS EN 12828:2015 — Projektovanje sistema toplovodnog grejanja",
+              "category": "Standardi / En",
+              "sizeBytes": 20074,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "standardi/EN/SRPS-EN-16798-1-2019.md",
+              "title": "SRPS EN 16798-1:2019 — Energetske performanse zgrada — Ventilacija u zgradama — Deo 1",
+              "category": "Standardi / En",
+              "sizeBytes": 190839,
+              "isReadme": false
+            },
+            {
+              "type": "folder",
+              "slug": "standardi/EN/img",
+              "label": "Img",
+              "children": [
+                {
+                  "type": "folder",
+                  "slug": "standardi/EN/img/SRPS-EN-16798-1-2019",
+                  "label": "Srps En 16798 1 2019",
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "standardi/IBC",
+          "label": "IBC",
+          "children": []
+        },
+        {
+          "type": "folder",
+          "slug": "standardi/NFPA",
+          "label": "Nfpa",
+          "children": []
+        },
+        {
+          "type": "folder",
+          "slug": "standardi/SNIP",
+          "label": "Snip",
+          "children": []
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "knjige",
+      "label": "Knjige",
+      "children": [
+        {
+          "type": "folder",
+          "slug": "knjige/_konverter",
+          "label": "_konverter",
+          "children": []
+        },
+        {
+          "type": "folder",
+          "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI",
+          "label": "2021 Ashrae Fundamentals Handbook Si",
+          "children": [
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 01 - Psychrometrics.md",
+              "title": "Chapter 1 — Psychrometrics",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 98168,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 02 - Thermodynamics and Refrigeration Cycles.md",
+              "title": "Chapter 2 — Thermodynamics and Refrigeration Cycles",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 126389,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 03 - Fluid Flow.md",
+              "title": "Chapter 3 — Fluid Flow",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 80027,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 04 - Heat Transfer.md",
+              "title": "Chapter 4 — Heat Transfer",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 187531,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 05 - Two-Phase Flow.md",
+              "title": "Chapter 5 — Two-Phase Flow",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 158253,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 06 - Mass Transfer.md",
+              "title": "Chapter 6 — Mass Transfer",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 84279,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 07 - Fundamentals of Control.md",
+              "title": "Chapter 7 — Fundamentals of Control",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 130966,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 08 - Sound and Vibration.md",
+              "title": "Chapter 8 — Sound and Vibration",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 133075,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 09 - Thermal Comfort.md",
+              "title": "Chapter 9 — Thermal Comfort",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 209211,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 10 - Indoor Environmental Health.md",
+              "title": "Chapter 10 — Indoor Environmental Health",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 213142,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 11 - Air Contaminants.md",
+              "title": "Chapter 11 — Air Contaminants",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 180194,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 12 - Odors.md",
+              "title": "Chapter 12 — Odors",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 49969,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 13 - Indoor Environmental Modeling.md",
+              "title": "Chapter 13 — Indoor Environmental Modeling",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 149168,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 14 - Climatic Design Information.md",
+              "title": "Chapter 14 — Climatic Design Information",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 574438,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 15 - Fenestration.md",
+              "title": "Chapter 15 — Fenestration",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 521628,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 16 - Ventilation and Infiltration.md",
+              "title": "Chapter 16 — Ventilation and Infiltration",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 275379,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 17 - Residential Cooling and Heating Load Calculations.md",
+              "title": "Chapter 17 — Residential Cooling and Heating Load Calculations",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 98932,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 18 - Nonresidential Cooling and Heating Load Calculations.md",
+              "title": "Chapter 18 — Nonresidential Cooling and Heating Load Calculations",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 381091,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 19 - Energy Estimating and Modeling Methods.md",
+              "title": "Chapter 19 — Energy Estimating and Modeling Methods",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 387807,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 20 - Space Air Diffusion.md",
+              "title": "Chapter 20 — Space Air Diffusion",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 55694,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 21 - Duct Design.md",
+              "title": "Chapter 21 — Duct Design",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 139672,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 22 - Pipe Design.md",
+              "title": "Chapter 22 — Pipe Design",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 220615,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 23 - Insulation for Mechanical Systems.md",
+              "title": "Chapter 23 — Insulation for Mechanical Systems",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 146600,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 24 - Airflow Around Buildings.md",
+              "title": "Chapter 24 — Airflow Around Buildings",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 108937,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 25 - Heat, Air, and Moisture Control in Building Assemblies—Fundamentals.md",
+              "title": "Chapter 25 — Heat, Air, and Moisture Control in Building Assemblies—Fundamentals",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 120577,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 26 - Heat, Air, and Moisture Control in Building Assemblies—Material Properties.md",
+              "title": "Chapter 26 — Heat, Air, and Moisture Control in Building Assemblies—Material Properties",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 163978,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 27 - Heat, Air, and Moisture Control in Building Assemblies—Examples.md",
+              "title": "Chapter 27 — Heat, Air, and Moisture Control in Building Assemblies—Examples",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 76767,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 28 - Combustion and Fuels.md",
+              "title": "Chapter 28 — Combustion and Fuels",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 136776,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 29 - Refrigerants.md",
+              "title": "Chapter 29 — Refrigerants",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 85118,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 30 - Thermophysical Properties of Refrigerants.md",
+              "title": "Chapter 30 — Thermophysical Properties of Refrigerants",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 434848,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 31 - Physical Properties of Secondary Coolants (Brines).md",
+              "title": "Chapter 31 — Physical Properties of Secondary Coolants (Brines)",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 74475,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 32 - Sorbents and Desiccants.md",
+              "title": "Chapter 32 — Sorbents and Desiccants",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 29921,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 33 - Physical Properties of Materials.md",
+              "title": "Chapter 33 — Physical Properties of Materials",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 31686,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 34 - Energy Resources.md",
+              "title": "Chapter 34 — Energy Resources",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 50062,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 35 - Sustainability.md",
+              "title": "Chapter 35 — Sustainability",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 85684,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 36 - Climate Change.md",
+              "title": "Chapter 36 — Climate Change",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 173743,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 37 - Moisture Management in Buildings.md",
+              "title": "Chapter 37 — Moisture Management in Buildings",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 76706,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 38 - Measurement and Instruments.md",
+              "title": "Chapter 38 — Measurement and Instruments",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 261876,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 39 - Abbreviations and Symbols.md",
+              "title": "Chapter 39 — Abbreviations and Symbols",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 41672,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 40 - Units and Conversions.md",
+              "title": "Chapter 40 — Units and Conversions",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 14932,
+              "isReadme": false
+            },
+            {
+              "type": "doc",
+              "path": "knjige/2021 ASHRAE Fundamentals Handbook SI/2021 ASHRAE Fundamentals Handbook SI - Chapter 41 - Codes and Standards.md",
+              "title": "Chapter 41 — Codes and Standards",
+              "category": "Knjige / 2021 Ashrae Fundamentals Handbook Si",
+              "sizeBytes": 145196,
+              "isReadme": false
+            },
+            {
+              "type": "folder",
+              "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img",
+              "label": "Img",
+              "children": [
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch01",
+                  "label": "Ch01",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch02",
+                  "label": "Ch02",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch03",
+                  "label": "Ch03",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch04",
+                  "label": "Ch04",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch05",
+                  "label": "Ch05",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch06",
+                  "label": "Ch06",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch07",
+                  "label": "Ch07",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch08",
+                  "label": "Ch08",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch09",
+                  "label": "Ch09",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch10",
+                  "label": "Ch10",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch11",
+                  "label": "Ch11",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch12",
+                  "label": "Ch12",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch13",
+                  "label": "Ch13",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch14",
+                  "label": "Ch14",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch15",
+                  "label": "Ch15",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch16",
+                  "label": "Ch16",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch17",
+                  "label": "Ch17",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch18",
+                  "label": "Ch18",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch19",
+                  "label": "Ch19",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch20",
+                  "label": "Ch20",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch21",
+                  "label": "Ch21",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch22",
+                  "label": "Ch22",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch23",
+                  "label": "Ch23",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch24",
+                  "label": "Ch24",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch25",
+                  "label": "Ch25",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch26",
+                  "label": "Ch26",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch27",
+                  "label": "Ch27",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch28",
+                  "label": "Ch28",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch30",
+                  "label": "Ch30",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch31",
+                  "label": "Ch31",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch32",
+                  "label": "Ch32",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch34",
+                  "label": "Ch34",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch35",
+                  "label": "Ch35",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch36",
+                  "label": "Ch36",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch37",
+                  "label": "Ch37",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch38",
+                  "label": "Ch38",
+                  "children": []
+                },
+                {
+                  "type": "folder",
+                  "slug": "knjige/2021 ASHRAE Fundamentals Handbook SI/img/ch39",
+                  "label": "Ch39",
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "slug": "administracija",
+      "label": "Administracija",
       "children": []
     },
     {
       "type": "folder",
-      "slug": "01-document-management",
-      "label": "1. Document Management",
+      "slug": "program-obuke",
+      "label": "Program obuke",
       "children": [
         {
-          "type": "doc",
-          "path": "01-document-management/01-document-management.md",
-          "title": "DOCUMENT MANAGEMENT",
-          "category": "1. Document Management",
-          "sizeBytes": 9568,
-          "isReadme": false
+          "type": "folder",
+          "slug": "program-obuke/01-document-management",
+          "label": "1. Document Management",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/01-document-management/01-document-management.md",
+              "title": "DOCUMENT MANAGEMENT",
+              "category": "Program obuke / 1. Document Management",
+              "sizeBytes": 9568,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/02-cad-standard",
+          "label": "2. CAD Standard",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/02-cad-standard/02-cad-standard.md",
+              "title": "CAD STANDARD",
+              "category": "Program obuke / 2. CAD Standard",
+              "sizeBytes": 7998,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/03-revit-standard",
+          "label": "3. Revit Standard",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/03-revit-standard/03-revit-standard.md",
+              "title": "REVIT STANDARD",
+              "category": "Program obuke / 3. Revit Standard",
+              "sizeBytes": 1447,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/04-proracun-gubitaka-toplote",
+          "label": "4. Proracun Gubitaka Toplote",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/04-proracun-gubitaka-toplote/04-proracun-gubitaka-toplote.md",
+              "title": "PRORAČUN GUBITAKA TOPLOTE",
+              "category": "Program obuke / 4. Proracun Gubitaka Toplote",
+              "sizeBytes": 2775,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/05-proracun-dobitaka-toplote",
+          "label": "5. Proracun Dobitaka Toplote",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/05-proracun-dobitaka-toplote/05-proracun-dobitaka-toplote.md",
+              "title": "PRORAČUN DOBITAKA TOPLOTE",
+              "category": "Program obuke / 5. Proracun Dobitaka Toplote",
+              "sizeBytes": 2648,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/06-proracun-kolicina-vazduha",
+          "label": "6. Proracun Kolicina Vazduha",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/06-proracun-kolicina-vazduha/06-proracun-kolicina-vazduha.md",
+              "title": "PRORAČUN KOLIČINA VAZDUHA",
+              "category": "Program obuke / 6. Proracun Kolicina Vazduha",
+              "sizeBytes": 1066,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/07-ventilacija-kuhinja",
+          "label": "7. Ventilacija Kuhinja",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/07-ventilacija-kuhinja/07-ventilacija-kuhinja.md",
+              "title": "VENTILACIJA KUHINJA",
+              "category": "Program obuke / 7. Ventilacija Kuhinja",
+              "sizeBytes": 837,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/08-proracun-buke",
+          "label": "8. Proracun Buke",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/08-proracun-buke/08-proracun-buke.md",
+              "title": "PRORAČUN BUKE",
+              "category": "Program obuke / 8. Proracun Buke",
+              "sizeBytes": 825,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/09-proracun-cevne-mreze",
+          "label": "9. Proracun Cevne Mreze",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/09-proracun-cevne-mreze/09-proracun-cevne-mreze.md",
+              "title": "PRORAČUN CEVNE MREŽE",
+              "category": "Program obuke / 9. Proracun Cevne Mreze",
+              "sizeBytes": 673,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/10-proracun-kanala-za-vazduh",
+          "label": "10. Proracun Kanala Za Vazduh",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/10-proracun-kanala-za-vazduh/10-proracun-kanala-za-vazduh.md",
+              "title": "PRORAČUN KANALA ZA VAZDUH",
+              "category": "Program obuke / 10. Proracun Kanala Za Vazduh",
+              "sizeBytes": 683,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/11-proracun-kompenzacije-cevovoda",
+          "label": "11. Proracun Kompenzacije Cevovoda",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/11-proracun-kompenzacije-cevovoda/11-proracun-kompenzacije-cevovoda.md",
+              "title": "PRORAČUN KOMPENZACIJE CEVOVODA",
+              "category": "Program obuke / 11. Proracun Kompenzacije Cevovoda",
+              "sizeBytes": 693,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/12-proracun-cevnog-registra",
+          "label": "12. Proracun Cevnog Registra",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/12-proracun-cevnog-registra/12-proracun-cevnog-registra.md",
+              "title": "PRORAČUN CEVNOG REGISTRA",
+              "category": "Program obuke / 12. Proracun Cevnog Registra",
+              "sizeBytes": 856,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/13-proracun-odvlazivanja",
+          "label": "13. Proracun Odvlazivanja",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/13-proracun-odvlazivanja/13-proracun-odvlazivanja.md",
+              "title": "PRORAČUN ODVLAŽIVANJA",
+              "category": "Program obuke / 13. Proracun Odvlazivanja",
+              "sizeBytes": 908,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/14-proracun-leda",
+          "label": "14. Proracun Leda",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/14-proracun-leda/14-proracun-leda.md",
+              "title": "PRORAČUN LEDA",
+              "category": "Program obuke / 14. Proracun Leda",
+              "sizeBytes": 960,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/15-proracun-koeficijenta-prolaza-toplote",
+          "label": "15. Proracun Koeficijenta Prolaza Toplote",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/15-proracun-koeficijenta-prolaza-toplote/15-proracun-koeficijenta-prolaza-toplote.md",
+              "title": "PRORAČUN KOEFICIJENTA PROLAZA TOPLOTE",
+              "category": "Program obuke / 15. Proracun Koeficijenta Prolaza Toplote",
+              "sizeBytes": 1099,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/16-elaborat-energetske-efikasnosti",
+          "label": "16. Elaborat Energetske Efikasnosti",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/16-elaborat-energetske-efikasnosti/16-elaborat-energetske-efikasnosti.md",
+              "title": "ELABORAT ENERGETSKE EFIKASNOSTI",
+              "category": "Program obuke / 16. Elaborat Energetske Efikasnosti",
+              "sizeBytes": 953,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/17-ventilacija-bazena",
+          "label": "17. Ventilacija Bazena",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/17-ventilacija-bazena/17-ventilacija-bazena.md",
+              "title": "VENTILACIJA BAZENA",
+              "category": "Program obuke / 17. Ventilacija Bazena",
+              "sizeBytes": 787,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/18-proracun-natpritisne-ventilacije",
+          "label": "18. Proracun Natpritisne Ventilacije",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/18-proracun-natpritisne-ventilacije/18-proracun-natpritisne-ventilacije.md",
+              "title": "PRORAČUN NATPRITISNE VENTILACIJE",
+              "category": "Program obuke / 18. Proracun Natpritisne Ventilacije",
+              "sizeBytes": 698,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/19-proracun-odimljavanja",
+          "label": "19. Proracun Odimljavanja",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/19-proracun-odimljavanja/19-proracun-odimljavanja.md",
+              "title": "PRORAČUN ODIMLJAVANJA",
+              "category": "Program obuke / 19. Proracun Odimljavanja",
+              "sizeBytes": 676,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/20-izbor-radijatora",
+          "label": "20. Izbor Radijatora",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/20-izbor-radijatora/20-izbor-radijatora.md",
+              "title": "IZBOR RADIJATORA",
+              "category": "Program obuke / 20. Izbor Radijatora",
+              "sizeBytes": 664,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/21-izbor-fen-kojla",
+          "label": "21. Izbor Fen Kojla",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/21-izbor-fen-kojla/21-izbor-fen-kojla.md",
+              "title": "IZBOR FEN KOJLA",
+              "category": "Program obuke / 21. Izbor Fen Kojla",
+              "sizeBytes": 662,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/22-izbor-vrf-sistema",
+          "label": "22. Izbor VRF Sistema",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/22-izbor-vrf-sistema/22-izbor-vrf-sistema.md",
+              "title": "IZBOR VRF SISTEMA",
+              "category": "Program obuke / 22. Izbor VRF Sistema",
+              "sizeBytes": 666,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/23-proracun-podnog-grejanja",
+          "label": "23. Proracun Podnog Grejanja",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/23-proracun-podnog-grejanja/23-proracun-podnog-grejanja.md",
+              "title": "PRORAČUN PODNOG GREJANJA",
+              "category": "Program obuke / 23. Proracun Podnog Grejanja",
+              "sizeBytes": 682,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/24-izbor-distributivnih-elemenata",
+          "label": "24. Izbor Distributivnih Elemenata",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/24-izbor-distributivnih-elemenata/24-izbor-distributivnih-elemenata.md",
+              "title": "IZBOR DISTRIBUTIVNIH ELEMENATA",
+              "category": "Program obuke / 24. Izbor Distributivnih Elemenata",
+              "sizeBytes": 692,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/25-izbor-pp-klapni",
+          "label": "25. Izbor PP Klapni",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/25-izbor-pp-klapni/25-izbor-pp-klapni.md",
+              "title": "IZBOR PP KLAPNI",
+              "category": "Program obuke / 25. Izbor PP Klapni",
+              "sizeBytes": 660,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/26-izbor-vav-cav",
+          "label": "26. Izbor VAV CAV",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/26-izbor-vav-cav/26-izbor-vav-cav.md",
+              "title": "IZBOR VAV/CAV",
+              "category": "Program obuke / 26. Izbor VAV CAV",
+              "sizeBytes": 656,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/27-izbor-klima-komora",
+          "label": "27. Izbor Klima Komora",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/27-izbor-klima-komora/27-izbor-klima-komora.md",
+              "title": "IZBOR KLIMA KOMORA",
+              "category": "Program obuke / 27. Izbor Klima Komora",
+              "sizeBytes": 667,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/28-izbor-ventilatora",
+          "label": "28. Izbor Ventilatora",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/28-izbor-ventilatora/28-izbor-ventilatora.md",
+              "title": "IZBOR VENTILATORA",
+              "category": "Program obuke / 28. Izbor Ventilatora",
+              "sizeBytes": 664,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/29-izbor-prigusivaca-buke",
+          "label": "29. Izbor Prigusivaca Buke",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/29-izbor-prigusivaca-buke/29-izbor-prigusivaca-buke.md",
+              "title": "IZBOR PRIGUŠIVAČA BUKE",
+              "category": "Program obuke / 29. Izbor Prigusivaca Buke",
+              "sizeBytes": 678,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/30-izbor-cirkulacionih-pumpi",
+          "label": "30. Izbor Cirkulacionih Pumpi",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/30-izbor-cirkulacionih-pumpi/30-izbor-cirkulacionih-pumpi.md",
+              "title": "IZBOR CIRKULACIONIH PUMPI",
+              "category": "Program obuke / 30. Izbor Cirkulacionih Pumpi",
+              "sizeBytes": 680,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/31-izbor-regulacionih-ventila",
+          "label": "31. Izbor Regulacionih Ventila",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/31-izbor-regulacionih-ventila/31-izbor-regulacionih-ventila.md",
+              "title": "IZBOR REGULACIONIH VENTILA",
+              "category": "Program obuke / 31. Izbor Regulacionih Ventila",
+              "sizeBytes": 684,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/32-izbor-sistema-za-odrzavanje-pritiska",
+          "label": "32. Izbor Sistema Za Odrzavanje Pritiska",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/32-izbor-sistema-za-odrzavanje-pritiska/32-izbor-sistema-za-odrzavanje-pritiska.md",
+              "title": "IZBOR SISTEMA ZA ODRŽAVANJE PRITISKA",
+              "category": "Program obuke / 32. Izbor Sistema Za Odrzavanje Pritiska",
+              "sizeBytes": 809,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/33-izbor-ventila-sigurnosti",
+          "label": "33. Izbor Ventila Sigurnosti",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/33-izbor-ventila-sigurnosti/33-izbor-ventila-sigurnosti.md",
+              "title": "IZBOR VENTILA SIGURNOSTI",
+              "category": "Program obuke / 33. Izbor Ventila Sigurnosti",
+              "sizeBytes": 678,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/34-izbor-izmenjivaca-toplote",
+          "label": "34. Izbor Izmenjivaca Toplote",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/34-izbor-izmenjivaca-toplote/34-izbor-izmenjivaca-toplote.md",
+              "title": "IZBOR IZMENJIVAČA TOPLOTE",
+              "category": "Program obuke / 34. Izbor Izmenjivaca Toplote",
+              "sizeBytes": 682,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/35-izbor-sabirnika-i-razdelnika",
+          "label": "35. Izbor Sabirnika I Razdelnika",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/35-izbor-sabirnika-i-razdelnika/35-izbor-sabirnika-i-razdelnika.md",
+              "title": "IZBOR SABIRNIKA I RAZDELNIKA",
+              "category": "Program obuke / 35. Izbor Sabirnika I Razdelnika",
+              "sizeBytes": 686,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/36-odzracivanje",
+          "label": "36. Odzracivanje",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/36-odzracivanje/36-odzracivanje.md",
+              "title": "ODZRAČIVANJE",
+              "category": "Program obuke / 36. Odzracivanje",
+              "sizeBytes": 656,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/37-izbor-bafer-tankova",
+          "label": "37. Izbor Bafer Tankova",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/37-izbor-bafer-tankova/37-izbor-bafer-tankova.md",
+              "title": "IZBOR BAFER TANKOVA",
+              "category": "Program obuke / 37. Izbor Bafer Tankova",
+              "sizeBytes": 668,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/38-izbor-kotlova",
+          "label": "38. Izbor Kotlova",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/38-izbor-kotlova/38-izbor-kotlova.md",
+              "title": "IZBOR KOTLOVA",
+              "category": "Program obuke / 38. Izbor Kotlova",
+              "sizeBytes": 656,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/39-izbor-toplotnih-pumpi",
+          "label": "39. Izbor Toplotnih Pumpi",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/39-izbor-toplotnih-pumpi/39-izbor-toplotnih-pumpi.md",
+              "title": "IZBOR TOPLOTNIH PUMPI",
+              "category": "Program obuke / 39. Izbor Toplotnih Pumpi",
+              "sizeBytes": 673,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/40-solarni-kolektori",
+          "label": "40. Solarni Kolektori",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/40-solarni-kolektori/40-solarni-kolektori.md",
+              "title": "SOLARNI KOLEKTORI",
+              "category": "Program obuke / 40. Solarni Kolektori",
+              "sizeBytes": 3058,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/41-hemijska-priprema-vode",
+          "label": "41. Hemijska Priprema Vode",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/41-hemijska-priprema-vode/41-hemijska-priprema-vode.md",
+              "title": "HEMIJSKA PRIPREMA VODE",
+              "category": "Program obuke / 41. Hemijska Priprema Vode",
+              "sizeBytes": 674,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/42-sanitarna-topla-voda",
+          "label": "42. Sanitarna Topla Voda",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/42-sanitarna-topla-voda/42-sanitarna-topla-voda.md",
+              "title": "SANITARNA TOPLA VODA",
+              "category": "Program obuke / 42. Sanitarna Topla Voda",
+              "sizeBytes": 670,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/43-ventilacija-prostorija-dizel-agregata",
+          "label": "43. Ventilacija Prostorija Dizel Agregata",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/43-ventilacija-prostorija-dizel-agregata/43-ventilacija-prostorija-dizel-agregata.md",
+              "title": "VENTILACIJA PROSTORIJA DIZEL AGREGATA",
+              "category": "Program obuke / 43. Ventilacija Prostorija Dizel Agregata",
+              "sizeBytes": 704,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/44-hladjenje-trafo-stanice",
+          "label": "44. Hladjenje Trafo Stanice",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/44-hladjenje-trafo-stanice/44-hladjenje-trafo-stanice.md",
+              "title": "HLADJENJE TRAFO STANICE",
+              "category": "Program obuke / 44. Hladjenje Trafo Stanice",
+              "sizeBytes": 676,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/45-rezervoari-za-gorivo",
+          "label": "45. Rezervoari Za Gorivo",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/45-rezervoari-za-gorivo/45-rezervoari-za-gorivo.md",
+              "title": "REZERVOARI ZA GORIVO",
+              "category": "Program obuke / 45. Rezervoari Za Gorivo",
+              "sizeBytes": 670,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/46-hidraulicke-seme",
+          "label": "46. Hidraulicke Seme",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/46-hidraulicke-seme/46-hidraulicke-seme.md",
+              "title": "HIDRAULIČKE ŠEME",
+              "category": "Program obuke / 46. Hidraulicke Seme",
+              "sizeBytes": 666,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/47-proracun-dimnjaka",
+          "label": "47. Proracun Dimnjaka",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/47-proracun-dimnjaka/47-proracun-dimnjaka.md",
+              "title": "PRORAČUN DIMNJAKA",
+              "category": "Program obuke / 47. Proracun Dimnjaka",
+              "sizeBytes": 666,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/48-gasne-kotlarnice",
+          "label": "48. Gasne Kotlarnice",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/48-gasne-kotlarnice/48-gasne-kotlarnice.md",
+              "title": "GASNE KOTLARNICE",
+              "category": "Program obuke / 48. Gasne Kotlarnice",
+              "sizeBytes": 662,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/49-proracun-gasovoda",
+          "label": "49. Proracun Gasovoda",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/49-proracun-gasovoda/49-proracun-gasovoda.md",
+              "title": "PRORAČUN GASOVODA",
+              "category": "Program obuke / 49. Proracun Gasovoda",
+              "sizeBytes": 666,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/50-izbor-kalorimetara",
+          "label": "50. Izbor Kalorimetara",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/50-izbor-kalorimetara/50-izbor-kalorimetara.md",
+              "title": "IZBOR KALORIMETARA",
+              "category": "Program obuke / 50. Izbor Kalorimetara",
+              "sizeBytes": 666,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/51-kompimovani-vazduh",
+          "label": "51. Kompimovani Vazduh",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/51-kompimovani-vazduh/51-kompimovani-vazduh.md",
+              "title": "KOMPIMOVANI VAZDUH",
+              "category": "Program obuke / 51. Kompimovani Vazduh",
+              "sizeBytes": 666,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/52-izolacija",
+          "label": "52. Izolacija",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/52-izolacija/52-izolacija.md",
+              "title": "IZOLACIJA",
+              "category": "Program obuke / 52. Izolacija",
+              "sizeBytes": 648,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/53-masinske-sale",
+          "label": "53. Masinske Sale",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/53-masinske-sale/53-masinske-sale.md",
+              "title": "MAŠINSKE SALE",
+              "category": "Program obuke / 53. Masinske Sale",
+              "sizeBytes": 903,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/54-leed",
+          "label": "54. LEED",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/54-leed/54-leed.md",
+              "title": "LEED",
+              "category": "Program obuke / 54. LEED",
+              "sizeBytes": 638,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/55-ibc",
+          "label": "55. IBC",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/55-ibc/55-ibc.md",
+              "title": "IBC",
+              "category": "Program obuke / 55. IBC",
+              "sizeBytes": 636,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/56-proracun-energije",
+          "label": "56. Proracun Energije",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/56-proracun-energije/56-proracun-energije.md",
+              "title": "PRORAČUN ENERGIJE",
+              "category": "Program obuke / 56. Proracun Energije",
+              "sizeBytes": 666,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/57-izbor-grejnih-kablova",
+          "label": "57. Izbor Grejnih Kablova",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/57-izbor-grejnih-kablova/57-izbor-grejnih-kablova.md",
+              "title": "IZBOR GREJNIH KABLOVA",
+              "category": "Program obuke / 57. Izbor Grejnih Kablova",
+              "sizeBytes": 672,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/58-tekstualna-dokumentacija",
+          "label": "58. Tekstualna Dokumentacija",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/58-tekstualna-dokumentacija/58-tekstualna-dokumentacija.md",
+              "title": "TEKSTUALNA DOKUMENTACIJA",
+              "category": "Program obuke / 58. Tekstualna Dokumentacija",
+              "sizeBytes": 22183,
+              "isReadme": false
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "slug": "program-obuke/59-projekt-menadzment",
+          "label": "59. Projekt Menadzment",
+          "children": [
+            {
+              "type": "doc",
+              "path": "program-obuke/59-projekt-menadzment/59-projekt-menadzment.md",
+              "title": "PROJEKT MENADŽMENT",
+              "category": "Program obuke / 59. Projekt Menadzment",
+              "sizeBytes": 1038,
+              "isReadme": false
+            }
+          ]
         }
       ]
     },
     {
       "type": "folder",
-      "slug": "02-cad-standard",
-      "label": "2. CAD Standard",
+      "slug": "help",
+      "label": "Help",
       "children": [
         {
           "type": "doc",
-          "path": "02-cad-standard/02-cad-standard.md",
-          "title": "CAD STANDARD",
-          "category": "2. CAD Standard",
-          "sizeBytes": 7998,
+          "path": "help/cortex-skill-setup.md",
+          "title": "BBD Cortex skill — tehničko podešavanje (za održavanje)",
+          "category": "Help",
+          "sizeBytes": 1864,
           "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "03-revit-standard",
-      "label": "3. Revit Standard",
-      "children": [
+        },
         {
           "type": "doc",
-          "path": "03-revit-standard/03-revit-standard.md",
-          "title": "REVIT STANDARD",
-          "category": "3. Revit Standard",
-          "sizeBytes": 1447,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "04-proracun-gubitaka-toplote",
-      "label": "4. Proracun Gubitaka Toplote",
-      "children": [
-        {
-          "type": "doc",
-          "path": "04-proracun-gubitaka-toplote/04-proracun-gubitaka-toplote.md",
-          "title": "PRORAČUN GUBITAKA TOPLOTE",
-          "category": "4. Proracun Gubitaka Toplote",
-          "sizeBytes": 2775,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "05-proracun-dobitaka-toplote",
-      "label": "5. Proracun Dobitaka Toplote",
-      "children": [
-        {
-          "type": "doc",
-          "path": "05-proracun-dobitaka-toplote/05-proracun-dobitaka-toplote.md",
-          "title": "PRORAČUN DOBITAKA TOPLOTE",
-          "category": "5. Proracun Dobitaka Toplote",
-          "sizeBytes": 2648,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "06-proracun-kolicina-vazduha",
-      "label": "6. Proracun Kolicina Vazduha",
-      "children": [
-        {
-          "type": "doc",
-          "path": "06-proracun-kolicina-vazduha/06-proracun-kolicina-vazduha.md",
-          "title": "PRORAČUN KOLIČINA VAZDUHA",
-          "category": "6. Proracun Kolicina Vazduha",
-          "sizeBytes": 1066,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "07-ventilacija-kuhinja",
-      "label": "7. Ventilacija Kuhinja",
-      "children": [
-        {
-          "type": "doc",
-          "path": "07-ventilacija-kuhinja/07-ventilacija-kuhinja.md",
-          "title": "VENTILACIJA KUHINJA",
-          "category": "7. Ventilacija Kuhinja",
-          "sizeBytes": 837,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "08-proracun-buke",
-      "label": "8. Proracun Buke",
-      "children": [
-        {
-          "type": "doc",
-          "path": "08-proracun-buke/08-proracun-buke.md",
-          "title": "PRORAČUN BUKE",
-          "category": "8. Proracun Buke",
-          "sizeBytes": 825,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "09-proracun-cevne-mreze",
-      "label": "9. Proracun Cevne Mreze",
-      "children": [
-        {
-          "type": "doc",
-          "path": "09-proracun-cevne-mreze/09-proracun-cevne-mreze.md",
-          "title": "PRORAČUN CEVNE MREŽE",
-          "category": "9. Proracun Cevne Mreze",
-          "sizeBytes": 673,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "10-proracun-kanala-za-vazduh",
-      "label": "10. Proracun Kanala Za Vazduh",
-      "children": [
-        {
-          "type": "doc",
-          "path": "10-proracun-kanala-za-vazduh/10-proracun-kanala-za-vazduh.md",
-          "title": "PRORAČUN KANALA ZA VAZDUH",
-          "category": "10. Proracun Kanala Za Vazduh",
-          "sizeBytes": 683,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "11-proracun-kompenzacije-cevovoda",
-      "label": "11. Proracun Kompenzacije Cevovoda",
-      "children": [
-        {
-          "type": "doc",
-          "path": "11-proracun-kompenzacije-cevovoda/11-proracun-kompenzacije-cevovoda.md",
-          "title": "PRORAČUN KOMPENZACIJE CEVOVODA",
-          "category": "11. Proracun Kompenzacije Cevovoda",
-          "sizeBytes": 693,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "12-proracun-cevnog-registra",
-      "label": "12. Proracun Cevnog Registra",
-      "children": [
-        {
-          "type": "doc",
-          "path": "12-proracun-cevnog-registra/12-proracun-cevnog-registra.md",
-          "title": "PRORAČUN CEVNOG REGISTRA",
-          "category": "12. Proracun Cevnog Registra",
-          "sizeBytes": 856,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "13-proracun-odvlazivanja",
-      "label": "13. Proracun Odvlazivanja",
-      "children": [
-        {
-          "type": "doc",
-          "path": "13-proracun-odvlazivanja/13-proracun-odvlazivanja.md",
-          "title": "PRORAČUN ODVLAŽIVANJA",
-          "category": "13. Proracun Odvlazivanja",
-          "sizeBytes": 908,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "14-proracun-leda",
-      "label": "14. Proracun Leda",
-      "children": [
-        {
-          "type": "doc",
-          "path": "14-proracun-leda/14-proracun-leda.md",
-          "title": "PRORAČUN LEDA",
-          "category": "14. Proracun Leda",
-          "sizeBytes": 960,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "15-proracun-koeficijenta-prolaza-toplote",
-      "label": "15. Proracun Koeficijenta Prolaza Toplote",
-      "children": [
-        {
-          "type": "doc",
-          "path": "15-proracun-koeficijenta-prolaza-toplote/15-proracun-koeficijenta-prolaza-toplote.md",
-          "title": "PRORAČUN KOEFICIJENTA PROLAZA TOPLOTE",
-          "category": "15. Proracun Koeficijenta Prolaza Toplote",
-          "sizeBytes": 1099,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "16-elaborat-energetske-efikasnosti",
-      "label": "16. Elaborat Energetske Efikasnosti",
-      "children": [
-        {
-          "type": "doc",
-          "path": "16-elaborat-energetske-efikasnosti/16-elaborat-energetske-efikasnosti.md",
-          "title": "ELABORAT ENERGETSKE EFIKASNOSTI",
-          "category": "16. Elaborat Energetske Efikasnosti",
-          "sizeBytes": 953,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "17-ventilacija-bazena",
-      "label": "17. Ventilacija Bazena",
-      "children": [
-        {
-          "type": "doc",
-          "path": "17-ventilacija-bazena/17-ventilacija-bazena.md",
-          "title": "VENTILACIJA BAZENA",
-          "category": "17. Ventilacija Bazena",
-          "sizeBytes": 787,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "18-proracun-natpritisne-ventilacije",
-      "label": "18. Proracun Natpritisne Ventilacije",
-      "children": [
-        {
-          "type": "doc",
-          "path": "18-proracun-natpritisne-ventilacije/18-proracun-natpritisne-ventilacije.md",
-          "title": "PRORAČUN NATPRITISNE VENTILACIJE",
-          "category": "18. Proracun Natpritisne Ventilacije",
-          "sizeBytes": 698,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "19-proracun-odimljavanja",
-      "label": "19. Proracun Odimljavanja",
-      "children": [
-        {
-          "type": "doc",
-          "path": "19-proracun-odimljavanja/19-proracun-odimljavanja.md",
-          "title": "PRORAČUN ODIMLJAVANJA",
-          "category": "19. Proracun Odimljavanja",
-          "sizeBytes": 676,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "20-izbor-radijatora",
-      "label": "20. Izbor Radijatora",
-      "children": [
-        {
-          "type": "doc",
-          "path": "20-izbor-radijatora/20-izbor-radijatora.md",
-          "title": "IZBOR RADIJATORA",
-          "category": "20. Izbor Radijatora",
-          "sizeBytes": 664,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "21-izbor-fen-kojla",
-      "label": "21. Izbor Fen Kojla",
-      "children": [
-        {
-          "type": "doc",
-          "path": "21-izbor-fen-kojla/21-izbor-fen-kojla.md",
-          "title": "IZBOR FEN KOJLA",
-          "category": "21. Izbor Fen Kojla",
-          "sizeBytes": 662,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "22-izbor-vrf-sistema",
-      "label": "22. Izbor VRF Sistema",
-      "children": [
-        {
-          "type": "doc",
-          "path": "22-izbor-vrf-sistema/22-izbor-vrf-sistema.md",
-          "title": "IZBOR VRF SISTEMA",
-          "category": "22. Izbor VRF Sistema",
-          "sizeBytes": 666,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "23-proracun-podnog-grejanja",
-      "label": "23. Proracun Podnog Grejanja",
-      "children": [
-        {
-          "type": "doc",
-          "path": "23-proracun-podnog-grejanja/23-proracun-podnog-grejanja.md",
-          "title": "PRORAČUN PODNOG GREJANJA",
-          "category": "23. Proracun Podnog Grejanja",
-          "sizeBytes": 682,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "24-izbor-distributivnih-elemenata",
-      "label": "24. Izbor Distributivnih Elemenata",
-      "children": [
-        {
-          "type": "doc",
-          "path": "24-izbor-distributivnih-elemenata/24-izbor-distributivnih-elemenata.md",
-          "title": "IZBOR DISTRIBUTIVNIH ELEMENATA",
-          "category": "24. Izbor Distributivnih Elemenata",
-          "sizeBytes": 692,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "25-izbor-pp-klapni",
-      "label": "25. Izbor PP Klapni",
-      "children": [
-        {
-          "type": "doc",
-          "path": "25-izbor-pp-klapni/25-izbor-pp-klapni.md",
-          "title": "IZBOR PP KLAPNI",
-          "category": "25. Izbor PP Klapni",
-          "sizeBytes": 660,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "26-izbor-vav-cav",
-      "label": "26. Izbor VAV CAV",
-      "children": [
-        {
-          "type": "doc",
-          "path": "26-izbor-vav-cav/26-izbor-vav-cav.md",
-          "title": "IZBOR VAV/CAV",
-          "category": "26. Izbor VAV CAV",
-          "sizeBytes": 656,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "27-izbor-klima-komora",
-      "label": "27. Izbor Klima Komora",
-      "children": [
-        {
-          "type": "doc",
-          "path": "27-izbor-klima-komora/27-izbor-klima-komora.md",
-          "title": "IZBOR KLIMA KOMORA",
-          "category": "27. Izbor Klima Komora",
-          "sizeBytes": 667,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "28-izbor-ventilatora",
-      "label": "28. Izbor Ventilatora",
-      "children": [
-        {
-          "type": "doc",
-          "path": "28-izbor-ventilatora/28-izbor-ventilatora.md",
-          "title": "IZBOR VENTILATORA",
-          "category": "28. Izbor Ventilatora",
-          "sizeBytes": 664,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "29-izbor-prigusivaca-buke",
-      "label": "29. Izbor Prigusivaca Buke",
-      "children": [
-        {
-          "type": "doc",
-          "path": "29-izbor-prigusivaca-buke/29-izbor-prigusivaca-buke.md",
-          "title": "IZBOR PRIGUŠIVAČA BUKE",
-          "category": "29. Izbor Prigusivaca Buke",
-          "sizeBytes": 678,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "30-izbor-cirkulacionih-pumpi",
-      "label": "30. Izbor Cirkulacionih Pumpi",
-      "children": [
-        {
-          "type": "doc",
-          "path": "30-izbor-cirkulacionih-pumpi/30-izbor-cirkulacionih-pumpi.md",
-          "title": "IZBOR CIRKULACIONIH PUMPI",
-          "category": "30. Izbor Cirkulacionih Pumpi",
-          "sizeBytes": 680,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "31-izbor-regulacionih-ventila",
-      "label": "31. Izbor Regulacionih Ventila",
-      "children": [
-        {
-          "type": "doc",
-          "path": "31-izbor-regulacionih-ventila/31-izbor-regulacionih-ventila.md",
-          "title": "IZBOR REGULACIONIH VENTILA",
-          "category": "31. Izbor Regulacionih Ventila",
-          "sizeBytes": 684,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "32-izbor-sistema-za-odrzavanje-pritiska",
-      "label": "32. Izbor Sistema Za Odrzavanje Pritiska",
-      "children": [
-        {
-          "type": "doc",
-          "path": "32-izbor-sistema-za-odrzavanje-pritiska/32-izbor-sistema-za-odrzavanje-pritiska.md",
-          "title": "IZBOR SISTEMA ZA ODRŽAVANJE PRITISKA",
-          "category": "32. Izbor Sistema Za Odrzavanje Pritiska",
-          "sizeBytes": 809,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "33-izbor-ventila-sigurnosti",
-      "label": "33. Izbor Ventila Sigurnosti",
-      "children": [
-        {
-          "type": "doc",
-          "path": "33-izbor-ventila-sigurnosti/33-izbor-ventila-sigurnosti.md",
-          "title": "IZBOR VENTILA SIGURNOSTI",
-          "category": "33. Izbor Ventila Sigurnosti",
-          "sizeBytes": 678,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "34-izbor-izmenjivaca-toplote",
-      "label": "34. Izbor Izmenjivaca Toplote",
-      "children": [
-        {
-          "type": "doc",
-          "path": "34-izbor-izmenjivaca-toplote/34-izbor-izmenjivaca-toplote.md",
-          "title": "IZBOR IZMENJIVAČA TOPLOTE",
-          "category": "34. Izbor Izmenjivaca Toplote",
-          "sizeBytes": 682,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "35-izbor-sabirnika-i-razdelnika",
-      "label": "35. Izbor Sabirnika I Razdelnika",
-      "children": [
-        {
-          "type": "doc",
-          "path": "35-izbor-sabirnika-i-razdelnika/35-izbor-sabirnika-i-razdelnika.md",
-          "title": "IZBOR SABIRNIKA I RAZDELNIKA",
-          "category": "35. Izbor Sabirnika I Razdelnika",
-          "sizeBytes": 686,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "36-odzracivanje",
-      "label": "36. Odzracivanje",
-      "children": [
-        {
-          "type": "doc",
-          "path": "36-odzracivanje/36-odzracivanje.md",
-          "title": "ODZRAČIVANJE",
-          "category": "36. Odzracivanje",
-          "sizeBytes": 656,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "37-izbor-bafer-tankova",
-      "label": "37. Izbor Bafer Tankova",
-      "children": [
-        {
-          "type": "doc",
-          "path": "37-izbor-bafer-tankova/37-izbor-bafer-tankova.md",
-          "title": "IZBOR BAFER TANKOVA",
-          "category": "37. Izbor Bafer Tankova",
-          "sizeBytes": 668,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "38-izbor-kotlova",
-      "label": "38. Izbor Kotlova",
-      "children": [
-        {
-          "type": "doc",
-          "path": "38-izbor-kotlova/38-izbor-kotlova.md",
-          "title": "IZBOR KOTLOVA",
-          "category": "38. Izbor Kotlova",
-          "sizeBytes": 656,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "39-izbor-toplotnih-pumpi",
-      "label": "39. Izbor Toplotnih Pumpi",
-      "children": [
-        {
-          "type": "doc",
-          "path": "39-izbor-toplotnih-pumpi/39-izbor-toplotnih-pumpi.md",
-          "title": "IZBOR TOPLOTNIH PUMPI",
-          "category": "39. Izbor Toplotnih Pumpi",
-          "sizeBytes": 673,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "40-solarni-kolektori",
-      "label": "40. Solarni Kolektori",
-      "children": [
-        {
-          "type": "doc",
-          "path": "40-solarni-kolektori/40-solarni-kolektori.md",
-          "title": "SOLARNI KOLEKTORI",
-          "category": "40. Solarni Kolektori",
-          "sizeBytes": 3058,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "41-hemijska-priprema-vode",
-      "label": "41. Hemijska Priprema Vode",
-      "children": [
-        {
-          "type": "doc",
-          "path": "41-hemijska-priprema-vode/41-hemijska-priprema-vode.md",
-          "title": "HEMIJSKA PRIPREMA VODE",
-          "category": "41. Hemijska Priprema Vode",
-          "sizeBytes": 674,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "42-sanitarna-topla-voda",
-      "label": "42. Sanitarna Topla Voda",
-      "children": [
-        {
-          "type": "doc",
-          "path": "42-sanitarna-topla-voda/42-sanitarna-topla-voda.md",
-          "title": "SANITARNA TOPLA VODA",
-          "category": "42. Sanitarna Topla Voda",
-          "sizeBytes": 670,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "43-ventilacija-prostorija-dizel-agregata",
-      "label": "43. Ventilacija Prostorija Dizel Agregata",
-      "children": [
-        {
-          "type": "doc",
-          "path": "43-ventilacija-prostorija-dizel-agregata/43-ventilacija-prostorija-dizel-agregata.md",
-          "title": "VENTILACIJA PROSTORIJA DIZEL AGREGATA",
-          "category": "43. Ventilacija Prostorija Dizel Agregata",
-          "sizeBytes": 704,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "44-hladjenje-trafo-stanice",
-      "label": "44. Hladjenje Trafo Stanice",
-      "children": [
-        {
-          "type": "doc",
-          "path": "44-hladjenje-trafo-stanice/44-hladjenje-trafo-stanice.md",
-          "title": "HLADJENJE TRAFO STANICE",
-          "category": "44. Hladjenje Trafo Stanice",
-          "sizeBytes": 676,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "45-rezervoari-za-gorivo",
-      "label": "45. Rezervoari Za Gorivo",
-      "children": [
-        {
-          "type": "doc",
-          "path": "45-rezervoari-za-gorivo/45-rezervoari-za-gorivo.md",
-          "title": "REZERVOARI ZA GORIVO",
-          "category": "45. Rezervoari Za Gorivo",
-          "sizeBytes": 670,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "46-hidraulicke-seme",
-      "label": "46. Hidraulicke Seme",
-      "children": [
-        {
-          "type": "doc",
-          "path": "46-hidraulicke-seme/46-hidraulicke-seme.md",
-          "title": "HIDRAULIČKE ŠEME",
-          "category": "46. Hidraulicke Seme",
-          "sizeBytes": 666,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "47-proracun-dimnjaka",
-      "label": "47. Proracun Dimnjaka",
-      "children": [
-        {
-          "type": "doc",
-          "path": "47-proracun-dimnjaka/47-proracun-dimnjaka.md",
-          "title": "PRORAČUN DIMNJAKA",
-          "category": "47. Proracun Dimnjaka",
-          "sizeBytes": 666,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "48-gasne-kotlarnice",
-      "label": "48. Gasne Kotlarnice",
-      "children": [
-        {
-          "type": "doc",
-          "path": "48-gasne-kotlarnice/48-gasne-kotlarnice.md",
-          "title": "GASNE KOTLARNICE",
-          "category": "48. Gasne Kotlarnice",
-          "sizeBytes": 662,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "49-proracun-gasovoda",
-      "label": "49. Proracun Gasovoda",
-      "children": [
-        {
-          "type": "doc",
-          "path": "49-proracun-gasovoda/49-proracun-gasovoda.md",
-          "title": "PRORAČUN GASOVODA",
-          "category": "49. Proracun Gasovoda",
-          "sizeBytes": 666,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "50-izbor-kalorimetara",
-      "label": "50. Izbor Kalorimetara",
-      "children": [
-        {
-          "type": "doc",
-          "path": "50-izbor-kalorimetara/50-izbor-kalorimetara.md",
-          "title": "IZBOR KALORIMETARA",
-          "category": "50. Izbor Kalorimetara",
-          "sizeBytes": 666,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "51-kompimovani-vazduh",
-      "label": "51. Kompimovani Vazduh",
-      "children": [
-        {
-          "type": "doc",
-          "path": "51-kompimovani-vazduh/51-kompimovani-vazduh.md",
-          "title": "KOMPIMOVANI VAZDUH",
-          "category": "51. Kompimovani Vazduh",
-          "sizeBytes": 666,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "52-izolacija",
-      "label": "52. Izolacija",
-      "children": [
-        {
-          "type": "doc",
-          "path": "52-izolacija/52-izolacija.md",
-          "title": "IZOLACIJA",
-          "category": "52. Izolacija",
-          "sizeBytes": 648,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "53-masinske-sale",
-      "label": "53. Masinske Sale",
-      "children": [
-        {
-          "type": "doc",
-          "path": "53-masinske-sale/53-masinske-sale.md",
-          "title": "MAŠINSKE SALE",
-          "category": "53. Masinske Sale",
-          "sizeBytes": 903,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "54-leed",
-      "label": "54. LEED",
-      "children": [
-        {
-          "type": "doc",
-          "path": "54-leed/54-leed.md",
-          "title": "LEED",
-          "category": "54. LEED",
-          "sizeBytes": 638,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "55-ibc",
-      "label": "55. IBC",
-      "children": [
-        {
-          "type": "doc",
-          "path": "55-ibc/55-ibc.md",
-          "title": "IBC",
-          "category": "55. IBC",
-          "sizeBytes": 636,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "56-proracun-energije",
-      "label": "56. Proracun Energije",
-      "children": [
-        {
-          "type": "doc",
-          "path": "56-proracun-energije/56-proracun-energije.md",
-          "title": "PRORAČUN ENERGIJE",
-          "category": "56. Proracun Energije",
-          "sizeBytes": 666,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "57-izbor-grejnih-kablova",
-      "label": "57. Izbor Grejnih Kablova",
-      "children": [
-        {
-          "type": "doc",
-          "path": "57-izbor-grejnih-kablova/57-izbor-grejnih-kablova.md",
-          "title": "IZBOR GREJNIH KABLOVA",
-          "category": "57. Izbor Grejnih Kablova",
-          "sizeBytes": 672,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "58-tekstualna-dokumentacija",
-      "label": "58. Tekstualna Dokumentacija",
-      "children": [
-        {
-          "type": "doc",
-          "path": "58-tekstualna-dokumentacija/58-tekstualna-dokumentacija.md",
-          "title": "TEKSTUALNA DOKUMENTACIJA",
-          "category": "58. Tekstualna Dokumentacija",
-          "sizeBytes": 22183,
-          "isReadme": false
-        }
-      ]
-    },
-    {
-      "type": "folder",
-      "slug": "59-projekt-menadzment",
-      "label": "59. Projekt Menadzment",
-      "children": [
-        {
-          "type": "doc",
-          "path": "59-projekt-menadzment/59-projekt-menadzment.md",
-          "title": "PROJEKT MENADŽMENT",
-          "category": "59. Projekt Menadzment",
-          "sizeBytes": 1038,
+          "path": "help/cortex-skill-uputstvo.md",
+          "title": "BBD Cortex skill — uputstvo za kolege",
+          "category": "Help",
+          "sizeBytes": 1513,
           "isReadme": false
         }
       ]

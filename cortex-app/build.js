@@ -3,8 +3,9 @@
  * BBD Cortex - content build script
  *
  * Scans the REPO ROOT (one level up from this file) for content folders —
- * pravilnici/, standardi/, each numbered training chapter (NN-slug/), and
- * any future top-level folder — and generates two static JSON files this
+ * pravilnici/, standardi/, knjige/, administracija/, program-obuke/ (one
+ * NN-slug/ subfolder per training chapter), help/, and any future top-level
+ * folder — and generates two static JSON files this
  * app reads at runtime:
  *   - manifest.json     a nested folder/doc tree (for the sidebar)
  *   - search-index.json full text of every document, lowercased (for search)
@@ -19,8 +20,11 @@ const REPO_ROOT = path.join(__dirname, '..');
 const OUT_MANIFEST = path.join(__dirname, 'manifest.json');
 const OUT_INDEX = path.join(__dirname, 'search-index.json');
 
-// Folders at the repo root that are tooling, not content.
-const EXCLUDE_TOP = new Set(['cortex-app', 'setup', '.git', 'node_modules']);
+// Folders at the repo root that are tooling or build output, not content.
+const EXCLUDE_TOP = new Set([
+  'cortex-app', 'setup', 'functions', 'scripts', 'Claude outputs',
+  'downloads', 'dist', '.build-skill', '.git', '.claude', 'node_modules',
+]);
 
 // Friendly labels for pravilnici's own subfolders.
 const PRAVILNICI_LABELS = {
@@ -36,9 +40,16 @@ const PRAVILNICI_LABELS = {
   'zastita-zivotne-sredine': 'Zaštita životne sredine',
 };
 
+// Top-level sections, in sidebar order (same order as the home page cards).
+// Any other content folder is listed after these, alphabetically.
+const TOP_ORDER = ['pravilnici', 'standardi', 'knjige', 'administracija', 'program-obuke', 'help'];
 const TOP_LABELS = {
   pravilnici: 'Pravilnici',
   standardi: 'Standardi',
+  knjige: 'Knjige',
+  administracija: 'Administracija',
+  'program-obuke': 'Program obuke',
+  help: 'Help',
 };
 
 // Kept upper-case when title-casing a chapter name derived from ALL-CAPS text.
@@ -60,29 +71,36 @@ function extractTitle(raw, fallback) {
   return fallback;
 }
 
-// chapter folders look like "NN-some-slug"
+// chapter folders (inside program-obuke/) look like "NN-some-slug"
 const CHAPTER_RE = /^(\d+)-/;
+const CHAPTERS_TOP = 'program-obuke';
 
 function topLevelSortKey(name) {
-  if (name === 'pravilnici') return [0, 0, name];
-  if (name === 'standardi') return [1, 0, name];
-  const m = CHAPTER_RE.exec(name);
-  if (m) return [2, parseInt(m[1], 10), name];
-  return [3, 0, name];
+  const i = TOP_ORDER.indexOf(name);
+  return i !== -1 ? [0, i, name] : [1, 0, name];
 }
 
 function labelFor(name, depth, parentSlug) {
   if (depth === 0) {
     if (TOP_LABELS[name]) return TOP_LABELS[name];
+    return titleCase(name.replace(/-/g, ' '));
+  }
+  if (parentSlug === 'pravilnici' && PRAVILNICI_LABELS[name]) return PRAVILNICI_LABELS[name];
+  if (parentSlug === CHAPTERS_TOP && depth === 1) {
     const m = CHAPTER_RE.exec(name);
     if (m) {
       const rest = name.slice(m[0].length).replace(/-/g, ' ');
       return `${parseInt(m[1], 10)}. ${titleCase(rest)}`;
     }
-    return titleCase(name.replace(/-/g, ' '));
   }
-  if (parentSlug === 'pravilnici' && PRAVILNICI_LABELS[name]) return PRAVILNICI_LABELS[name];
   return titleCase(name.replace(/-/g, ' '));
+}
+
+// Chapters sort by number (1, 2, … 10), everything else by label.
+function compareFolders(a, b) {
+  const ma = CHAPTER_RE.exec(a.name), mb = CHAPTER_RE.exec(b.name);
+  if (ma && mb) return parseInt(ma[1], 10) - parseInt(mb[1], 10) || a.name.localeCompare(b.name, 'sr');
+  return a.label.localeCompare(b.label, 'sr');
 }
 
 const searchDocs = [];
@@ -115,7 +133,7 @@ function walk(dir, relSlug, depth, breadcrumb) {
   }
 
   docs.sort((a, b) => a.path.localeCompare(b.path, 'sr'));
-  folders.sort((a, b) => a.label.localeCompare(b.label, 'sr'));
+  folders.sort(compareFolders);
 
   const visibleDocs = docs.filter((d) => !d.isReadme);
   const docCount = visibleDocs.length + folders.reduce((s, f) => s + f.docCount, 0);
@@ -130,7 +148,7 @@ function walk(dir, relSlug, depth, breadcrumb) {
 }
 
 const topNames = fs.readdirSync(REPO_ROOT, { withFileTypes: true })
-  .filter((e) => e.isDirectory() && !e.name.startsWith('.') && !EXCLUDE_TOP.has(e.name))
+  .filter((e) => e.isDirectory() && !e.name.startsWith('.') && !e.name.startsWith('_') && !EXCLUDE_TOP.has(e.name))
   .map((e) => e.name)
   .sort((a, b) => {
     const ka = topLevelSortKey(a), kb = topLevelSortKey(b);
@@ -144,7 +162,7 @@ for (const name of topNames) {
   const label = labelFor(name, 0, null);
   const { node, docCount } = walk(path.join(REPO_ROOT, name), name, 1, [label]);
   node.label = label;
-  // Always show a top-level section (even an empty placeholder like standardi/);
+  // Always show a top-level section (even an empty placeholder like administracija/);
   // an empty nested subfolder (e.g. a pravilnici category with only a README) stays hidden.
   tree.push(node);
 }

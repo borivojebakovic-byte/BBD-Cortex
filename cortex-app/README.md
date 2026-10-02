@@ -1,8 +1,8 @@
 # BBD Cortex — web app (MVP)
 
 A document viewer and search over the whole BBD Cortex knowledge base — `pravilnici/`,
-`standardi/`, and every numbered training chapter (`01-document-management/`, `02-cad-standard/`,
-…) — meant to run at **cortex.bbdcons.com**. This is Phase 1 from the MVP plan: browsing and
+`standardi/`, `knjige/`, `administracija/`, the training chapters in `program-obuke/`
+(`01-document-management/`, `02-cad-standard/`, …) and `help/` — meant to run at **cortex.bbdcons.com**. This is Phase 1 from the MVP plan: browsing and
 search, read-only, no chat/Q&A yet (that's Phase 2).
 
 ## How it works
@@ -16,10 +16,13 @@ search, read-only, no chat/Q&A yet (that's Phase 2).
 - **The repo root stays the single source of truth.** This app reads documents directly from
   the repo root (one level up) — it never copies or duplicates that content. Edit a document
   anywhere in the repo, refresh the browser, see the change.
-- **`build.js`** scans every top-level content folder in the repo root (skipping `cortex-app/`,
-  `setup/`, `.git/`) and generates two small JSON files this app reads:
+- **`build.js`** scans every top-level content folder in the repo root (skipping tooling and
+  build output: `cortex-app/`, `setup/`, `functions/`, `scripts/`, `Claude outputs/`,
+  `downloads/`, `dist/`, `.git/`, …) and generates two small JSON files this app reads:
   - `manifest.json` — a nested folder/document tree, for the sidebar (each top-level folder is
-    always shown, even if currently empty, e.g. `standardi/`)
+    always shown, even if currently empty, e.g. `administracija/`). Order is fixed by
+    `TOP_ORDER` in `build.js` — Pravilnici, Standardi, Knjige, Administracija, Program obuke,
+    Help — the same order as the cards on Home; any other folder follows alphabetically.
   - `search-index.json` — full text of every document (lowercased), for search
   Run it again whenever documents, chapters, or folders are added, removed, or renamed:
   ```
@@ -72,8 +75,8 @@ The page shown at `#/` (no hash). The **logo in the top-left corner links back t
 document or tool. It has a larger logo, a short description with document/tool counts, and two
 columns of cards (built in `showHome()` in `assets/app.js`):
 
-- **Baza znanja** — Pravilnici, Standardi, Knjige, Program obuke (from the `SECTIONS` list) and
-  Help (`docs/cortex-skill-uputstvo.md`). Counts come from `manifest.json`. Each section card
+- **Baza znanja** — Pravilnici, Standardi, Knjige, Administracija, Program obuke (from the
+  `SECTIONS` list) and Help (`help/cortex-skill-uputstvo.md`). Counts come from `manifest.json`. Each section card
   opens a section page `#cat/<id>` listing all its documents grouped by subfolder.
 - **Alati** — one card per tool, generated from `MENU` in `tools.js` (exposed as
   `CortexTools.menu`), so a new tool shows up on Home automatically.
@@ -135,11 +138,21 @@ Each top-level folder is one section in the sidebar:
 
 - `pravilnici/` — laws and regulations, grouped into subfolders by area (HVAC, buka, …)
 - `standardi/` — domestic and international standards (folder created, awaiting content)
-- `NN-slug/` (e.g. `02-cad-standard/`) — one folder per training-manual chapter, converted from
-  the internal "Program obuke pripravnika" Word document. Each has its own `.md` file (with a
-  small frontmatter block: `naziv`, `poglavlje`, `izvor`, `preuzeto`, `napomena`) and, where
-  needed, a `media/` subfolder with that chapter's own images. New chapters just need a new
-  numbered folder — `build.js` picks them up automatically, sorted by chapter number.
+- `knjige/` — technical books (e.g. ASHRAE Fundamentals Handbook), one `.md` per chapter
+- `administracija/` — corporate documents (statute, organization chart, decisions, studies);
+  empty for now
+- `program-obuke/NN-slug/` (e.g. `program-obuke/02-cad-standard/`) — one folder per
+  training-manual chapter, converted from the internal "Program obuke pripravnika" Word
+  document. Each has its own `.md` file (with a small frontmatter block: `naziv`, `poglavlje`,
+  `izvor`, `preuzeto`, `napomena`) and, where needed, a `media/` subfolder with that chapter's
+  own images. New chapters just need a new numbered folder inside `program-obuke/` —
+  `build.js` picks them up automatically, sorted by chapter number.
+- `help/` — how-to documents for BBD Cortex itself (Claude skill guide and setup)
+
+Links inside a document: a relative link to another `.md` file opens that document in the app,
+and a `#anchor` link scrolls to the heading with that slug. Old addresses from before the
+chapters moved into `program-obuke/` (`#/02-cad-standard%2F…`) and `docs/` was renamed to
+`help/` are redirected to the new path, so existing bookmarks keep working.
 
 `Primeri proračuna` and `Primeri projekata` referenced inside a chapter live on BBD's internal
 network (e.g. `X:\...`, `Y:\...`), not in this repo — they're written into the chapter text as

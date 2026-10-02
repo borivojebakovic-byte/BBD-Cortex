@@ -150,8 +150,8 @@
 
   // ---- naslovna strana (Home) i stranice oblasti ---------------------------
 
-  // Kartice baze znanja. `slug` = top-level folder iz manifest.json;
-  // `chapters: true` = svi numerisani folderi (01-…, 02-…) zajedno.
+  // Kartice baze znanja, istim redom kao u levom meniju. `slug` = top-level folder
+  // iz manifest.json; `chapters: true` = stranica sa spiskom poglavlja (NN-… podfolderi).
   var SECTIONS = [
     { id: 'pravilnici', slug: 'pravilnici', title: 'Pravilnici',
       desc: 'Zakoni, pravilnici i odluke — HVAC, gas, PP zaštita, garaže, buka, izgradnja.', icon: 'para' },
@@ -159,7 +159,9 @@
       desc: 'Kartice standarda — SRPS EN, ASHRAE, DIN, NFPA, BS, IBC, SNiP.', icon: 'std' },
     { id: 'knjige', slug: 'knjige', title: 'Knjige',
       desc: 'Stručna literatura — ASHRAE Fundamentals Handbook i druge knjige.', icon: 'book' },
-    { id: 'obuka', chapters: true, title: 'Program obuke',
+    { id: 'administracija', slug: 'administracija', title: 'Administracija',
+      desc: 'Korporativni dokumenti — statut, organizaciona struktura, rešenja, elaborati.', icon: 'admin' },
+    { id: 'obuka', slug: 'program-obuke', chapters: true, title: 'Program obuke',
       desc: 'Poglavlja interne obuke — standardi BBD-a, proračuni i izbor opreme.', icon: 'cap' }
   ];
 
@@ -167,6 +169,7 @@
     para: '<text x="16" y="23" text-anchor="middle" font-size="21" font-weight="700" fill="currentColor" stroke="none">§</text>',
     std: '<rect x="7" y="5" width="18" height="22" rx="1.5"/><path d="M11 11h10M11 15h10M11 19h6"/>',
     book: '<path d="M6 7.5c3-1.5 7-1.5 10 .5v18c-3-2-7-2-10-.5zM26 7.5c-3-1.5-7-1.5-10 .5v18c3-2 7-2 10-.5z"/>',
+    admin: '<rect x="5" y="10" width="22" height="16" rx="1.5"/><path d="M12 10V7.5A1.5 1.5 0 0 1 13.5 6h5A1.5 1.5 0 0 1 20 7.5V10M5 17h22M14.5 17v2.5h3V17"/>',
     cap: '<path d="M3 13l13-6 13 6-13 6zM9 16v6c4 3 10 3 14 0v-6M29 13v7"/>',
     help: '<circle cx="16" cy="16" r="11"/><path d="M12.5 13a3.5 3.5 0 1 1 5 3.2c-1 .5-1.5 1.2-1.5 2.3"/><circle cx="16" cy="22.5" r=".6" fill="currentColor"/>'
   };
@@ -192,8 +195,10 @@
     return null;
   }
 
+  var CHAPTERS_SLUG = 'program-obuke';
   function chapterNodes() {
-    return tree.filter(function (n) { return n.type !== 'doc' && /^\d+-/.test(n.slug); });
+    var root = findNode(CHAPTERS_SLUG);
+    return root ? root.children.filter(function (n) { return n.type !== 'doc'; }) : [];
   }
 
   function sectionCount(sec) {
@@ -226,7 +231,7 @@
       var c = sectionCount(sec);
       return homeCard('#cat/' + sec.id, icon(sec.icon), sec.title, sec.desc, c.n ? c.n + ' ' + c.unit : 'uskoro');
     }).join('') +
-      homeCard('#/docs%2Fcortex-skill-uputstvo.md', icon('help'), 'Help',
+      homeCard('#/help%2Fcortex-skill-uputstvo.md', icon('help'), 'Help',
         'Uputstvo za korišćenje BBD Cortex skill-a u Claude-u i kako postavljati pitanja.', '');
 
     var right = menu.map(function (m) {
@@ -286,7 +291,7 @@
     if (!sec) { contentInner.innerHTML = '<p>Oblast nije pronađena.</p>'; return; }
     setActiveLink(null);
     document.title = sec.title + ' — BBD Cortex';
-    var body;
+    var body, node = findNode(sec.slug);
     if (sec.chapters) {
       body = '<ul class="cat-list cat-chapters">' + chapterNodes().map(function (n) {
         var first = n.children.filter(function (c) { return c.type === 'doc'; })[0];
@@ -294,14 +299,13 @@
         return '<li><a href="' + href + '">' + esc(n.label) + '</a></li>';
       }).join('') + '</ul>';
     } else {
-      var node = findNode(sec.slug);
       body = node && countDocs(node) ? docListHtml(node) : '<p class="cat-empty">U ovoj oblasti još nema dokumenata.</p>';
-      // proširi istu granu u levom meniju
-      if (node && !expanded[node.slug]) {
-        expanded[node.slug] = true;
-        var g = sidebarTree.querySelector('.sb-group[data-slug="' + CSS.escape(node.slug) + '"]');
-        if (g) { g.classList.add('open'); g.querySelector(':scope > .sb-group-toggle').setAttribute('aria-expanded', 'true'); }
-      }
+    }
+    // proširi istu granu u levom meniju
+    if (node && !expanded[node.slug]) {
+      expanded[node.slug] = true;
+      var g = sidebarTree.querySelector('.sb-group[data-slug="' + CSS.escape(node.slug) + '"]');
+      if (g) { g.classList.add('open'); g.querySelector(':scope > .sb-group-toggle').setAttribute('aria-expanded', 'true'); }
     }
     contentInner.innerHTML =
       '<div class="cat">' +
@@ -327,7 +331,57 @@
     });
   }
 
+  // Linkovi unutar dokumenta: relativni link na drugi .md otvara taj dokument
+  // u aplikaciji (#/putanja), a #sidro skroluje do naslova umesto da menja rutu.
+  function resolveRel(baseDir, href) {
+    var parts = (baseDir ? baseDir.split('/') : []);
+    href.split('/').forEach(function (seg) {
+      if (seg === '..') parts.pop();
+      else if (seg && seg !== '.') parts.push(seg);
+    });
+    return parts.join('/');
+  }
+  // marked ne daje id naslovima, pa se sidro traži po GitHub slug-u teksta naslova
+  function slugify(t) {
+    return t.trim().toLowerCase().replace(/[^\p{L}\p{N}\s_-]/gu, '').replace(/\s/g, '-');
+  }
+  function findAnchor(id) {
+    var byId = document.getElementById(id);
+    if (byId && contentInner.contains(byId)) return byId;
+    var hs = contentInner.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    for (var i = 0; i < hs.length; i++) if (slugify(hs[i].textContent) === id.toLowerCase()) return hs[i];
+    return null;
+  }
+  function fixRelativeLinks(docPath) {
+    var baseDir = docPath.split('/').slice(0, -1).join('/');
+    contentInner.querySelectorAll('a[href]').forEach(function (a) {
+      var href = a.getAttribute('href');
+      if (!href || /^([a-z]+:)?\/\//i.test(href) || /^(mailto|tel):/i.test(href) || href.charAt(0) === '/') return;
+      if (href.charAt(0) === '#') {
+        if (/^#(\/|cat\/|tool\/)/.test(href)) return; // ruta aplikacije
+        a.addEventListener('click', function (e) {
+          e.preventDefault();
+          var t = findAnchor(decodeURIComponent(href.slice(1)));
+          if (t) t.scrollIntoView();
+        });
+        return;
+      }
+      var m = href.match(/^([^#?]+\.md)(#.*)?$/i);
+      if (m) a.setAttribute('href', '#/' + encodeURIComponent(resolveRel(baseDir, decodeURIComponent(m[1]))));
+      else a.setAttribute('href', '/' + resolveRel(baseDir, href));
+    });
+  }
+
+  // Stari linkovi (pre premeštanja): NN-poglavlje/… → program-obuke/NN-poglavlje/…, docs/… → help/…
+  function legacyPath(path) {
+    if (/^\d+-[^/]+\//.test(path)) return CHAPTERS_SLUG + '/' + path;
+    if (path.indexOf('docs/') === 0) return 'help/' + path.slice(5);
+    return null;
+  }
+
   function renderDoc(path) {
+    var moved = legacyPath(path);
+    if (moved) { location.replace('#/' + encodeURIComponent(moved)); return; }
     var meta = docByPath[path];
     setActiveLink(path);
     contentInner.innerHTML = '<p>Učitavanje…</p>';
@@ -342,6 +396,7 @@
         var parsed = parseFrontmatter(raw);
         contentInner.innerHTML = categoryLine + metaBoxHtml(parsed.meta) + marked.parse(parsed.body);
         fixRelativeImages(path);
+        fixRelativeLinks(path);
       })
       .catch(function (err) {
         contentInner.innerHTML = '<p>Dokument nije pronađen (' + esc(err.message) + ').</p>';

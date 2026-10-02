@@ -8,7 +8,7 @@
   config.json
   scripts/search.py
 scripts/build_skill_zip.py     <- pakuje skill + pravilnici/ standardi/ knjige/ u ZIP
-docs/cortex-skill-uputstvo.md  <- uputstvo za kolege
+help/cortex-skill-uputstvo.md  <- uputstvo za kolege
 ```
 
 ## Automatsko pakovanje na Cloudflare Pages
